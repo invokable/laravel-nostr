@@ -11,7 +11,7 @@ class EventTag implements Arrayable
     public function __construct(
         protected readonly string $id,
         protected readonly string $relay = '',
-        protected readonly string $marker = 'root',
+        protected readonly string $marker = '',
     ) {
     }
 

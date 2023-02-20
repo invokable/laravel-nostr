@@ -22,8 +22,8 @@ class ClientPoolTest extends TestCase
         $responses = Nostr::pool()
                           ->publish(event: $event, sk: '', relays: ['wss://1', 'wss://2']);
 
-        $this->assertTrue($responses[0]->ok());
-        $this->assertTrue($responses[1]->ok());
+        $this->assertTrue($responses['wss://1']->ok());
+        $this->assertTrue($responses['wss://2']->ok());
         Http::assertSentCount(2);
     }
 
@@ -41,8 +41,8 @@ class ClientPoolTest extends TestCase
                           ->withRelays(relays: ['wss://1', 'wss://2'])
                           ->list(filters: $filters);
 
-        $this->assertTrue($responses[0]->ok());
-        $this->assertTrue($responses[1]->ok());
+        $this->assertTrue($responses['wss://1']->ok());
+        $this->assertTrue($responses['wss://2']->ok());
         Http::assertSentCount(2);
     }
 
@@ -56,8 +56,8 @@ class ClientPoolTest extends TestCase
                           ->withRelays(relays: ['wss://1', 'wss://2'])
                           ->get(filter: $filter, relays: ['1', '2']);
 
-        $this->assertTrue($responses[0]->ok());
-        $this->assertTrue($responses[1]->ok());
+        $this->assertTrue($responses['1']->ok());
+        $this->assertTrue($responses['2']->ok());
         Http::assertSentCount(2);
     }
 }

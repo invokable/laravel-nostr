@@ -239,7 +239,7 @@ class SocialClient
         return $this->publishEvent(event: $event);
     }
 
-    public function reply(string $content, string $event_id, string $marker = 'root', array $pks = []): Response
+    public function reply(string $content, string $event_id, array $to = [], string $marker = 'root'): Response
     {
         $tags = collect([
             new EventTag(
@@ -249,7 +249,7 @@ class SocialClient
             ),
         ]);
 
-        foreach ($pks as $pk) {
+        foreach ($to as $pk) {
             $tags->push(new PersonTag(pubkey: $pk));
         }
 
@@ -258,6 +258,21 @@ class SocialClient
             content: $content,
             created_at: now()->timestamp,
             tags: $tags->toArray(),
+        );
+
+        return $this->publishEvent(event: $event);
+    }
+
+    public function delete(string $event_id): Response
+    {
+        $e = new EventTag(
+            id: $event_id,
+        );
+
+        $event = new Event(
+            kind: Kind::EventDeletion->value,
+            created_at: now()->timestamp,
+            tags: [$e->toArray()],
         );
 
         return $this->publishEvent(event: $event);

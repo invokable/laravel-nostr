@@ -45,7 +45,8 @@ class PendingPool
 
         return Http::pool(
             fn (Pool $pool) => collect($relays)
-                ->map(fn ($relay) => $pool->baseUrl(Config::get('nostr.api_base'))
+                ->map(fn ($relay) => $pool->as($relay)
+                                          ->baseUrl(Config::get('nostr.api_base'))
                                           ->post('event/publish', [
                                               'event' => collect($event)->toArray(),
                                               'sk' => $sk,
@@ -62,7 +63,8 @@ class PendingPool
 
         return Http::pool(
             fn (Pool $pool) => collect($relays)
-                ->map(fn ($relay) => $pool->baseUrl(Config::get('nostr.api_base'))
+                ->map(fn ($relay) => $pool->as($relay)
+                                          ->baseUrl(Config::get('nostr.api_base'))
                                           ->post('event/list', [
                                               'filters' => collect($filters)->toArray(),
                                               'relay' => $relay,
@@ -78,7 +80,8 @@ class PendingPool
 
         return Http::pool(
             fn (Pool $pool) => collect($relays)
-                ->map(fn ($relay) => $pool->baseUrl(Config::get('nostr.api_base'))
+                ->map(fn ($relay) => $pool->as($relay)
+                                          ->baseUrl(Config::get('nostr.api_base'))
                                           ->post('event/get', [
                                               'filter' => collect($filter)->toArray(),
                                               'relay' => $relay,

@@ -14,11 +14,13 @@ class Event implements Jsonable, Arrayable, Stringable
     protected readonly string $pubkey;
     protected readonly string $sig;
 
+    /**
+     * @param  array<array<string>>  $tags
+     */
     public function __construct(
         protected readonly int $kind = 0,
         protected readonly string $content = '',
         protected readonly int $created_at = 0,
-        /** @var array<array<string>> */
         protected readonly array $tags = [],
     ) {
     }

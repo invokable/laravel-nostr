@@ -224,7 +224,17 @@ class SocilalTest extends TestCase
         Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->reply(content: 'test', event_id: '1', pks: ['1']);
+                                 ->reply(content: 'test', event_id: '1', to: ['1']);
+
+        $this->assertTrue($response->successful());
+    }
+
+    public function test_delete()
+    {
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+
+        $response = $this->social->withKey('sk', 'pk')
+                                 ->delete(event_id: '1');
 
         $this->assertTrue($response->successful());
     }
