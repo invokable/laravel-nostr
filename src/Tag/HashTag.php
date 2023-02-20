@@ -12,6 +12,9 @@ class HashTag implements Arrayable
     ) {
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function toArray(): array
     {
         return ['t', $this->hashtag];

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Revolution\Nostr;
@@ -14,7 +15,7 @@ class Event implements Jsonable, Arrayable, Stringable
     protected readonly string $sig;
 
     public function __construct(
-        protected readonly Kind|int $kind = Kind::Metadata,
+        protected readonly int $kind = 0,
         protected readonly string $content = '',
         protected readonly int $created_at = 0,
         /** @var array<array<string>> */

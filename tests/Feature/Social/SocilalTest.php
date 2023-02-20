@@ -190,41 +190,41 @@ class SocilalTest extends TestCase
 
     public function test_create_text_note()
     {
-        Nostr::shouldReceive('event->publish->created')->once()->andReturnTrue();
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
                                  ->createTextNote(content: 'test', tags: []);
 
-        $this->assertTrue($response->created());
+        $this->assertTrue($response->successful());
     }
 
     public function test_create_text_note_to()
     {
-        Nostr::shouldReceive('event->publish->created')->once()->andReturnTrue();
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
                                  ->createTextNoteTo(content: 'test', pk: 'to');
 
-        $this->assertTrue($response->created());
+        $this->assertTrue($response->successful());
     }
 
     public function test_create_text_note_hashtag()
     {
-        Nostr::shouldReceive('event->publish->created')->once()->andReturnTrue();
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
                                  ->createTextNoteWithHashTag(content: 'test', hashtags: ['test']);
 
-        $this->assertTrue($response->created());
+        $this->assertTrue($response->successful());
     }
 
     public function test_reply()
     {
-        Nostr::shouldReceive('event->publish->created')->once()->andReturnTrue();
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
                                  ->reply(content: 'test', event_id: '1', pks: ['1']);
 
-        $this->assertTrue($response->created());
+        $this->assertTrue($response->successful());
     }
 }

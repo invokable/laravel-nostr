@@ -32,7 +32,7 @@ class NostrChannel
         }
 
         $event = new Event(
-            kind: Kind::Text,
+            kind: Kind::Text->value,
             content: $message->content,
             created_at: now()->timestamp,
             tags: $message->tags,

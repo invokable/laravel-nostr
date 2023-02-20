@@ -80,7 +80,7 @@ class SocialClient
     public function updateProfile(Profile $profile): Response
     {
         $event = new Event(
-            kind: Kind::Metadata,
+            kind: Kind::Metadata->value,
             content: $profile->toJson(),
             created_at: now()->timestamp,
         );
@@ -121,7 +121,7 @@ class SocialClient
     public function updateFollows(array $follows): Response
     {
         $event = new Event(
-            kind: Kind::Contacts,
+            kind: Kind::Contacts->value,
             content: '',
             created_at: now()->timestamp,
             tags: collect($follows)->toArray(),
@@ -199,7 +199,7 @@ class SocialClient
     public function createTextNote(string $content, array $tags = []): Response
     {
         $event = new Event(
-            kind: Kind::Text,
+            kind: Kind::Text->value,
             content: $content,
             created_at: now()->timestamp,
             tags: $tags,
@@ -211,7 +211,7 @@ class SocialClient
     public function createTextNoteTo(string $content, string $pk): Response
     {
         $event = new Event(
-            kind: Kind::Text,
+            kind: Kind::Text->value,
             content: $content,
             created_at: now()->timestamp,
             tags: [(new PersonTag(pubkey: $pk))->toArray()],
@@ -229,7 +229,7 @@ class SocialClient
         }
 
         $event = new Event(
-            kind: Kind::Text,
+            kind: Kind::Text->value,
             content: $content,
             created_at: now()->timestamp,
             tags: $tags->toArray(),
@@ -253,7 +253,7 @@ class SocialClient
         }
 
         $event = new Event(
-            kind: Kind::Text,
+            kind: Kind::Text->value,
             content: $content,
             created_at: now()->timestamp,
             tags: $tags->toArray(),

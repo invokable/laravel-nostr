@@ -16,7 +16,7 @@ class ClientEventTest extends TestCase
     {
         Http::fake(fn () => Http::response(['message' => 'ok']));
 
-        $event = new Event(kind: Kind::Text);
+        $event = new Event(kind: Kind::Text->value);
 
         $response = Nostr::event()->publish(event: $event, sk: '', relay: '');
 
@@ -59,7 +59,7 @@ class ClientEventTest extends TestCase
     {
         Http::fake(fn () => Http::response(['hash' => 'hash']));
 
-        $event = new Event(kind: Kind::Text);
+        $event = new Event(kind: Kind::Text->value);
 
         $response = Nostr::event()->hash(event: $event);
 
@@ -72,7 +72,7 @@ class ClientEventTest extends TestCase
     {
         Http::fake(fn () => Http::response(['sign' => 'sign']));
 
-        $event = new Event(kind: Kind::Text);
+        $event = new Event(kind: Kind::Text->value);
 
         $response = Nostr::event()->sign(event: $event);
 

@@ -14,6 +14,9 @@ class PersonTag implements Arrayable
     ) {
     }
 
+    /**
+     * @return array<string, string, string, string>
+     */
     public function toArray(): array
     {
         return ['p', $this->pubkey, $this->relay, $this->petname];

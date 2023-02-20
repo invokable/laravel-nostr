@@ -14,7 +14,7 @@ class FilterTest extends TestCase
         $f = new Filter(
             ids: ['a'],
             authors: ['1'],
-            kinds: [Kind::Metadata, 1],
+            kinds: [Kind::Metadata->value, 1],
             since: 0,
             until: 0,
             limit: 0,

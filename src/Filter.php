@@ -11,12 +11,17 @@ class Filter implements Jsonable, Arrayable, Stringable
 {
     protected array $parameters = [];
 
+    /**
+     * @param  array<string>|null  $ids
+     * @param  array<string>|null  $authors
+     * @param  array<int>|null  $kinds
+     * @param  int|null  $since
+     * @param  int|null  $until
+     * @param  int|null  $limit
+     */
     public function __construct(
-        /** @var array<string>|null */
         public readonly ?array $ids = null,
-        /** @var array<string>|null */
         public readonly ?array $authors = null,
-        /** @var array<Kind|int>|null */
         public readonly ?array $kinds = null,
         public readonly ?int $since = null,
         public readonly ?int $until = null,

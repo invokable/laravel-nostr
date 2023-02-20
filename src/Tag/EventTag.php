@@ -14,6 +14,9 @@ class EventTag implements Arrayable
     ) {
     }
 
+    /**
+     * @return array<string, string, string, string>
+     */
     public function toArray(): array
     {
         return ['e', $this->id, $this->relay, $this->marker];

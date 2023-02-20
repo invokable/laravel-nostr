@@ -12,7 +12,7 @@ class EventTest extends TestCase
     public function test_event()
     {
         $e = new Event(
-            kind: Kind::Text,
+            kind: Kind::Text->value,
             content: 'test',
             created_at: 0,
             tags: [['e', 'test']],
@@ -31,5 +31,19 @@ class EventTest extends TestCase
             'created_at' => 0,
             'tags' => [['e', 'test']],
         ]), (string) $e);
+    }
+
+    public function test_to_array()
+    {
+        $e = new Event(
+            kind: Kind::Text->value,
+        );
+
+        $this->assertSame([
+            'kind' => 1,
+            'content' => '',
+            'created_at' => 0,
+            'tags' => [],
+        ], $e->toArray());
     }
 }
