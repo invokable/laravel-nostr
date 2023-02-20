@@ -32,6 +32,7 @@ class NostrServe extends Command
      * Execute the console command.
      *
      * @return int
+     *
      * @throws BadOpcodeException
      */
     public function handle(): int
