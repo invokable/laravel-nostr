@@ -27,4 +27,9 @@ class NostrClient
     {
         return new PendingNip05();
     }
+
+    public function pool(): PendingPool
+    {
+        return new PendingPool();
+    }
 }
