@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Feature;
@@ -79,5 +80,41 @@ class ProfileTest extends TestCase
             'nip05' => '',
             'lud06' => '',
         ]), (string) $p);
+    }
+
+    public function test_from_json()
+    {
+        $p = Profile::fromJson(json_encode([
+            'name' => 'test',
+        ]));
+
+        $this->assertSame([
+            'name' => 'test',
+            'display_name' => '',
+            'about' => '',
+            'picture' => '',
+            'banner' => '',
+            'website' => '',
+            'nip05' => '',
+            'lud06' => '',
+        ], $p->toArray());
+    }
+
+    public function test_from_array()
+    {
+        $p = Profile::fromArray([
+            'name' => 'test',
+        ]);
+
+        $this->assertSame([
+            'name' => 'test',
+            'display_name' => '',
+            'about' => '',
+            'picture' => '',
+            'banner' => '',
+            'website' => '',
+            'nip05' => '',
+            'lud06' => '',
+        ], $p->toArray());
     }
 }
