@@ -38,6 +38,14 @@ class NostrChannel
             return;
         }
 
+        $this->publish($message, $route);
+    }
+
+    /**
+     * @throws RequestException
+     */
+    protected function publish(NostrMessage $message, NostrRoute $route): void
+    {
         $event = new Event(
             kind: Kind::Text->value,
             content: $message->content,
@@ -52,7 +60,7 @@ class NostrChannel
                               sk: $route->sk,
                           );
 
-        foreach ($responses as $relay => $response) {
+        foreach ($responses as $response) {
             $response->throw();
         }
     }

@@ -13,9 +13,8 @@ class IdentifierTag implements Arrayable
     ) {
     }
 
-    public static function make(
-        string $d,
-    ): static {
+    public static function make(string $d,): static
+    {
         return new static(d: $d);
     }
 
