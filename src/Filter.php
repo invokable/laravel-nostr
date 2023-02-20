@@ -31,12 +31,11 @@ class Filter implements Jsonable, Arrayable, Stringable
     }
 
     /**
-     * Set extra parameters.
-     * ->with(['#e' => ['...']])
+     * Set extra parameters. ->with(['#e' => ['...'], '#r' => [...]]).
      *
      * @param  array<array-key, array<string>>  $parameters
      */
-    public function with(array $parameters,): static
+    public function with(array $parameters): static
     {
         $this->parameters = $parameters;
 
@@ -52,7 +51,7 @@ class Filter implements Jsonable, Arrayable, Stringable
             ->toArray();
     }
 
-    public function toJson($options = 0,): string
+    public function toJson($options = 0): string
     {
         return json_encode($this->toArray(), $options);
     }

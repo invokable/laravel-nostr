@@ -98,7 +98,6 @@ class SocialTestCommand extends Command
         //                $res = Social::createTextNote('test');
         //                dump($res->json());
 
-
         return 0;
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Revolution\Nostr\Console;
 
-use Illuminate\Support\Arr;
-use Revolution\Nostr\Kind;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Revolution\Nostr\Kind;
 use WebSocket\BadOpcodeException;
 use WebSocket\Client;
 use WebSocket\ConnectionException;
