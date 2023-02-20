@@ -23,13 +23,13 @@ class NostrClient
         return new PendingEvent();
     }
 
-    public function nip05(): PendingNip05
-    {
-        return new PendingNip05();
-    }
-
     public function pool(): PendingPool
     {
         return new PendingPool();
+    }
+
+    public function nip05(): PendingNip05
+    {
+        return new PendingNip05();
     }
 }

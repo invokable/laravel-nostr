@@ -12,8 +12,8 @@ use Revolution\Nostr\Client\PendingPool;
 /**
  * @method static PendingKey key()
  * @method static PendingEvent event()
- * @method static PendingNip05 nip05()
  * @method static PendingPool pool()
+ * @method static PendingNip05 nip05()
  *
  * @see NostrClient
  */

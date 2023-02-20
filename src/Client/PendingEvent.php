@@ -5,18 +5,38 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Client;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Concerns\HasHttp;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
 
+/**
+ * Working with single relay.
+ */
 class PendingEvent
 {
     use HasHttp;
     use Macroable;
 
-    public function publish(Event|array $event, string $sk, string $relay): Response
+    public function __construct(
+        protected string $relay = '',
+    ) {
+        $this->relay = Arr::first(Config::get('nostr.relays', []));
+    }
+
+    public function withRelay(string $relay): static
     {
+        $this->relay = $relay;
+
+        return $this;
+    }
+
+    public function publish(Event|array $event, string $sk, ?string $relay = null): Response
+    {
+        $relay = $relay ?? $this->relay;
+
         return $this->http()->post('event/publish', [
             'event' => collect($event)->toArray(),
             'sk' => $sk,
@@ -27,8 +47,10 @@ class PendingEvent
     /**
      * @param  array<Filter|array>  $filters
      */
-    public function list(array $filters, string $relay): Response
+    public function list(array $filters, ?string $relay = null): Response
     {
+        $relay = $relay ?? $this->relay;
+
         return $this->http()->post('event/list', [
             'filters' => collect($filters)->toArray(),
             'relay' => $relay,

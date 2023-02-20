@@ -19,7 +19,9 @@ class ClientEventTest extends TestCase
 
         $event = new Event(kind: Kind::Text->value);
 
-        $response = Nostr::event()->publish(event: $event, sk: '', relay: '');
+        $response = Nostr::event()
+                         ->withRelay(relay: '')
+                         ->publish(event: $event, sk: '');
 
         $this->assertSame([
             'message' => 'ok',
