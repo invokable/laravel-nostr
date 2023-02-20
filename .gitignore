@@ -1,0 +1,6 @@
+/vendor
+.env
+.phpunit.result.cache
+testbench.yaml
+composer.lock
+

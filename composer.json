@@ -1,0 +1,44 @@
+{
+  "name": "revolution/laravel-nostr",
+  "description": "Laravel Nostr",
+  "keywords": [
+    "laravel",
+    "nostr"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.1",
+    "illuminate/support": "^9.0||^10.0",
+    "guzzlehttp/guzzle": "^7.5"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^7.0||^8.0",
+    "phpunit/phpunit": "^9.5|^10.0",
+    "textalk/websocket": "^1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Revolution\\Nostr\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "kawax",
+      "email": "kawaxbiz@gmail.com"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Revolution\\Nostr\\NostrServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable"
+}

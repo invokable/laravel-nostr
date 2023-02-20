@@ -1,0 +1,5 @@
+env:
+  - NOSTR_SK=
+  - NOSTR_NSEC=
+  - NOSTR_PK=
+  - NOSTR_NPUB=
