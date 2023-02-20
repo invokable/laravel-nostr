@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Revolution\Nostr;
@@ -33,7 +34,7 @@ class Filter implements Jsonable, Arrayable, Stringable
      * Set extra parameters.
      * ->with(['#e' => ['...']])
      *
-     * @param array<array-key, array<string>> $parameters
+     * @param  array<array-key, array<string>>  $parameters
      */
     public function with(array $parameters,): static
     {

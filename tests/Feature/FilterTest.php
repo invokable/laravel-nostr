@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\Feature;
@@ -42,6 +43,6 @@ class FilterTest extends TestCase
 
         $f = collect($filters)->toArray();
 
-        $this->assertSame([['authors'=> ['1']],['authors'=> ['2']]], $f);
+        $this->assertSame([['authors' => ['1']], ['authors' => ['2']]], $f);
     }
 }

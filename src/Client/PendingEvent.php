@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Revolution\Nostr\Client;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Concerns\HasHttp;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
@@ -11,6 +13,7 @@ use Revolution\Nostr\Filter;
 class PendingEvent
 {
     use HasHttp;
+    use Macroable;
 
     public function publish(Event|array $event, string $sk, string $relay): Response
     {
