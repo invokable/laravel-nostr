@@ -21,14 +21,14 @@ class NostrChannel
         $message = $notification->toNostr($notifiable);
 
         if (! $message instanceof NostrMessage) {
-            return;
+            return; // @codeCoverageIgnore
         }
 
         /** @var NostrRoute $route */
         $route = $notifiable->routeNotificationFor('nostr', $notification);
 
         if (! $route instanceof NostrRoute) {
-            return;
+            return; // @codeCoverageIgnore
         }
 
         $event = new Event(

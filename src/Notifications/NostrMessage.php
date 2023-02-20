@@ -12,7 +12,6 @@ class NostrMessage implements Arrayable
         public string $content,
         public array $tags = [],
     ) {
-        //
     }
 
     public static function create(string $content, array $tags = []): static
