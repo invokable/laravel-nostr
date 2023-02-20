@@ -41,11 +41,15 @@ class NostrChannel
             tags: $message->tags,
         );
 
-        Nostr::pool()
+        $responses = Nostr::pool()
              ->withRelays($route->relays)
              ->publish(
                  event: $event,
                  sk: $route->sk,
              );
+
+        foreach ($responses as $relay => $response){
+            $response->throw();
+        }
     }
 }
