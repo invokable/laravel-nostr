@@ -26,11 +26,13 @@ return [
         'wss://nostr.shawnyeager.net',
         'wss://relay.nostr.vision',
         'wss://nostr.zkid.social',
+        'wss://relay.nostr.band',
 
         'wss://nostr-relay.nokotaro.com',
         'wss://nostr.fediverse.jp',
         'wss://nostr.h3z.jp',
         'wss://relay-jp.nostr.wirednet.jp',
         'wss://relay.nostr.wirednet.jp',
+        'wss://nostr.holybea.com',
     ],
 ];
