@@ -15,7 +15,7 @@ class PendingNip05
 
     public function profile(string $user): Response
     {
-        return $this->http()->post('nip05/profile', [
+        return $this->http()->get('nip05/profile', [
             'user' => $user,
         ]);
     }
