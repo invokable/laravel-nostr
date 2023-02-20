@@ -13,6 +13,12 @@ class ReferenceTag implements Arrayable
     ) {
     }
 
+    public static function make(
+        string $r,
+    ): static {
+        return new static(r: $r);
+    }
+
     /**
      * @return array<string, string>
      */

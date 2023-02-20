@@ -215,7 +215,7 @@ class SocialClient
             kind: Kind::Text->value,
             content: $content,
             created_at: now()->timestamp,
-            tags: [(new PersonTag(pubkey: $pk))->toArray()],
+            tags: [PersonTag::make(pubkey: $pk)->toArray()],
         );
 
         return $this->publishEvent(event: $event);
@@ -226,7 +226,7 @@ class SocialClient
         $tags = collect();
 
         foreach ($hashtags as $hashtag) {
-            $tags->push((new HashTag(hashtag: $hashtag))->toArray());
+            $tags->push(HashTag::make(hashtag: $hashtag)->toArray());
         }
 
         $event = new Event(
@@ -250,7 +250,7 @@ class SocialClient
         ]);
 
         foreach ($to as $pk) {
-            $tags->push(new PersonTag(pubkey: $pk));
+            $tags->push(PersonTag::make(pubkey: $pk)->toArray());
         }
 
         $event = new Event(
@@ -265,9 +265,7 @@ class SocialClient
 
     public function delete(string $event_id): Response
     {
-        $e = new EventTag(
-            id: $event_id,
-        );
+        $e = EventTag::make(id: $event_id);
 
         $event = new Event(
             kind: Kind::EventDeletion->value,

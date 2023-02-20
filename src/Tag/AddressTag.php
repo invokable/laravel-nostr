@@ -17,6 +17,15 @@ class AddressTag implements Arrayable
     ) {
     }
 
+    public static function make(
+        int $kind,
+        string $pubkey,
+        string $identifier,
+        string $relay = '',
+    ): static {
+        return new static(kind: $kind, pubkey: $pubkey, identifier: $identifier, relay: $relay);
+    }
+
     /**
      * @return array<string, string, string>
      */

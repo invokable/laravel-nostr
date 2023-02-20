@@ -15,6 +15,14 @@ class EventTag implements Arrayable
     ) {
     }
 
+    public static function make(
+        string $id,
+        string $relay = '',
+        string $marker = '',
+    ): static {
+        return new static(id: $id, relay: $relay, marker: $marker);
+    }
+
     /**
      * @return array<string, string, string, string>
      */

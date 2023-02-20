@@ -13,6 +13,12 @@ class HashTag implements Arrayable
     ) {
     }
 
+    public static function make(
+        string $hashtag,
+    ): static {
+        return new static(hashtag: $hashtag);
+    }
+
     /**
      * @return array<string, string>
      */

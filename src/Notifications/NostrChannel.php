@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Notifications;
 
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
 use Revolution\Nostr\Event;
@@ -12,6 +13,9 @@ use Revolution\Nostr\Kind;
 
 class NostrChannel
 {
+    /**
+     * @throws RequestException
+     */
     public function send(mixed $notifiable, Notification $notification): void
     {
         /** @var NostrMessage $message */
@@ -42,13 +46,13 @@ class NostrChannel
         );
 
         $responses = Nostr::pool()
-             ->withRelays($route->relays)
-             ->publish(
-                 event: $event,
-                 sk: $route->sk,
-             );
+                          ->withRelays($route->relays)
+                          ->publish(
+                              event: $event,
+                              sk: $route->sk,
+                          );
 
-        foreach ($responses as $relay => $response){
+        foreach ($responses as $relay => $response) {
             $response->throw();
         }
     }

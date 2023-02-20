@@ -15,6 +15,14 @@ class PersonTag implements Arrayable
     ) {
     }
 
+    public static function make(
+        string $pubkey,
+        string $relay = '',
+        string $petname = '',
+    ): static {
+        return new static(pubkey: $pubkey, relay: $relay, petname: $petname);
+    }
+
     /**
      * @return array<string, string, string, string>
      */

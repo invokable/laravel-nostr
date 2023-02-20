@@ -14,7 +14,7 @@ class TagTest extends TestCase
 {
     public function test_addr()
     {
-        $a = new AddressTag(
+        $a = AddressTag::make(
             kind: Kind::Text->value,
             pubkey: 'pk',
             identifier: 'd',
@@ -27,7 +27,7 @@ class TagTest extends TestCase
 
     public function test_identifier()
     {
-        $d = new IdentifierTag(
+        $d = IdentifierTag::make(
             d: 'identifier',
         );
 
@@ -37,7 +37,7 @@ class TagTest extends TestCase
 
     public function test_reference()
     {
-        $r = new ReferenceTag(
+        $r = ReferenceTag::make(
             r: 'reference',
         );
 
