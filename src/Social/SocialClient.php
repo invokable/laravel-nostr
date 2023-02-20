@@ -95,7 +95,7 @@ class SocialClient
 
         $filter = new Filter(
             authors: [$pk],
-            kinds: [Kind::Metadata],
+            kinds: [Kind::Metadata->value],
         );
 
         return Nostr::event()->get(filter: $filter, relay: $this->relay);
@@ -105,7 +105,7 @@ class SocialClient
     {
         $filter = new Filter(
             authors: [$this->pk],
-            kinds: [Kind::Contacts],
+            kinds: [Kind::Contacts->value],
         );
 
         $response = Nostr::event()->get(filter: $filter, relay: $this->relay);
@@ -138,7 +138,7 @@ class SocialClient
     {
         $filter = new Filter(
             authors: $authors,
-            kinds: [Kind::Metadata],
+            kinds: [Kind::Metadata->value],
         );
 
         $response = Nostr::event()->list(filters: [$filter], relay: $this->relay);
@@ -153,7 +153,7 @@ class SocialClient
     {
         $filter = new Filter(
             authors: $authors,
-            kinds: [Kind::Text],
+            kinds: [Kind::Text->value],
             since: $since,
             until: $until,
             limit: $limit,
