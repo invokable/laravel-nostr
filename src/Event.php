@@ -49,16 +49,19 @@ class Event implements Jsonable, Arrayable, Stringable
         return collect(get_object_vars($this))
             ->reject(fn ($item) => is_null($item))
             ->map(fn ($item) => $item instanceof BackedEnum ? $item->value : $item)
-            ->map(function ($item, $key) {
-                //tags
-                if ($key === 'tags' && is_array($item)) {
-                    $item = collect($item)
-                        ->map(fn ($tag) => $tag instanceof Arrayable ? $tag->toArray() : $tag)->toArray();
-                }
-
-                return $item;
-            })
+            ->map($this->castTags(...))
             ->toArray();
+    }
+
+    protected function castTags(mixed $item, string $key): mixed
+    {
+        if ($key === 'tags' && is_array($item)) {
+            $item = collect($item)
+                ->map(fn ($tag) => $tag instanceof Arrayable ? $tag->toArray() : $tag)
+                ->toArray();
+        }
+
+        return $item;
     }
 
     public function toJson($options = 0): string

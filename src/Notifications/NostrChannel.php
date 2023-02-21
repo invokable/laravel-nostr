@@ -48,7 +48,7 @@ class NostrChannel
             kind: Kind::Text,
             content: $message->content,
             created_at: now()->timestamp,
-            tags: $message->tags,
+            tags: collect($message->tags)->toArray(),
         );
 
         $responses = Nostr::pool()
