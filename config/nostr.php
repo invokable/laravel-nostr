@@ -27,6 +27,9 @@ return [
         'wss://relay.nostr.vision',
         'wss://nostr.zkid.social',
         'wss://relay.nostr.band',
+        'wss://nostr.shawnyeager.net',
+        'wss://global.relay.red',
+        'wss://nostr.lnprivate.network',
 
         'wss://nostr-relay.nokotaro.com',
         'wss://nostr.fediverse.jp',
