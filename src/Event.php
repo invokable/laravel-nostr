@@ -15,9 +15,6 @@ class Event implements Jsonable, Arrayable, Stringable
     protected readonly string $pubkey;
     protected readonly string $sig;
 
-    /**
-     * @param  array<array<string>>  $tags
-     */
     public function __construct(
         protected readonly int|Kind $kind = Kind::Metadata,
         protected readonly string $content = '',
@@ -52,6 +49,7 @@ class Event implements Jsonable, Arrayable, Stringable
         return collect(get_object_vars($this))
             ->reject(fn ($item) => is_null($item))
             ->map(fn ($item) => $item instanceof BackedEnum ? $item->value : $item)
+            ->map(fn ($item) => $item instanceof Arrayable ? $item->toArray() : $item)
             ->toArray();
     }
 
