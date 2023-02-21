@@ -28,6 +28,7 @@ use Revolution\Nostr\Social\SocialClient;
  * @method static Response createTextNoteWithHashTag(string $content, array $hashtags = [])
  * @method static Response reply(string $content, string $event_id, array $to = [], string $marker = 'root')
  * @method static Response delete(string $event_id)
+ * @method static Event getEventById(string $id)
  *
  * @see SocialClient
  */
