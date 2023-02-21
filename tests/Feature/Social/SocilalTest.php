@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Social;
 
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Http;
+use Revolution\Nostr\Exceptions\EventNotFoundException;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
 use Revolution\Nostr\Profile;
@@ -237,5 +240,53 @@ class SocilalTest extends TestCase
                                  ->delete(event_id: '1');
 
         $this->assertTrue($response->successful());
+    }
+
+    public function test_get_event_by_id()
+    {
+        Http::fake(fn () => Http::response([
+            'event' => [
+                'kind' => 1,
+                'content' => 'test',
+                'created_at' => 0,
+                'tags' => [],
+                'pubkey' => '1',
+                'id' => '1',
+                'sig' => '1',
+            ],
+        ]));
+
+        $event = $this->social->withKey('sk', 'pk')
+                              ->getEventById(id: '1');
+
+        $this->assertSame([
+            'id' => '1',
+            'pubkey' => '1',
+            'sig' => '1',
+            'kind' => 1,
+            'content' => 'test',
+            'created_at' => 0,
+            'tags' => [],
+        ], $event->toArray());
+    }
+
+    public function test_get_event_by_id_http_failed()
+    {
+        Http::fake(fn () => Http::response('', 500));
+
+        $this->expectException(RequestException::class);
+
+        $event = $this->social->withKey('sk', 'pk')
+                              ->getEventById(id: '1');
+    }
+
+    public function test_get_event_by_id_validator_fails()
+    {
+        Http::fake(fn () => Http::response(['event' => []]));
+
+        $this->expectException(EventNotFoundException::class);
+
+        $event = $this->social->withKey('sk', 'pk')
+                              ->getEventById(id: '1');
     }
 }

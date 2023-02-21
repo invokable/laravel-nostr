@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Social;
 
 use Exception;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Event;
+use Revolution\Nostr\Exceptions\EventNotFoundException;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
@@ -274,5 +276,44 @@ class SocialClient
         );
 
         return $this->publishEvent(event: $event);
+    }
+
+    /**
+     * @throws RequestException|EventNotFoundException
+     */
+    public function getEventById(string $id): Event
+    {
+        $filter = new Filter(
+            ids: [$id],
+        );
+
+        $res = Nostr::event()->get(filter: $filter, relay: $this->relay);
+
+        if ($res->failed()) {
+            $res->throw();
+        }
+
+        $validator = validator(data: $res->json('event'), rules: [
+            'kind' => 'required|numeric',
+            'content' => 'required|string',
+            'created_at' => 'required|numeric',
+            'tags' => 'array',
+            'id' => 'required|string',
+            'pubkey' => 'required|string',
+            'sig' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            throw new EventNotFoundException();
+        }
+
+        return tap(new Event(
+            kind: $res->json('event.kind'),
+            content: $res->json('event.content'),
+            created_at: $res->json('event.created_at'),
+            tags: $res->json('event.tags'),
+        ))->withId($res->json('event.id'))
+          ->withPublicKey($res->json('event.pubkey'))
+          ->withSign($res->json('event.sig'));
     }
 }
