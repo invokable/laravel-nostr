@@ -10,3 +10,5 @@
 .gitignore export-ignore
 .styleci.yml export-ignore
 phpunit.xml export-ignore
+/src/Console export-ignore
+testbench.yaml.example export-ignore
