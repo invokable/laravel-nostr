@@ -6,8 +6,10 @@ namespace Tests\Feature\Tag;
 
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Tag\AddressTag;
+use Revolution\Nostr\Tag\ExpirationTag;
 use Revolution\Nostr\Tag\IdentifierTag;
 use Revolution\Nostr\Tag\ReferenceTag;
+use Revolution\Nostr\Tag\SubjectTag;
 use Tests\TestCase;
 
 class TagTest extends TestCase
@@ -43,5 +45,25 @@ class TagTest extends TestCase
 
         $this->assertIsArray($r->toArray());
         $this->assertSame(['r', 'reference'], $r->toArray());
+    }
+
+    public function test_subject()
+    {
+        $s = SubjectTag::make(
+            subject: 'subject',
+        );
+
+        $this->assertIsArray($s->toArray());
+        $this->assertSame(['subject', 'subject'], $s->toArray());
+    }
+
+    public function test_expiration()
+    {
+        $e = ExpirationTag::make(
+            expiration: 0,
+        );
+
+        $this->assertIsArray($e->toArray());
+        $this->assertSame(['expiration', '0'], $e->toArray());
     }
 }

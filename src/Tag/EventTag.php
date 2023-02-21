@@ -6,6 +6,9 @@ namespace Revolution\Nostr\Tag;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * NIP-1
+ */
 class EventTag implements Arrayable
 {
     public function __construct(

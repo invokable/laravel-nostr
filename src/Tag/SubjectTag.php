@@ -7,18 +7,18 @@ namespace Revolution\Nostr\Tag;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * NIP-33
+ * NIP-14
  */
-class IdentifierTag implements Arrayable
+class SubjectTag implements Arrayable
 {
     public function __construct(
-        protected readonly string $d,
+        protected readonly string $subject,
     ) {
     }
 
-    public static function make(string $d): static
+    public static function make(string $subject): static
     {
-        return new static(d: $d);
+        return new static(subject: $subject);
     }
 
     /**
@@ -26,6 +26,6 @@ class IdentifierTag implements Arrayable
      */
     public function toArray(): array
     {
-        return ['d', $this->d];
+        return ['subject', $this->subject];
     }
 }

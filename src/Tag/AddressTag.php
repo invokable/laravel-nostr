@@ -7,6 +7,9 @@ namespace Revolution\Nostr\Tag;
 use Illuminate\Contracts\Support\Arrayable;
 use Revolution\Nostr\Kind;
 
+/**
+ * NIP-23,33
+ */
 class AddressTag implements Arrayable
 {
     public function __construct(
