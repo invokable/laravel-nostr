@@ -9,6 +9,8 @@ use Revolution\Nostr\Profile;
 use Revolution\Nostr\Social\SocialClient;
 
 /**
+ * Implementation for social networking.
+ *
  * @method static static withRelay(string $relay)
  * @method static static withKey(string $sk, string $pk)
  * @method static Response publishEvent(Event $event)

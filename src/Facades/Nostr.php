@@ -10,6 +10,8 @@ use Revolution\Nostr\Client\PendingNip05;
 use Revolution\Nostr\Client\PendingPool;
 
 /**
+ * Basic Nostr client.
+ *
  * @method static PendingKey key()
  * @method static PendingEvent event()
  * @method static PendingPool pool()
