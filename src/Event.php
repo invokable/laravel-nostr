@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr;
 
+use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Stringable;
@@ -18,7 +19,7 @@ class Event implements Jsonable, Arrayable, Stringable
      * @param  array<array<string>>  $tags
      */
     public function __construct(
-        protected readonly int $kind = 0,
+        protected readonly int|Kind $kind = Kind::Metadata,
         protected readonly string $content = '',
         protected readonly int $created_at = 0,
         protected readonly array $tags = [],
@@ -50,6 +51,7 @@ class Event implements Jsonable, Arrayable, Stringable
     {
         return collect(get_object_vars($this))
             ->reject(fn ($item) => is_null($item))
+            ->map(fn ($item) => $item instanceof BackedEnum ? $item->value : $item)
             ->toArray();
     }
 

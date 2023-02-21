@@ -81,7 +81,7 @@ class SocialClient
     public function updateProfile(Profile $profile): Response
     {
         $event = new Event(
-            kind: Kind::Metadata->value,
+            kind: Kind::Metadata,
             content: $profile->toJson(),
             created_at: now()->timestamp,
         );
@@ -95,7 +95,7 @@ class SocialClient
 
         $filter = new Filter(
             authors: [$pk],
-            kinds: [Kind::Metadata->value],
+            kinds: [Kind::Metadata],
         );
 
         return Nostr::event()->get(filter: $filter, relay: $this->relay);
@@ -105,7 +105,7 @@ class SocialClient
     {
         $filter = new Filter(
             authors: [$this->pk],
-            kinds: [Kind::Contacts->value],
+            kinds: [Kind::Contacts],
         );
 
         $response = Nostr::event()->get(filter: $filter, relay: $this->relay);
@@ -122,7 +122,7 @@ class SocialClient
     public function updateFollows(array $follows): Response
     {
         $event = new Event(
-            kind: Kind::Contacts->value,
+            kind: Kind::Contacts,
             content: '',
             created_at: now()->timestamp,
             tags: collect($follows)->toArray(),
@@ -138,7 +138,7 @@ class SocialClient
     {
         $filter = new Filter(
             authors: $authors,
-            kinds: [Kind::Metadata->value],
+            kinds: [Kind::Metadata],
         );
 
         $response = Nostr::event()->list(filters: [$filter], relay: $this->relay);
@@ -153,7 +153,7 @@ class SocialClient
     {
         $filter = new Filter(
             authors: $authors,
-            kinds: [Kind::Text->value],
+            kinds: [Kind::Text],
             since: $since,
             until: $until,
             limit: $limit,
@@ -200,7 +200,7 @@ class SocialClient
     public function createTextNote(string $content, array $tags = []): Response
     {
         $event = new Event(
-            kind: Kind::Text->value,
+            kind: Kind::Text,
             content: $content,
             created_at: now()->timestamp,
             tags: $tags,
@@ -212,7 +212,7 @@ class SocialClient
     public function createTextNoteTo(string $content, string $pk): Response
     {
         $event = new Event(
-            kind: Kind::Text->value,
+            kind: Kind::Text,
             content: $content,
             created_at: now()->timestamp,
             tags: [PersonTag::make(pubkey: $pk)->toArray()],
@@ -230,7 +230,7 @@ class SocialClient
         }
 
         $event = new Event(
-            kind: Kind::Text->value,
+            kind: Kind::Text,
             content: $content,
             created_at: now()->timestamp,
             tags: $tags->toArray(),
@@ -254,7 +254,7 @@ class SocialClient
         }
 
         $event = new Event(
-            kind: Kind::Text->value,
+            kind: Kind::Text,
             content: $content,
             created_at: now()->timestamp,
             tags: $tags->toArray(),
@@ -268,7 +268,7 @@ class SocialClient
         $e = EventTag::make(id: $event_id);
 
         $event = new Event(
-            kind: Kind::EventDeletion->value,
+            kind: Kind::EventDeletion,
             created_at: now()->timestamp,
             tags: [$e->toArray()],
         );

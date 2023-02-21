@@ -15,7 +15,7 @@ class FilterTest extends TestCase
         $f = new Filter(
             ids: ['a'],
             authors: ['1'],
-            kinds: [Kind::Metadata->value, 1],
+            kinds: [Kind::Metadata, 1],
             since: 0,
             until: 0,
             limit: 0,
@@ -37,12 +37,12 @@ class FilterTest extends TestCase
     public function test_filters_to_array()
     {
         $filters = [
-            new Filter(authors: ['1']),
+            new Filter(authors: ['1'], kinds: [Kind::Metadata]),
             new Filter(authors: ['2']),
         ];
 
         $f = collect($filters)->toArray();
 
-        $this->assertSame([['authors' => ['1']], ['authors' => ['2']]], $f);
+        $this->assertSame([['authors' => ['1'], 'kinds' => [0]], ['authors' => ['2']]], $f);
     }
 }

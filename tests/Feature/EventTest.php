@@ -13,7 +13,7 @@ class EventTest extends TestCase
     public function test_event()
     {
         $e = new Event(
-            kind: Kind::Text->value,
+            kind: Kind::Text,
             content: 'test',
             created_at: 0,
             tags: [['e', 'test']],
@@ -37,7 +37,7 @@ class EventTest extends TestCase
     public function test_to_array()
     {
         $e = new Event(
-            kind: Kind::Text->value,
+            kind: Kind::Text,
         );
 
         $this->assertSame([

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr;
 
+use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Stringable;
@@ -15,7 +16,7 @@ class Filter implements Jsonable, Arrayable, Stringable
     /**
      * @param  array<string>|null  $ids
      * @param  array<string>|null  $authors
-     * @param  array<int>|null  $kinds
+     * @param  array<int|Kind>|null  $kinds
      * @param  int|null  $since
      * @param  int|null  $until
      * @param  int|null  $limit
@@ -48,7 +49,22 @@ class Filter implements Jsonable, Arrayable, Stringable
             ->except(['parameters'])
             ->merge($this->parameters)
             ->reject(fn ($item) => is_null($item))
+            ->map($this->castEnum(...))
             ->toArray();
+    }
+
+    /**
+     * Convert an array containing BackedEnum.
+     */
+    protected function castEnum(array|int $item): array|int
+    {
+        if (is_array($item)) {
+            $item = collect($item)
+                ->map(fn ($item) => $item instanceof BackedEnum ? $item->value : $item)
+                ->toArray();
+        }
+
+        return $item;
     }
 
     public function toJson($options = 0): string

@@ -10,7 +10,7 @@ use Revolution\Nostr\Kind;
 class AddressTag implements Arrayable
 {
     public function __construct(
-        protected readonly int $kind,
+        protected readonly int|Kind $kind,
         protected readonly string $pubkey,
         protected readonly string $identifier,
         protected readonly string $relay = '',
@@ -18,7 +18,7 @@ class AddressTag implements Arrayable
     }
 
     public static function make(
-        int $kind,
+        int|Kind $kind,
         string $pubkey,
         string $identifier,
         string $relay = '',
@@ -31,8 +31,10 @@ class AddressTag implements Arrayable
      */
     public function toArray(): array
     {
+        $kind = $this->kind instanceof Kind ? $this->kind->value : $this->kind;
+
         $addr = collect([
-            $this->kind,
+            $kind,
             $this->pubkey,
             $this->identifier,
         ])->join('|');

@@ -15,7 +15,7 @@ class TagTest extends TestCase
     public function test_addr()
     {
         $a = AddressTag::make(
-            kind: Kind::Text->value,
+            kind: Kind::Text,
             pubkey: 'pk',
             identifier: 'd',
             relay: 'wss://'

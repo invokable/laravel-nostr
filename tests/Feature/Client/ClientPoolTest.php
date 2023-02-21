@@ -17,7 +17,7 @@ class ClientPoolTest extends TestCase
     {
         Http::fake(fn () => Http::response(['message' => 'ok']));
 
-        $event = new Event(kind: Kind::Text->value);
+        $event = new Event(kind: Kind::Text);
 
         $responses = Nostr::pool()
                           ->publish(event: $event, sk: '', relays: ['wss://1', 'wss://2']);
