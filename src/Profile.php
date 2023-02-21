@@ -19,6 +19,7 @@ class Profile implements Jsonable, Arrayable, Stringable
         public string $website = '',
         public string $nip05 = '',
         public string $lud06 = '',
+        public string $lud16 = '',
     ) {
     }
 
@@ -33,6 +34,7 @@ class Profile implements Jsonable, Arrayable, Stringable
             website: $profile['website'] ?? '',
             nip05: $profile['nip05'] ?? '',
             lud06: $profile['lud06'] ?? '',
+            lud16: $profile['lud16'] ?? '',
         );
     }
 

@@ -20,6 +20,7 @@ class ProfileTest extends TestCase
             website: '',
             nip05: '',
             lud06: '',
+            lud16: '',
         );
 
         $p->display_name = 'display_name';
@@ -43,6 +44,7 @@ class ProfileTest extends TestCase
             'website' => '',
             'nip05' => '',
             'lud06' => '',
+            'lud16' => '',
         ], $p->toArray());
     }
 
@@ -61,6 +63,7 @@ class ProfileTest extends TestCase
             'website' => '',
             'nip05' => '',
             'lud06' => '',
+            'lud16' => '',
         ]), $p->toJson());
     }
 
@@ -79,6 +82,7 @@ class ProfileTest extends TestCase
             'website' => '',
             'nip05' => '',
             'lud06' => '',
+            'lud16' => '',
         ]), (string) $p);
     }
 
@@ -97,6 +101,7 @@ class ProfileTest extends TestCase
             'website' => '',
             'nip05' => '',
             'lud06' => '',
+            'lud16' => '',
         ], $p->toArray());
     }
 
@@ -115,6 +120,7 @@ class ProfileTest extends TestCase
             'website' => '',
             'nip05' => '',
             'lud06' => '',
+            'lud16' => '',
         ], $p->toArray());
     }
 }

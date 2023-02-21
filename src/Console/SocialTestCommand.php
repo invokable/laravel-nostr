@@ -61,11 +61,11 @@ class SocialTestCommand extends Command
         //
         //        dump($res->json());
         //
-        //        $res = Social::profile(
-        //            pk: $pk,
-        //        );
-        //
-        //        dump($res->json());
+        $res = Social::profile(
+            pk: $pk,
+        );
+
+        dump($res->json());
         //
         //        $follow_ids = Social::follows();
         //        dump($follow_ids);
@@ -102,25 +102,25 @@ class SocialTestCommand extends Command
         //                $res = Social::createTextNote('test');
         //                dump($res->json());
 
-//        $event = new Event(
-//            kind: Kind::Text->value,
-//            content: 'publish test',
-//            created_at: now()->timestamp,
-//            tags: [],
-//        );
-//
-//        $responses = Nostr::pool()->publish(event: $event, sk: $sk);
-//        foreach ($responses as $relay => $response) {
-//            $this->line($relay);
-//
-//            $this->table(
-//                ['kind', 'content', 'created_at'],
-//                [$response->collect('event')->only(['kind', 'content', 'created_at'])->toArray()]
-//            );
-//        }
-//
-//        $event_id = Arr::first($responses)['event']['id'];
-//        $this->info($event_id);
+        //        $event = new Event(
+        //            kind: Kind::Text->value,
+        //            content: 'publish test',
+        //            created_at: now()->timestamp,
+        //            tags: [],
+        //        );
+        //
+        //        $responses = Nostr::pool()->publish(event: $event, sk: $sk);
+        //        foreach ($responses as $relay => $response) {
+        //            $this->line($relay);
+        //
+        //            $this->table(
+        //                ['kind', 'content', 'created_at'],
+        //                [$response->collect('event')->only(['kind', 'content', 'created_at'])->toArray()]
+        //            );
+        //        }
+        //
+        //        $event_id = Arr::first($responses)['event']['id'];
+        //        $this->info($event_id);
 
         //        $delete = new Event(
         //            kind: Kind::EventDeletion->value,
@@ -135,20 +135,20 @@ class SocialTestCommand extends Command
         //            $this->info($response->body());
         //        }
 
-//        $res = Social::createTextNote('test');
-//        $event_id_p = Arr::get($res, 'event.id');
-//
-//        $res = Social::reply(content: 'reply1', event_id: $event_id_p, to: [$pk]);
-//        $event_id = Arr::get($res, 'event.id');
-//        dump($res->json());
-//
-//        $res = Social::reply(content: 'reply2', event_id: $event_id_p, to: [$pk]);
-//        $event_id = Arr::get($res, 'event.id');
-//        dump($res->json());
-//
-//        $res = Social::reply(content: 'reply3', event_id: $event_id_p);
-//        $event_id = Arr::get($res, 'event.id');
-//        dump($res->json());
+        //        $res = Social::createTextNote('test');
+        //        $event_id_p = Arr::get($res, 'event.id');
+        //
+        //        $res = Social::reply(content: 'reply1', event_id: $event_id_p, to: [$pk]);
+        //        $event_id = Arr::get($res, 'event.id');
+        //        dump($res->json());
+        //
+        //        $res = Social::reply(content: 'reply2', event_id: $event_id_p, to: [$pk]);
+        //        $event_id = Arr::get($res, 'event.id');
+        //        dump($res->json());
+        //
+        //        $res = Social::reply(content: 'reply3', event_id: $event_id_p);
+        //        $event_id = Arr::get($res, 'event.id');
+        //        dump($res->json());
 
         return 0;
     }
