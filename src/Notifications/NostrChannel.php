@@ -7,6 +7,7 @@ namespace Revolution\Nostr\Notifications;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Kind;
@@ -41,9 +42,6 @@ class NostrChannel
         $this->publish($message, $route);
     }
 
-    /**
-     * @throws RequestException
-     */
     protected function publish(NostrMessage $message, NostrRoute $route): void
     {
         $event = new Event(
@@ -61,7 +59,9 @@ class NostrChannel
                           );
 
         foreach ($responses as $response) {
-            $response->throw();
+            if ($response->failed()) {
+                Log::debug($response->body());
+            }
         }
     }
 }
