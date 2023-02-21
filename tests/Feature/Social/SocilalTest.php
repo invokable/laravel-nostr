@@ -91,8 +91,8 @@ class SocilalTest extends TestCase
         Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $follows = [
-            new PersonTag(pubkey: '1'),
-            new PersonTag(pubkey: '2'),
+            new PersonTag(p: '1'),
+            new PersonTag(p: '2'),
         ];
 
         $res = $this->social->withKey('sk', 'pk')

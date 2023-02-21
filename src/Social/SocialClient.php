@@ -217,7 +217,7 @@ class SocialClient
             kind: Kind::Text,
             content: $content,
             created_at: now()->timestamp,
-            tags: [PersonTag::make(pubkey: $pk)->toArray()],
+            tags: [PersonTag::make(p: $pk)->toArray()],
         );
 
         return $this->publishEvent(event: $event);
@@ -228,7 +228,7 @@ class SocialClient
         $tags = collect();
 
         foreach ($hashtags as $hashtag) {
-            $tags->push(HashTag::make(hashtag: $hashtag)->toArray());
+            $tags->push(HashTag::make(t: $hashtag)->toArray());
         }
 
         $event = new Event(
@@ -252,7 +252,7 @@ class SocialClient
         ]);
 
         foreach ($to as $pk) {
-            $tags->push(PersonTag::make(pubkey: $pk)->toArray());
+            $tags->push(PersonTag::make(p: $pk)->toArray());
         }
 
         $event = new Event(

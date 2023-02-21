@@ -12,13 +12,13 @@ use Illuminate\Contracts\Support\Arrayable;
 class HashTag implements Arrayable
 {
     public function __construct(
-        protected readonly string $hashtag,
+        protected readonly string $t,
     ) {
     }
 
-    public static function make(string $hashtag): static
+    public static function make(string $t): static
     {
-        return new static(hashtag: $hashtag);
+        return new static(t: $t);
     }
 
     /**
@@ -26,6 +26,6 @@ class HashTag implements Arrayable
      */
     public function toArray(): array
     {
-        return ['t', $this->hashtag];
+        return ['t', $this->t];
     }
 }

@@ -12,18 +12,18 @@ use Illuminate\Contracts\Support\Arrayable;
 class PersonTag implements Arrayable
 {
     public function __construct(
-        protected readonly string $pubkey,
+        protected readonly string $p,
         protected readonly string $relay = '',
         protected readonly string $petname = '',
     ) {
     }
 
     public static function make(
-        string $pubkey,
+        string $p,
         string $relay = '',
         string $petname = '',
     ): static {
-        return new static(pubkey: $pubkey, relay: $relay, petname: $petname);
+        return new static(p: $p, relay: $relay, petname: $petname);
     }
 
     /**
@@ -31,6 +31,6 @@ class PersonTag implements Arrayable
      */
     public function toArray(): array
     {
-        return ['p', $this->pubkey, $this->relay, $this->petname];
+        return ['p', $this->p, $this->relay, $this->petname];
     }
 }

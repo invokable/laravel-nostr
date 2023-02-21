@@ -39,7 +39,7 @@ class EventTest extends TestCase
     {
         $e = new Event(
             kind: Kind::Text,
-            tags: [HashTag::make(hashtag: 'test')],
+            tags: [HashTag::make(t: 'test')],
         );
 
         $this->assertSame([
