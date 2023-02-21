@@ -25,7 +25,7 @@ class NostrServiceProvider extends ServiceProvider
     {
         $this->configurePublishing();
 
-        if ($this->app->runningUnitTests()) {
+        if ($this->app->runningUnitTests() && class_exists(SocialTestCommand::class)) {
             $this->commands([
                 SocialTestCommand::class,
                 NostrServe::class,
