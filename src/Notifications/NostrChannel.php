@@ -60,7 +60,7 @@ class NostrChannel
 
         foreach ($responses as $relay => $response) {
             if ($response->failed()) {
-                Log::debug($relay, $response->json());
+                Log::debug($relay, $response->json() ?? []);
             }
         }
     }
