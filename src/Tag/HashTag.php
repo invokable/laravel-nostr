@@ -11,11 +11,17 @@ use Illuminate\Contracts\Support\Arrayable;
  */
 class HashTag implements Arrayable
 {
+    /**
+     * @param  string  $t  hashtag
+     */
     public function __construct(
         protected readonly string $t,
     ) {
     }
 
+    /**
+     * @param  string  $t  hashtag
+     */
     public static function make(string $t): static
     {
         return new static(t: $t);

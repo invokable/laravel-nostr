@@ -11,11 +11,17 @@ use Illuminate\Contracts\Support\Arrayable;
  */
 class IdentifierTag implements Arrayable
 {
+    /**
+     * @param  string  $d  identifier
+     */
     public function __construct(
         protected readonly string $d,
     ) {
     }
 
+    /**
+     * @param  string  $d  identifier
+     */
     public static function make(string $d): static
     {
         return new static(d: $d);

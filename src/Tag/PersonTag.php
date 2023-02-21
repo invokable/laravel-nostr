@@ -11,6 +11,9 @@ use Illuminate\Contracts\Support\Arrayable;
  */
 class PersonTag implements Arrayable
 {
+    /**
+     * @param  string  $p  pubkey
+     */
     public function __construct(
         protected readonly string $p,
         protected readonly string $relay = '',
@@ -18,6 +21,9 @@ class PersonTag implements Arrayable
     ) {
     }
 
+    /**
+     * @param  string  $p  pubkey
+     */
     public static function make(
         string $p,
         string $relay = '',
