@@ -49,7 +49,15 @@ class Event implements Jsonable, Arrayable, Stringable
         return collect(get_object_vars($this))
             ->reject(fn ($item) => is_null($item))
             ->map(fn ($item) => $item instanceof BackedEnum ? $item->value : $item)
-            ->map(fn ($item) => $item instanceof Arrayable ? $item->toArray() : $item)
+            ->map(function ($item, $key) {
+                //tags
+                if ($key === 'tags' && is_array($item)) {
+                    $item = collect($item)
+                        ->map(fn ($tag) => $tag instanceof Arrayable ? $tag->toArray() : $tag)->toArray();
+                }
+
+                return $item;
+            })
             ->toArray();
     }
 

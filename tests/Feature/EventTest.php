@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Kind;
+use Revolution\Nostr\Tag\HashTag;
 use Tests\TestCase;
 
 class EventTest extends TestCase
@@ -38,13 +39,14 @@ class EventTest extends TestCase
     {
         $e = new Event(
             kind: Kind::Text,
+            tags: [HashTag::make(hashtag: 'test')],
         );
 
         $this->assertSame([
             'kind' => 1,
             'content' => '',
             'created_at' => 0,
-            'tags' => [],
+            'tags' => [['t', 'test']],
         ], $e->toArray());
     }
 }

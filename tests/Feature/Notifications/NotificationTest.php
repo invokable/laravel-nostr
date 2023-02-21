@@ -40,6 +40,18 @@ class NotificationTest extends TestCase
         Http::assertSentCount(0);
     }
 
+    public function test_notification_failed()
+    {
+        Http::fake([
+            '*' => Http::response('', 500),
+        ]);
+
+        Notification::route('nostr', NostrRoute::to(sk: 'sk', relays: ['wss://']))
+                    ->notify(new TestNotification(content: 'test'));
+
+        Http::assertSentCount(1);
+    }
+
     public function test_notification_fake()
     {
         Notification::fake();
