@@ -7,7 +7,7 @@ namespace Revolution\Nostr\Tag;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * NIP-14
+ * NIP-14.
  */
 class SubjectTag implements Arrayable
 {

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Revolution\Nostr\Kind;
 
 /**
- * NIP-23,33
+ * NIP-23,33.
  */
 class AddressTag implements Arrayable
 {

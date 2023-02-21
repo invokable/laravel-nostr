@@ -7,7 +7,7 @@ namespace Revolution\Nostr\Tag;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * NIP-12
+ * NIP-12.
  */
 class HashTag implements Arrayable
 {

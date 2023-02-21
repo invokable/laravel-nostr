@@ -7,7 +7,7 @@ namespace Revolution\Nostr\Tag;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * NIP-40
+ * NIP-40.
  */
 class ExpirationTag implements Arrayable
 {

@@ -7,7 +7,7 @@ namespace Revolution\Nostr\Tag;
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * NIP-33
+ * NIP-33.
  */
 class IdentifierTag implements Arrayable
 {
