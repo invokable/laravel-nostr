@@ -58,9 +58,9 @@ class NostrChannel
                               sk: $route->sk,
                           );
 
-        foreach ($responses as $response) {
+        foreach ($responses as $relay => $response) {
             if ($response->failed()) {
-                Log::debug($response->body());
+                Log::debug($relay, $response->json());
             }
         }
     }
