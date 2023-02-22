@@ -295,7 +295,7 @@ class SocialClient
 
         $validator = validator(data: $res->json('event'), rules: [
             'kind' => 'required|numeric',
-            'content' => 'required|string',
+            'content' => 'string',
             'created_at' => 'required|numeric',
             'tags' => 'array',
             'id' => 'required|string',
