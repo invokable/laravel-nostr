@@ -100,7 +100,7 @@ class SocialTestCommand extends Command
         //        }
 
         //
-        //                $res = Social::createTextNote('test');
+        //                $res = Social::createNote('test');
         //                dump($res->json());
 
         //        $event = new Event(
@@ -136,7 +136,7 @@ class SocialTestCommand extends Command
         //            $this->info($response->body());
         //        }
 
-        //        $res = Social::createTextNote('test');
+        //        $res = Social::createNote('test');
         //        $event_id_p = Arr::get($res, 'event.id');
         //
         //        $res = Social::reply(content: 'reply1', event_id: $event_id_p, to: [$pk]);

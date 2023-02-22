@@ -192,32 +192,32 @@ class SocilalTest extends TestCase
         $this->assertIsArray($notes);
     }
 
-    public function test_create_text_note()
+    public function test_create_note()
     {
         Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->createTextNote(content: 'test', tags: []);
+                                 ->createNote(content: 'test', tags: []);
 
         $this->assertTrue($response->successful());
     }
 
-    public function test_create_text_note_to()
+    public function test_create_note_to()
     {
         Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->createTextNoteTo(content: 'test', pk: 'to');
+                                 ->createNoteTo(content: 'test', pk: 'to');
 
         $this->assertTrue($response->successful());
     }
 
-    public function test_create_text_note_hashtag()
+    public function test_create_note_hashtag()
     {
         Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->createTextNoteWithHashTag(content: 'test', hashtags: ['test']);
+                                 ->createNoteWithHashTag(content: 'test', hashtags: ['test']);
 
         $this->assertTrue($response->successful());
     }

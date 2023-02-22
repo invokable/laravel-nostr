@@ -199,7 +199,7 @@ class SocialClient
     /**
      * If you need a more complex creation method, use macro() or publishEvent() directly.
      */
-    public function createTextNote(string $content, array $tags = []): Response
+    public function createNote(string $content, array $tags = []): Response
     {
         $event = new Event(
             kind: Kind::Text,
@@ -211,7 +211,7 @@ class SocialClient
         return $this->publishEvent(event: $event);
     }
 
-    public function createTextNoteTo(string $content, string $pk): Response
+    public function createNoteTo(string $content, string $pk): Response
     {
         $event = new Event(
             kind: Kind::Text,
@@ -223,7 +223,7 @@ class SocialClient
         return $this->publishEvent(event: $event);
     }
 
-    public function createTextNoteWithHashTag(string $content, array $hashtags = []): Response
+    public function createNoteWithHashTag(string $content, array $hashtags = []): Response
     {
         $tags = collect();
 
