@@ -207,7 +207,7 @@ class SocialClient
             kind: Kind::Text,
             content: $content,
             created_at: now()->timestamp,
-            tags: $tags,
+            tags: collect($tags)->toArray(),
         );
 
         return $this->publishEvent(event: $event);
