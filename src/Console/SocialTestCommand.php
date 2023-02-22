@@ -70,7 +70,7 @@ class SocialTestCommand extends Command
         //        $follow_ids = Social::follows();
         //        dump($follow_ids);
         //
-        //        $follows = collect($follow_ids)->push($pk)->unique()->map(fn ($follow) => new PersonTag(pubkey: $follow))->toArray();
+        //        $follows = collect($follow_ids)->push($pk)->unique()->map(fn ($follow) => new PersonTag(p: $follow))->toArray();
         //
         //        $res = Social::updateFollows(follows: $follows);
         //        dump($res->json());
@@ -103,7 +103,7 @@ class SocialTestCommand extends Command
         //                dump($res->json());
 
         //        $event = new Event(
-        //            kind: Kind::Text->value,
+        //            kind: Kind::Text,
         //            content: 'publish test',
         //            created_at: now()->timestamp,
         //            tags: [],
@@ -123,7 +123,7 @@ class SocialTestCommand extends Command
         //        $this->info($event_id);
 
         //        $delete = new Event(
-        //            kind: Kind::EventDeletion->value,
+        //            kind: Kind::EventDeletion,
         //            content: '',
         //            created_at: now()->timestamp,
         //            tags: [(new EventTag(id: $event_id))->toArray()],
