@@ -69,7 +69,7 @@ class SocilalTest extends TestCase
     {
         Nostr::shouldReceive('event->get->json')->once()->andReturn(['name' => 'name']);
 
-        $response = $this->social->profile(pk: 'pk')->json();
+        $response = $this->social->profile(pk: 'pk');
 
         $this->assertIsArray($response);
     }
