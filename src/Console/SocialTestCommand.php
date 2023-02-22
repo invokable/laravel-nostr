@@ -9,6 +9,7 @@ use Revolution\Nostr\Event;
 use Revolution\Nostr\Exceptions\EventNotFoundException;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
+use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
 use Revolution\Nostr\Tag\EventTag;
@@ -62,11 +63,11 @@ class SocialTestCommand extends Command
         //
         //        dump($res->json());
         //
-        $res = Social::profile(
-            pk: $pk,
-        );
-
-        dump($res->json());
+        //        $res = Social::profile(
+        //            pk: $pk,
+        //        );
+        //
+        //        dump($res);
         //
         //        $follow_ids = Social::follows();
         //        dump($follow_ids);
@@ -151,12 +152,18 @@ class SocialTestCommand extends Command
         //        $event_id = Arr::get($res, 'event.id');
         //        dump($res->json());
 
-        try {
-            $event = Social::getEventById(id: '1');
-            dump($event->toJson());
-        } catch (EventNotFoundException $e) {
-            dump($e->getMessage());
-        }
+        //        try {
+        //            $event = Social::getEventById(id: '1');
+        //            dump($event->toJson());
+        //        } catch (EventNotFoundException $e) {
+        //            dump($e->getMessage());
+        //        }
+
+        $filter = new Filter(
+            authors: [$pk],
+        );
+
+        Nostr::pool()->list([$filter]);
 
         return 0;
     }
