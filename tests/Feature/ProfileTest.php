@@ -88,7 +88,7 @@ class ProfileTest extends TestCase
 
     public function test_from_json()
     {
-        $p = Profile::fromJson(json_encode([
+        $p = Profile::fromJson(profile: json_encode([
             'name' => 'test',
         ]));
 
@@ -107,7 +107,7 @@ class ProfileTest extends TestCase
 
     public function test_from_array()
     {
-        $p = Profile::fromArray([
+        $p = Profile::fromArray(profile: [
             'name' => 'test',
         ]);
 
