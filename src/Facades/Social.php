@@ -16,7 +16,7 @@ use Revolution\Nostr\Social\SocialClient;
  * @method static Response publishEvent(Event $event)
  * @method static array createNewUser(Profile $profile)
  * @method static Response updateProfile(Profile $profile)
- * @method static Response profile(?string $pk = null)
+ * @method static array profile(?string $pk = null)
  * @method static array follows()
  * @method static Response updateFollows(array $follows)
  * @method static array profiles(array $authors)
