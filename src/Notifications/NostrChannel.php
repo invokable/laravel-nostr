@@ -7,7 +7,6 @@ namespace Revolution\Nostr\Notifications;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Log;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Kind;
@@ -51,17 +50,11 @@ class NostrChannel
             tags: collect($message->tags)->toArray(),
         );
 
-        $responses = Nostr::pool()
-                          ->withRelays($route->relays)
-                          ->publish(
-                              event: $event,
-                              sk: $route->sk,
-                          );
-
-        foreach ($responses as $relay => $response) {
-            if ($response->failed()) {
-                Log::debug(class_basename($this).' : '.$relay.' : '.$response->body());
-            }
-        }
+        Nostr::pool()
+             ->withRelays($route->relays)
+             ->publish(
+                 event: $event,
+                 sk: $route->sk,
+             );
     }
 }
