@@ -91,7 +91,7 @@ class SocialClient
         return $this->publishEvent(event: $event);
     }
 
-    public function profile(?string $pk = null): Response
+    public function profile(?string $pk = null): array
     {
         $pk = $pk ?? $this->pk;
 
@@ -100,7 +100,9 @@ class SocialClient
             kinds: [Kind::Metadata],
         );
 
-        return Nostr::event()->get(filter: $filter, relay: $this->relay);
+        return Nostr::event()
+                    ->get(filter: $filter, relay: $this->relay)
+                    ->json('event') ?? [];
     }
 
     public function follows(): array
@@ -143,9 +145,9 @@ class SocialClient
             kinds: [Kind::Metadata],
         );
 
-        $response = Nostr::event()->list(filters: [$filter], relay: $this->relay);
-
-        return $response->json('events') ?? [];
+        return Nostr::event()
+                    ->list(filters: [$filter], relay: $this->relay)
+                    ->json('events') ?? [];
     }
 
     /**
