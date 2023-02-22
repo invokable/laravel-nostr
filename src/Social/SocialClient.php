@@ -293,7 +293,7 @@ class SocialClient
             $res->throw();
         }
 
-        $validator = validator(data: $res->json('event'), rules: [
+        $validator = validator(data: $res->json('event') ?? [], rules: [
             'kind' => 'required|numeric',
             'content' => 'string',
             'created_at' => 'required|numeric',
@@ -304,7 +304,7 @@ class SocialClient
         ]);
 
         if ($validator->fails()) {
-            throw new EventNotFoundException();
+            throw new EventNotFoundException("Event(id:$id) not found on $this->relay");
         }
 
         return tap(new Event(

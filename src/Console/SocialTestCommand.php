@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Revolution\Nostr\Event;
+use Revolution\Nostr\Exceptions\EventNotFoundException;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
 use Revolution\Nostr\Kind;
@@ -149,6 +150,13 @@ class SocialTestCommand extends Command
         //        $res = Social::reply(content: 'reply3', event_id: $event_id_p);
         //        $event_id = Arr::get($res, 'event.id');
         //        dump($res->json());
+
+        try {
+            $event = Social::getEventById(id: '1');
+            dump($event->toJson());
+        } catch (EventNotFoundException $e) {
+            dump($e->getMessage());
+        }
 
         return 0;
     }

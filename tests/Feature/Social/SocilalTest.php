@@ -247,7 +247,7 @@ class SocilalTest extends TestCase
         Http::fake(fn () => Http::response([
             'event' => [
                 'kind' => 1,
-                'content' => 'test',
+                'content' => '',
                 'created_at' => 0,
                 'tags' => [],
                 'pubkey' => '1',
@@ -264,7 +264,7 @@ class SocilalTest extends TestCase
             'pubkey' => '1',
             'sig' => '1',
             'kind' => 1,
-            'content' => 'test',
+            'content' => '',
             'created_at' => 0,
             'tags' => [],
         ], $event->toArray());
