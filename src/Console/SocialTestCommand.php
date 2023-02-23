@@ -63,22 +63,20 @@ class SocialTestCommand extends Command
         //
         //        dump($res->json());
         //
-        //        $res = Social::profile(
-        //            pk: $pk,
-        //        );
+        //                $res = Social::profile();
         //
-        //        dump($res);
+        //                dump($res);
         //
-        //        $follow_ids = Social::follows();
-        //        dump($follow_ids);
+        //                $follow_ids = Social::follows();
+        //                dump($follow_ids);
         //
         //        $follows = collect($follow_ids)->push($pk)->unique()->map(fn ($follow) => new PersonTag(p: $follow))->toArray();
         //
         //        $res = Social::updateFollows(follows: $follows);
         //        dump($res->json());
         //
-        //        $profiles = Social::profiles(authors: $follow_ids);
-        //        dump($profiles);
+        //                $profiles = Social::profiles(authors: $follow_ids);
+        //                dump($profiles);
         //
         //        $notes = Social::notes(authors: $follow_ids, limit: 2);
         //        dump($notes);
@@ -152,18 +150,21 @@ class SocialTestCommand extends Command
         //        $event_id = Arr::get($res, 'event.id');
         //        dump($res->json());
 
-        //        try {
-        //            $event = Social::getEventById(id: '1');
-        //            dump($event->toJson());
-        //        } catch (EventNotFoundException $e) {
-        //            dump($e->getMessage());
-        //        }
+        try {
+            $event = Social::getEventById(id: '');
+            dump($event->toJson());
 
-        $filter = new Filter(
-            authors: [$pk],
-        );
+            $res = Nostr::event()->verify($event);
+            dump($res->json());
+        } catch (EventNotFoundException $e) {
+            dump($e->getMessage());
+        }
 
-        Nostr::pool()->list([$filter]);
+        //        $filter = new Filter(
+        //            authors: [$pk],
+        //        );
+        //
+        //        Nostr::pool()->list([$filter]);
 
         return 0;
     }
