@@ -3,3 +3,5 @@ env:
   - NOSTR_NSEC=
   - NOSTR_PK=
   - NOSTR_NPUB=
+  - NOSTR_API_BASE=https://nostr-api.vercel.app/api/
+  #- NOSTR_API_BASE=http://localhost:3000/api/
