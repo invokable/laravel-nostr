@@ -78,4 +78,11 @@ class PendingEvent
             'event' => collect($event)->toArray(),
         ]);
     }
+
+    public function verify(Event|array $event): Response
+    {
+        return $this->http()->post('event/verify', [
+            'event' => collect($event)->toArray(),
+        ]);
+    }
 }
