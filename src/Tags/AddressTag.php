@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Revolution\Nostr\Tag;
+namespace Revolution\Nostr\Tags;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Revolution\Nostr\Kind;

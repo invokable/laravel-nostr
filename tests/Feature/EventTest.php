@@ -6,7 +6,7 @@ namespace Tests\Feature;
 
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Kind;
-use Revolution\Nostr\Tag\HashTag;
+use Revolution\Nostr\Tags\HashTag;
 use Tests\TestCase;
 
 class EventTest extends TestCase

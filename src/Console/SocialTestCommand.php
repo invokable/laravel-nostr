@@ -12,8 +12,8 @@ use Revolution\Nostr\Facades\Social;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
-use Revolution\Nostr\Tag\EventTag;
-use Revolution\Nostr\Tag\PersonTag;
+use Revolution\Nostr\Tags\EventTag;
+use Revolution\Nostr\Tags\PersonTag;
 
 class SocialTestCommand extends Command
 {

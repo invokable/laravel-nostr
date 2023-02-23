@@ -17,9 +17,9 @@ use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
-use Revolution\Nostr\Tag\EventTag;
-use Revolution\Nostr\Tag\HashTag;
-use Revolution\Nostr\Tag\PersonTag;
+use Revolution\Nostr\Tags\EventTag;
+use Revolution\Nostr\Tags\HashTag;
+use Revolution\Nostr\Tags\PersonTag;
 
 /**
  * Implementation for social networking.

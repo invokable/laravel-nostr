@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Tag;
 
 use Revolution\Nostr\Kind;
-use Revolution\Nostr\Tag\AddressTag;
-use Revolution\Nostr\Tag\ExpirationTag;
-use Revolution\Nostr\Tag\IdentifierTag;
-use Revolution\Nostr\Tag\ReferenceTag;
-use Revolution\Nostr\Tag\SubjectTag;
+use Revolution\Nostr\Tags\AddressTag;
+use Revolution\Nostr\Tags\ExpirationTag;
+use Revolution\Nostr\Tags\IdentifierTag;
+use Revolution\Nostr\Tags\ReferenceTag;
+use Revolution\Nostr\Tags\SubjectTag;
 use Tests\TestCase;
 
 class TagTest extends TestCase

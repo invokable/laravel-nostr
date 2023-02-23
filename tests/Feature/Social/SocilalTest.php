@@ -11,7 +11,7 @@ use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
 use Revolution\Nostr\Profile;
 use Revolution\Nostr\Social\SocialClient;
-use Revolution\Nostr\Tag\PersonTag;
+use Revolution\Nostr\Tags\PersonTag;
 use Tests\TestCase;
 
 class SocilalTest extends TestCase
