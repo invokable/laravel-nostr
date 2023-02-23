@@ -4,19 +4,37 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Client;
 
-use Illuminate\Http\Client\Response;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 use Illuminate\Support\Traits\Macroable;
-use Revolution\Nostr\Client\Concerns\HasHttp;
 
 class PendingNip05
 {
-    use HasHttp;
     use Macroable;
 
-    public function profile(string $user): Response
+    /**
+     * @throws RequestException
+     */
+    public function profile(string $user): array
     {
-        return $this->http()->get('nip05/profile', [
-            'user' => $user,
-        ]);
+        [$name, $domain] = Str::of($user)
+                              ->whenContains(
+                                  needles: '@',
+                                  callback: fn (Stringable $user): array => $user->explode('@')->toArray(),
+                                  default: fn (Stringable $domain): array => ['_', $domain->value()]
+                              );
+
+        $res = Http::withOptions(['allow_redirects' => false])
+                   ->get("https://$domain/.well-known/nostr.json", [
+                       'name' => $name,
+                   ])
+                   ->throw();
+
+        $pubkey = $res->json("names.$name");
+        $relays = $res->json("relays.$pubkey") ?? [];
+
+        return compact(['user', 'pubkey', 'relays']);
     }
 }
