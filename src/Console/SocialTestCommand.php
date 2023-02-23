@@ -168,21 +168,21 @@ class SocialTestCommand extends Command
         //
         //        Nostr::pool()->list([$filter]);
 
-//        $keys = Nostr::key()->generate()->json();
-//        dump($keys);
-//
-//        $keys_sk = Nostr::key()->fromSecretKey($keys['sk'])->json();
-//        dump($keys_sk);
-//
-//        $keys_nsec = Nostr::key()->fromNsec($keys['nsec'])->json();
-//        dump($keys_nsec);
-//
-//        $res = Http::baseUrl(Config::get('nostr.api_base'))
-//                   ->get('key/from', [
-//                       'npub' => '',
-//                       'pk' => $keys['pk'],
-//                   ]);
-//        dump($res->json());
+        $keys = Nostr::key()->generate()->json();
+        dump($keys);
+
+        $keys_sk = Nostr::key()->fromSecretKey($keys['sk'])->json();
+        dump($keys_sk);
+
+        $keys_nsec = Nostr::key()->fromNsec($keys['nsec'])->json();
+        dump($keys_nsec);
+
+        $res = Http::baseUrl(Config::get('nostr.api_base'))
+                   ->get('key/from', [
+                       'npub' => '',
+                       'pk' => $keys['pk'],
+                   ]);
+        dump($res->json());
 
         return 0;
     }
