@@ -29,7 +29,7 @@ class PersonTag implements Arrayable
         string $relay = '',
         string $petname = '',
     ): static {
-        return new static(p: $p, relay: $relay, petname: $petname);
+        return new static(...func_get_args());
     }
 
     /**

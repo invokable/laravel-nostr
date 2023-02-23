@@ -34,6 +34,28 @@ class FilterTest extends TestCase
         ]), (string) $f);
     }
 
+    public function test_filter_make()
+    {
+        $f = Filter::make(
+            ids: ['a'],
+            authors: ['1'],
+            kinds: [Kind::Metadata, 1],
+            since: 0,
+            until: 0,
+            limit: 0,
+        )->with(['#e' => ['1']]);
+
+        $this->assertSame(json_encode([
+            'ids' => ['a'],
+            'authors' => ['1'],
+            'kinds' => [0, 1],
+            'since' => 0,
+            'until' => 0,
+            'limit' => 0,
+            '#e' => ['1'],
+        ]), $f->toJson());
+    }
+
     public function test_filters_to_array()
     {
         $filters = [

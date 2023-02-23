@@ -31,6 +31,17 @@ class Filter implements Jsonable, Arrayable, Stringable
     ) {
     }
 
+    public static function make(
+        ?array $ids = null,
+        ?array $authors = null,
+        ?array $kinds = null,
+        ?int $since = null,
+        ?int $until = null,
+        ?int $limit = null,
+    ): static {
+        return new static(...func_get_args());
+    }
+
     /**
      * Set extra parameters. ->with(['#e' => ['...'], '#r' => [...]]).
      *

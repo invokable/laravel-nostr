@@ -26,7 +26,7 @@ class AddressTag implements Arrayable
         string $identifier,
         string $relay = '',
     ): static {
-        return new static(kind: $kind, pubkey: $pubkey, identifier: $identifier, relay: $relay);
+        return new static(...func_get_args());
     }
 
     /**

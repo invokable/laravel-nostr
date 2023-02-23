@@ -309,13 +309,14 @@ class SocialClient
             throw new EventNotFoundException("Event(id:$id) not found on $this->relay");
         }
 
-        return tap(new Event(
+        return Event::make(
             kind: $res->json('event.kind'),
             content: $res->json('event.content'),
             created_at: $res->json('event.created_at'),
             tags: $res->json('event.tags'),
-        ))->withId($res->json('event.id'))
-          ->withPublicKey($res->json('event.pubkey'))
-          ->withSign($res->json('event.sig'));
+        )
+                    ->withId($res->json('event.id'))
+                    ->withPublicKey($res->json('event.pubkey'))
+                    ->withSign($res->json('event.sig'));
     }
 }

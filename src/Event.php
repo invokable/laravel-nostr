@@ -23,6 +23,15 @@ class Event implements Jsonable, Arrayable, Stringable
     ) {
     }
 
+    public static function make(
+        int|Kind $kind = Kind::Metadata,
+        string $content = '',
+        int $created_at = 0,
+        array $tags = [],
+    ): static {
+        return new static(...func_get_args());
+    }
+
     public function withId(string $id): static
     {
         $this->id = $id;

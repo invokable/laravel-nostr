@@ -23,7 +23,7 @@ class EventTag implements Arrayable
         string $relay = '',
         string $marker = '',
     ): static {
-        return new static(id: $id, relay: $relay, marker: $marker);
+        return new static(...func_get_args());
     }
 
     /**

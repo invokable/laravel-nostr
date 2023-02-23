@@ -49,4 +49,20 @@ class EventTest extends TestCase
             'tags' => [['t', 'test']],
         ], $e->toArray());
     }
+
+    public function test_make()
+    {
+        $e = Event::make(
+            kind: Kind::Text,
+            tags: [],
+        )->withId('1');
+
+        $this->assertSame([
+            'id' => '1',
+            'kind' => 1,
+            'content' => '',
+            'created_at' => 0,
+            'tags' => [],
+        ], $e->toArray());
+    }
 }
