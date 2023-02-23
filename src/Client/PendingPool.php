@@ -44,14 +44,26 @@ class PendingPool
         $relays = blank($relays) ? $this->relays : $relays;
 
         return Http::pool(
-            fn (Pool $pool) => collect($relays)
-                ->map(fn ($relay) => $pool->as($relay)
-                                          ->baseUrl(Config::get('nostr.api_base'))
-                                          ->post('event/publish', [
-                                              'event' => collect($event)->toArray(),
-                                              'sk' => $sk,
-                                              'relay' => $relay,
-                                          ]))->toArray());
+            fn (Pool $pool) => $this->publishRequests(
+                pool: $pool,
+                event: $event,
+                sk: $sk,
+                relays: $relays
+            )
+        );
+    }
+
+    private function publishRequests(Pool $pool, Event|array $event, string $sk, array $relays): array
+    {
+        return collect($relays)
+            ->map(fn ($relay) => $pool->as($relay)
+                                      ->baseUrl(Config::get('nostr.api_base'))
+                                      ->post('event/publish', [
+                                          'event' => collect($event)->toArray(),
+                                          'sk' => $sk,
+                                          'relay' => $relay,
+                                      ]))
+            ->toArray();
     }
 
     /**
@@ -62,13 +74,24 @@ class PendingPool
         $relays = blank($relays) ? $this->relays : $relays;
 
         return Http::pool(
-            fn (Pool $pool) => collect($relays)
-                ->map(fn ($relay) => $pool->as($relay)
-                                          ->baseUrl(Config::get('nostr.api_base'))
-                                          ->post('event/list', [
-                                              'filters' => collect($filters)->toArray(),
-                                              'relay' => $relay,
-                                          ]))->toArray());
+            fn (Pool $pool) => $this->listRequests(
+                pool: $pool,
+                filters: $filters,
+                relays: $relays
+            )
+        );
+    }
+
+    private function listRequests(Pool $pool, array $filters, array $relays): array
+    {
+        return collect($relays)
+            ->map(fn ($relay) => $pool->as($relay)
+                                      ->baseUrl(Config::get('nostr.api_base'))
+                                      ->post('event/list', [
+                                          'filter' => collect($filters)->toArray(),
+                                          'relay' => $relay,
+                                      ]))
+            ->toArray();
     }
 
     /**
@@ -79,12 +102,23 @@ class PendingPool
         $relays = blank($relays) ? $this->relays : $relays;
 
         return Http::pool(
-            fn (Pool $pool) => collect($relays)
-                ->map(fn ($relay) => $pool->as($relay)
-                                          ->baseUrl(Config::get('nostr.api_base'))
-                                          ->post('event/get', [
-                                              'filter' => collect($filter)->toArray(),
-                                              'relay' => $relay,
-                                          ]))->toArray());
+            fn (Pool $pool) => $this->getRequests(
+                pool: $pool,
+                filter: $filter,
+                relays: $relays
+            )
+        );
+    }
+
+    private function getRequests(Pool $pool, Filter|array $filter, array $relays): array
+    {
+        return collect($relays)
+            ->map(fn ($relay) => $pool->as($relay)
+                                      ->baseUrl(Config::get('nostr.api_base'))
+                                      ->post('event/get', [
+                                          'filter' => collect($filter)->toArray(),
+                                          'relay' => $relay,
+                                      ]))
+            ->toArray();
     }
 }
