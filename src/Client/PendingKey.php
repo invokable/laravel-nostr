@@ -20,28 +20,28 @@ class PendingKey
 
     public function fromSecretKey(string $sk): Response
     {
-        return $this->http()->get('key/from_sk', [
+        return $this->http()->get('key/from', [
             'sk' => $sk,
         ]);
     }
 
     public function fromNsec(string $nsec): Response
     {
-        return $this->http()->get('key/from_nsec', [
+        return $this->http()->get('key/from', [
             'nsec' => $nsec,
         ]);
     }
 
     public function fromPublicKey(string $pk): Response
     {
-        return $this->http()->get('key/from_pk', [
+        return $this->http()->get('key/from', [
             'pk' => $pk,
         ]);
     }
 
     public function fromNpub(string $npub): Response
     {
-        return $this->http()->get('key/from_npub', [
+        return $this->http()->get('key/from', [
             'npub' => $npub,
         ]);
     }
