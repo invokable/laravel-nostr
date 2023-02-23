@@ -295,14 +295,14 @@ class SocialClient
             $res->throw();
         }
 
-        $validator = validator(data: $res->json('event') ?? [], rules: [
-            'kind' => 'required|numeric',
+        $validator = validator(data: $event = $res->json('event') ?? [], rules: [
+            'kind' => 'required|filled|numeric|integer',
             'content' => 'string',
-            'created_at' => 'required|numeric',
+            'created_at' => 'required|filled|numeric|integer',
             'tags' => 'array',
-            'id' => 'required|string',
-            'pubkey' => 'required|string',
-            'sig' => 'required|string',
+            'id' => 'required|filled|string|size:64',
+            'pubkey' => 'required|filled|string|size:64',
+            'sig' => 'required|filled|string|size:128',
         ]);
 
         if ($validator->fails()) {
@@ -310,13 +310,13 @@ class SocialClient
         }
 
         return Event::make(
-            kind: $res->json('event.kind'),
-            content: $res->json('event.content'),
-            created_at: $res->json('event.created_at'),
-            tags: $res->json('event.tags'),
+            kind: $event['kind'],
+            content: $event['content'] ?? '',
+            created_at: $event['created_at'],
+            tags: $event['tags'] ?? [],
         )
-                    ->withId($res->json('event.id'))
-                    ->withPublicKey($res->json('event.pubkey'))
-                    ->withSign($res->json('event.sig'));
+                    ->withId(id: $event['id'])
+                    ->withPublicKey(pubkey: $event['pubkey'])
+                    ->withSign(sig: $event['sig']);
     }
 }

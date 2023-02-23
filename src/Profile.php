@@ -40,9 +40,7 @@ class Profile implements Jsonable, Arrayable, Stringable
 
     public static function fromJson(string $profile): static
     {
-        $arr = json_decode($profile, true);
-
-        return static::fromArray($arr);
+        return static::fromArray(json_decode($profile, true));
     }
 
     public function toArray(): array

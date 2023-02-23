@@ -6,6 +6,7 @@ namespace Tests\Feature\Social;
 
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Revolution\Nostr\Exceptions\EventNotFoundException;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
@@ -244,25 +245,29 @@ class SocilalTest extends TestCase
 
     public function test_get_event_by_id()
     {
+        $pk = Str::random(64);
+        $id = Str::random(64);
+        $sig = Str::random(128);
+
         Http::fake(fn () => Http::response([
             'event' => [
                 'kind' => 1,
                 'content' => '',
                 'created_at' => 0,
                 'tags' => [],
-                'pubkey' => '1',
-                'id' => '1',
-                'sig' => '1',
+                'pubkey' => $pk,
+                'id' => $id,
+                'sig' => $sig,
             ],
         ]));
 
         $event = $this->social->withKey('sk', 'pk')
-                              ->getEventById(id: '1');
+                              ->getEventById(id: $id);
 
         $this->assertSame([
-            'id' => '1',
-            'pubkey' => '1',
-            'sig' => '1',
+            'id' => $id,
+            'pubkey' => $pk,
+            'sig' => $sig,
             'kind' => 1,
             'content' => '',
             'created_at' => 0,
