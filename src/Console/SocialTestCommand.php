@@ -5,6 +5,8 @@ namespace Revolution\Nostr\Console;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Exceptions\EventNotFoundException;
 use Revolution\Nostr\Facades\Nostr;
@@ -150,21 +152,37 @@ class SocialTestCommand extends Command
         //        $event_id = Arr::get($res, 'event.id');
         //        dump($res->json());
 
-        try {
-            $event = Social::getEventById(id: '');
-            dump($event->toJson());
-
-            $res = Nostr::event()->verify($event);
-            dump($res->json());
-        } catch (EventNotFoundException $e) {
-            dump($e->getMessage());
-        }
+        //        try {
+        //            $event = Social::getEventById(id: '');
+        //            dump($event->toJson());
+        //
+        //            $res = Nostr::event()->verify($event);
+        //            dump($res->json());
+        //        } catch (EventNotFoundException $e) {
+        //            dump($e->getMessage());
+        //        }
 
         //        $filter = new Filter(
         //            authors: [$pk],
         //        );
         //
         //        Nostr::pool()->list([$filter]);
+
+//        $keys = Nostr::key()->generate()->json();
+//        dump($keys);
+//
+//        $keys_sk = Nostr::key()->fromSecretKey($keys['sk'])->json();
+//        dump($keys_sk);
+//
+//        $keys_nsec = Nostr::key()->fromNsec($keys['nsec'])->json();
+//        dump($keys_nsec);
+//
+//        $res = Http::baseUrl(Config::get('nostr.api_base'))
+//                   ->get('key/from', [
+//                       'npub' => '',
+//                       'pk' => $keys['pk'],
+//                   ]);
+//        dump($res->json());
 
         return 0;
     }
