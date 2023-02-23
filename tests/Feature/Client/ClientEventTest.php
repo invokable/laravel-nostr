@@ -83,4 +83,17 @@ class ClientEventTest extends TestCase
             'sign' => 'sign',
         ], $response->json());
     }
+
+    public function test_event_verify()
+    {
+        Http::fake(fn () => Http::response(['verify' => true]));
+
+        $event = new Event(kind: Kind::Text);
+
+        $response = Nostr::event()->verify(event: $event);
+
+        $this->assertSame([
+            'verify' => true,
+        ], $response->json());
+    }
 }
