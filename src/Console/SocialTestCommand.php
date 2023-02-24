@@ -152,15 +152,15 @@ class SocialTestCommand extends Command
         //        $event_id = Arr::get($res, 'event.id');
         //        dump($res->json());
 
-        try {
-            $event = Social::getEventById(id: '');
-            dump($event->toJson());
-
-            $res = Nostr::event()->verify($event);
-            dump($res->json());
-        } catch (EventNotFoundException $e) {
-            dump($e->getMessage());
-        }
+        //        try {
+        //            $event = Social::getEventById(id: '');
+        //            dump($event->toJson());
+        //
+        //            $res = Nostr::event()->verify($event);
+        //            dump($res->json());
+        //        } catch (EventNotFoundException $e) {
+        //            dump($e->getMessage());
+        //        }
 
         //        $filter = new Filter(
         //            authors: [$pk],
@@ -182,6 +182,28 @@ class SocialTestCommand extends Command
         //                       'npub' => '',
         //                       'pk' => $keys['pk'],
         //                   ]);
+        //        dump($res->json());
+
+//                $res = Nostr::nip19()->decode('');
+//                dump($res->json());
+//
+//                $res = Nostr::nip19()->note('');
+//                dump($res->json());
+//
+//                $res = Nostr::nip19()->nprofile([
+//                    'pubkey' => '11',
+//                    'relays' => [],
+//                ]);
+//                dump($res->json());
+//
+//                $res = Nostr::nip19()->nevent(json_decode('{}',true));
+//                dump($res->json());
+
+//        $res = Nostr::nip19()->naddr([
+        //            'identifier' => '1',
+        //            'pubkey' => '11',
+        //            'kind' => 0,
+        //        ]);
         //        dump($res->json());
 
         return 0;
