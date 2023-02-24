@@ -186,7 +186,7 @@ $event = Event::make(
 $sk = 'my sk';
 
 $responses = Nostr::pool()->publish(event: $event, sk: $sk);
-// $responses is array<Response>
+// $responses is array<string, Response>
 // [
 //     'wss://relay1' => $response,
 //     'wss://relay2' => $response,
