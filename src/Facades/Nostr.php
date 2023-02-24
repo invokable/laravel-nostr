@@ -7,6 +7,7 @@ use Revolution\Nostr\Client\NostrClient;
 use Revolution\Nostr\Client\PendingEvent;
 use Revolution\Nostr\Client\PendingKey;
 use Revolution\Nostr\Client\PendingNip05;
+use Revolution\Nostr\Client\PendingNip19;
 use Revolution\Nostr\Client\PendingPool;
 
 /**
@@ -16,6 +17,7 @@ use Revolution\Nostr\Client\PendingPool;
  * @method static PendingEvent event()
  * @method static PendingPool pool()
  * @method static PendingNip05 nip05()
+ * @method static PendingNip19 nip19()
  *
  * @see NostrClient
  */

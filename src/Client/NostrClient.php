@@ -32,4 +32,9 @@ class NostrClient
     {
         return new PendingNip05();
     }
+
+    public function nip19(): PendingNip19
+    {
+        return new PendingNip19();
+    }
 }
