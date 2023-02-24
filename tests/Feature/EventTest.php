@@ -65,4 +65,27 @@ class EventTest extends TestCase
             'tags' => [],
         ], $e->toArray());
     }
+
+    public function test_make_signed()
+    {
+        $e = Event::makeSigned(
+            kind: Kind::Text,
+            content: '',
+            created_at: 0,
+            tags: [],
+            id: '1',
+            pubkey: '1',
+            sig: '1',
+        );
+
+        $this->assertSame([
+            'id' => '1',
+            'pubkey' => '1',
+            'sig' => '1',
+            'kind' => 1,
+            'content' => '',
+            'created_at' => 0,
+            'tags' => [],
+        ], $e->toArray());
+    }
 }

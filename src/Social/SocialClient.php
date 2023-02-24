@@ -285,15 +285,9 @@ class SocialClient
      */
     public function getEventById(string $id): Event
     {
-        $filter = new Filter(
-            ids: [$id],
-        );
-
-        $res = Nostr::event()->get(filter: $filter, relay: $this->relay);
-
-        if ($res->failed()) {
-            $res->throw();
-        }
+        $res = Nostr::event()
+                    ->get(filter: Filter::make(ids: [$id]), relay: $this->relay)
+                    ->throw();
 
         $validator = validator(data: $event = $res->json('event') ?? [], rules: [
             'kind' => 'required|filled|numeric|integer',
@@ -309,14 +303,14 @@ class SocialClient
             throw new EventNotFoundException("Event(id:$id) not found on $this->relay");
         }
 
-        return Event::make(
+        return Event::makeSigned(
             kind: $event['kind'],
             content: $event['content'] ?? '',
             created_at: $event['created_at'],
             tags: $event['tags'] ?? [],
-        )
-                    ->withId(id: $event['id'])
-                    ->withPublicKey(pubkey: $event['pubkey'])
-                    ->withSign(sig: $event['sig']);
+            id: $event['id'],
+            pubkey: $event['pubkey'],
+            sig: $event['sig']
+        );
     }
 }

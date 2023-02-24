@@ -23,6 +23,9 @@ class Event implements Jsonable, Arrayable, Stringable
     ) {
     }
 
+    /**
+     * Make new event.
+     */
     public static function make(
         int|Kind $kind = Kind::Metadata,
         string $content = '',
@@ -30,6 +33,25 @@ class Event implements Jsonable, Arrayable, Stringable
         array $tags = [],
     ): static {
         return new static(...func_get_args());
+    }
+
+    /**
+     * From signed event.
+     */
+    public static function makeSigned(
+        int|Kind $kind,
+        string $content,
+        int $created_at,
+        array $tags,
+        string $id,
+        string $pubkey,
+        string $sig,
+    ): static {
+        return (new static(kind: $kind, content: $content, created_at: $created_at,
+            tags: $tags))
+            ->withId(id: $id)
+            ->withPublicKey(pubkey: $pubkey)
+            ->withSign(sig: $sig);
     }
 
     public function withId(string $id): static
