@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client;
 
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Facades\Nostr;
+use Revolution\Nostr\Kind;
+use Revolution\Nostr\Nip19\AddressPointer;
+use Revolution\Nostr\Nip19\EventPointer;
+use Revolution\Nostr\Nip19\ProfilePointer;
 use Tests\TestCase;
 
 class ClientNip19Test extends TestCase
@@ -36,6 +41,8 @@ class ClientNip19Test extends TestCase
         $this->assertSame([
             'note' => 'note1aaa',
         ], $res->json());
+
+        Http::assertSent(fn (Request $request) => $request['note'] === '1');
     }
 
     public function test_nip19_encode_profile()
@@ -44,14 +51,16 @@ class ClientNip19Test extends TestCase
             'nprofile' => 'nprofile1',
         ]));
 
-        $res = Nostr::nip19()->nprofile(profile: [
-            'pubkey' => '1',
-            'relays' => [],
-        ]);
+        $res = Nostr::nip19()->nprofile(profile: $p = ProfilePointer::make(
+            pubkey: '1',
+            relays: [],
+        ));
 
         $this->assertSame([
             'nprofile' => 'nprofile1',
         ], $res->json());
+
+        Http::assertSent(fn (Request $request) => $request['profile'] === $p->toArray());
     }
 
     public function test_nip19_encode_event()
@@ -60,13 +69,16 @@ class ClientNip19Test extends TestCase
             'nevent' => 'nevent1',
         ]));
 
-        $res = Nostr::nip19()->nevent(event: [
-            'kind' => 0,
-        ]);
+        $res = Nostr::nip19()->nevent(event: $e = EventPointer::make(
+            id: '1',
+            relays: [],
+        ));
 
         $this->assertSame([
             'nevent' => 'nevent1',
         ], $res->json());
+
+        Http::assertSent(fn (Request $request) => $request['event'] === $e->toArray());
     }
 
     public function test_nip19_encode_addr()
@@ -75,14 +87,17 @@ class ClientNip19Test extends TestCase
             'naddr' => 'naddr1',
         ]));
 
-        $res = Nostr::nip19()->naddr(addr: [
-            'identifier' => '1',
-            'pubkey' => '11',
-            'kind' => 0,
-        ]);
+        $res = Nostr::nip19()->naddr(addr: $a = AddressPointer::make(
+            identifier: '1',
+            pubkey: '11',
+            kind: Kind::Metadata,
+            relays: [],
+        ));
 
         $this->assertSame([
             'naddr' => 'naddr1',
         ], $res->json());
+
+        Http::assertSent(fn (Request $request) => $request['addr'] === $a->toArray());
     }
 }

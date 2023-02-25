@@ -7,6 +7,9 @@ namespace Revolution\Nostr\Client;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Concerns\HasHttp;
+use Revolution\Nostr\Nip19\AddressPointer;
+use Revolution\Nostr\Nip19\EventPointer;
+use Revolution\Nostr\Nip19\ProfilePointer;
 
 class PendingNip19
 {
@@ -38,30 +41,30 @@ class PendingNip19
     /**
      * encode profile.
      */
-    public function nprofile(array $profile): Response
+    public function nprofile(ProfilePointer $profile): Response
     {
         return $this->http()->post('nip19/nprofile', [
-            'profile' => $profile,
+            'profile' => $profile->toArray(),
         ]);
     }
 
     /**
      * encode event.
      */
-    public function nevent(array $event): Response
+    public function nevent(EventPointer $event): Response
     {
         return $this->http()->post('nip19/nevent', [
-            'event' => $event,
+            'event' => $event->toArray(),
         ]);
     }
 
     /**
      * encode addr.
      */
-    public function naddr(array $addr): Response
+    public function naddr(AddressPointer $addr): Response
     {
         return $this->http()->post('nip19/naddr', [
-            'addr' => $addr,
+            'addr' => $addr->toArray(),
         ]);
     }
 }
