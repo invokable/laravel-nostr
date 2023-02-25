@@ -43,7 +43,7 @@ class NostrChannel
 
     protected function publish(NostrMessage $message, NostrRoute $route): void
     {
-        $event = new Event(
+        $event = Event::make(
             kind: Kind::Text,
             content: $message->content,
             created_at: now()->timestamp,

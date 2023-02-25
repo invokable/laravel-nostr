@@ -9,8 +9,8 @@ use Illuminate\Contracts\Support\Arrayable;
 class NostrMessage implements Arrayable
 {
     public function __construct(
-        public string $content,
-        public array $tags = [],
+        public readonly string $content,
+        public readonly array $tags = [],
     ) {
     }
 
