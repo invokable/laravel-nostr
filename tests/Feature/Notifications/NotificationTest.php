@@ -101,7 +101,7 @@ class TestNotification extends \Illuminate\Notifications\Notification
         return [NostrChannel::class];
     }
 
-    public function toNostr($notifiable)
+    public function toNostr(mixed $notifiable): NostrMessage
     {
         return NostrMessage::create(content: $this->content, tags: $this->tags);
     }
