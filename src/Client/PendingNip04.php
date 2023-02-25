@@ -6,8 +6,10 @@ namespace Revolution\Nostr\Client;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Macroable;
+use PHPUnit\Framework\Attributes\CodeCoverageIgnore;
 use Revolution\Nostr\Client\Concerns\HasHttp;
 
+#[CodeCoverageIgnore]
 class PendingNip04
 {
     use HasHttp;
