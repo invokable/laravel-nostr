@@ -28,6 +28,11 @@ class NostrClient
         return new PendingPool();
     }
 
+    //    public function nip04(): PendingNip04
+    //    {
+    //        return new PendingNip04();
+    //    }
+
     public function nip05(): PendingNip05
     {
         return new PendingNip05();

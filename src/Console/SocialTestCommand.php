@@ -168,42 +168,48 @@ class SocialTestCommand extends Command
         //
         //        Nostr::pool()->list([$filter]);
 
-//                $keys = Nostr::key()->generate()->json();
-//                dump($keys);
-//
-//                $keys_sk = Nostr::key()->fromSecretKey($keys['sk'])->json();
-//                dump($keys_sk);
-//
-//                $keys_nsec = Nostr::key()->fromNsec($keys['nsec'])->json();
-//                dump($keys_nsec);
-//
-//                $res = Http::baseUrl(Config::get('nostr.api_base'))
-//                           ->get('key/from_pk', [
-//                               'pk' => $keys['pk'],
-//                           ]);
-//                dump($res->json());
+        //                $keys = Nostr::key()->generate()->json();
+        //                dump($keys);
+        //
+        //                $keys_sk = Nostr::key()->fromSecretKey($keys['sk'])->json();
+        //                dump($keys_sk);
+        //
+        //                $keys_nsec = Nostr::key()->fromNsec($keys['nsec'])->json();
+        //                dump($keys_nsec);
+        //
+        //                $res = Http::baseUrl(Config::get('nostr.api_base'))
+        //                           ->get('key/from_pk', [
+        //                               'pk' => $keys['pk'],
+        //                           ]);
+        //                dump($res->json());
 
-//                $res = Nostr::nip19()->decode('');
-//                dump($res->json());
-//
-//                $res = Nostr::nip19()->note('');
-//                dump($res->json());
-//
-//                $res = Nostr::nip19()->nprofile([
-//                    'pubkey' => '11',
-//                    'relays' => [],
-//                ]);
-//                dump($res->json());
-//
-//                $res = Nostr::nip19()->nevent(json_decode('{}',true));
-//                dump($res->json());
+        //                $res = Nostr::nip19()->decode('');
+        //                dump($res->json());
+        //
+        //                $res = Nostr::nip19()->note('');
+        //                dump($res->json());
+        //
+        //                $res = Nostr::nip19()->nprofile([
+        //                    'pubkey' => '11',
+        //                    'relays' => [],
+        //                ]);
+        //                dump($res->json());
+        //
+        //                $res = Nostr::nip19()->nevent(json_decode('{}',true));
+        //                dump($res->json());
 
-//        $res = Nostr::nip19()->naddr([
+        //        $res = Nostr::nip19()->naddr([
         //            'identifier' => '1',
         //            'pubkey' => '11',
         //            'kind' => 0,
         //        ]);
         //        dump($res->json());
+
+//        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'test');
+//        dump($encrypt->json('encrypt'));
+//
+//        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $encrypt->json('encrypt', ''));
+//        dump($decrypt->json('decrypt'));
 
         return 0;
     }
