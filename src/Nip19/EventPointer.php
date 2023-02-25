@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Revolution\Nostr\Nip19;
 
 use Illuminate\Contracts\Support\Arrayable;
