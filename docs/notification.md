@@ -20,7 +20,7 @@ class TestNotification extends Notification
 
     public function toNostr(mixed $notifiable): NostrMessage
     {
-        return NostrMessage::create(
+        return new NostrMessage(
             content: 'hello #laravel',
             tags: [
                 HashTag::make(t: 'laravel'),
