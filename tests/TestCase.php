@@ -41,7 +41,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
      * @param  Application  $app
      * @return void
      */
-    protected function getEnvironment(Application $app): void
+    protected function defineEnvironment($app): void
     {
         //
     }
