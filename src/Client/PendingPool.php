@@ -37,7 +37,7 @@ class PendingPool
 
     /**
      * @param  array<string>  $relays
-     * @return array<Response>
+     * @return array<array-key, Response>
      */
     public function publish(Event|array $event, string $sk, array $relays = []): array
     {
@@ -67,7 +67,7 @@ class PendingPool
     }
 
     /**
-     * @return array<Response>
+     * @return array<array-key, Response>
      */
     public function list(array $filters, array $relays = []): array
     {
@@ -95,7 +95,7 @@ class PendingPool
     }
 
     /**
-     * @return array<Response>
+     * @return array<array-key, Response>
      */
     public function get(Filter|array $filter, array $relays = []): array
     {
