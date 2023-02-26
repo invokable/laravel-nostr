@@ -7,7 +7,6 @@ namespace Tests\Feature\Client;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Client\NostrClient;
-use Revolution\Nostr\Client\PendingNip04;
 use Revolution\Nostr\Facades\Nostr;
 use Tests\TestCase;
 
