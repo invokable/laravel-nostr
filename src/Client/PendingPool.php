@@ -67,6 +67,8 @@ class PendingPool
     }
 
     /**
+     * @param  array<Filter|array>  $filters
+     * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
     public function list(array $filters, array $relays = []): array
@@ -95,6 +97,7 @@ class PendingPool
     }
 
     /**
+     * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
     public function get(Filter|array $filter, array $relays = []): array
