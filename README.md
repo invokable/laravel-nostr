@@ -23,6 +23,13 @@ composer require revolution/laravel-nostr
 php artisan vendor:publish --tag=nostr-config
 ```
 
+### Uninstall
+```shell
+composer remove revolution/laravel-nostr
+```
+
+- Delete `config/nostr.php`
+
 ## Usage
 - [NostrClient](./docs/nostr-client.md)
 - [Laravel Notifications](./docs/notification.md)
