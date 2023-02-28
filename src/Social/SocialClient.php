@@ -58,26 +58,26 @@ class SocialClient
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|RequestException
      */
     public function createNewUser(Profile $profile): array
     {
         $keys = Nostr::key()->generate()->collect();
 
-        if ($keys->has(['sk', 'pk'])) {
-            $this->withKey(sk: $keys->get('sk'), pk: $keys->get('pk'));
-
-            $response = $this->updateProfile($profile);
-
-            if ($response->successful()) {
-                return [
-                    'keys' => $keys->toArray(),
-                    'profile' => $profile->toArray(),
-                ];
-            }
+        if (! $keys->has(['sk', 'pk'])) {
+            throw new Exception('Failed create new user.');
         }
 
-        throw new Exception('Failed create new user.');
+        $this->withKey(sk: $keys->get('sk'), pk: $keys->get('pk'));
+
+        $this->updateFollows(follows: [PersonTag::make(p: $this->pk)])->throw();
+
+        $this->updateProfile(profile: $profile)->throw();
+
+        return [
+            'keys' => $keys->toArray(),
+            'profile' => $profile->toArray(),
+        ];
     }
 
     public function updateProfile(Profile $profile): Response
