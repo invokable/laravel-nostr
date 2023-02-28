@@ -20,6 +20,7 @@ use Revolution\Nostr\Profile;
 use Revolution\Nostr\Tags\EventTag;
 use Revolution\Nostr\Tags\HashTag;
 use Revolution\Nostr\Tags\PersonTag;
+use Revolution\Nostr\Tags\ReferenceTag;
 
 /**
  * Implementation for social networking.
@@ -130,6 +131,35 @@ class SocialClient
             content: '',
             created_at: now()->timestamp,
             tags: collect($follows)->toArray(),
+        );
+
+        return $this->publishEvent(event: $event);
+    }
+
+    public function relays(): array
+    {
+        $filter = new Filter(
+            authors: [$this->pk],
+            kinds: [Kind::RelayList],
+        );
+
+        return Nostr::event()
+                    ->get(filter: $filter, relay: $this->relay)
+                    ->json('event') ?? [];
+    }
+
+    public function updateRelays(array $relays = []): Response
+    {
+        $relays = blank($relays) ? config('nostr.relays') : $relays;
+
+        $relays = collect($relays)
+            ->map(fn ($relay) => ReferenceTag::make(r: $relay));
+
+        $event = new Event(
+            kind: Kind::RelayList,
+            content: '',
+            created_at: now()->timestamp,
+            tags: $relays->toArray(),
         );
 
         return $this->publishEvent(event: $event);

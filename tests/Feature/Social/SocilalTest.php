@@ -104,6 +104,33 @@ class SocilalTest extends TestCase
         $this->assertTrue($res->successful());
     }
 
+    public function test_relays()
+    {
+        Nostr::shouldReceive('event->get->json')->once()->andReturn([
+            ['r', 'wss://1'],
+            ['r', 'wss://2'],
+        ]);
+
+        $follows = $this->social->withKey('sk', 'pk')->relays();
+
+        $this->assertSame([['r', 'wss://1'], ['r', 'wss://2']], $follows);
+    }
+
+    public function test_update_relays()
+    {
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+
+        $relays = [
+            'wss://1',
+            'wss://2',
+        ];
+
+        $res = $this->social->withKey('sk', 'pk')
+                            ->updateRelays(relays: $relays);
+
+        $this->assertTrue($res->successful());
+    }
+
     public function test_profiles()
     {
         Nostr::shouldReceive('event->list->json')->once()->andReturn([

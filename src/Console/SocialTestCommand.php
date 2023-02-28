@@ -211,6 +211,12 @@ class SocialTestCommand extends Command
 //        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $encrypt->json('encrypt', ''));
 //        dump($decrypt->json('decrypt'));
 
+//        $res = Social::updateRelays();
+//        dump($res->body());
+
+//        $res = Social::relays();
+//        dump($res);
+
         return 0;
     }
 }

@@ -19,6 +19,8 @@ use Revolution\Nostr\Social\SocialClient;
  * @method static array profile(?string $pk = null)
  * @method static array follows()
  * @method static Response updateFollows(array $follows)
+ * @method static array relays()
+ * @method static Response updateRelays(array $relays = [])
  * @method static array profiles(array $authors)
  * @method static array notes(array $authors, ?int $since = null, ?int $until = null, ?int $limit = null)
  * @method static array mergeNotesAndProfiles(array $notes, array $profiles)
