@@ -40,7 +40,9 @@ class SocilalTest extends TestCase
             'pk' => 'pk',
         ]));
 
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Nostr::shouldReceive('event->publish->throw')->once();
+
+        Nostr::shouldReceive('event->publish->throw')->once();
 
         $p = new Profile(name: 'name');
 
@@ -56,7 +58,7 @@ class SocilalTest extends TestCase
 
         Nostr::shouldReceive('key->generate->collect')->once()->andReturn(collect());
 
-        Nostr::shouldReceive('event->publish->successful')->never();
+        Nostr::shouldReceive('event->publish->throw')->never();
 
         $p = new Profile(name: 'name');
 
