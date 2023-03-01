@@ -10,7 +10,7 @@ use Revolution\Nostr\Tags\HashTag;
 
 class TestNotification extends Notification
 {
-    public function via($notifiable): array
+    public function via(object $notifiable): array
     {
         return [
             'mail',
@@ -18,7 +18,7 @@ class TestNotification extends Notification
         ];
     }
 
-    public function toNostr(mixed $notifiable): NostrMessage
+    public function toNostr(object $notifiable): NostrMessage
     {
         return new NostrMessage(
             content: 'hello #laravel',
