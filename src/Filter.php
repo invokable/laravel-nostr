@@ -28,6 +28,7 @@ class Filter implements Jsonable, Arrayable, Stringable
         public readonly ?int $since = null,
         public readonly ?int $until = null,
         public readonly ?int $limit = null,
+        public readonly ?string $search = null,
     ) {
     }
 
@@ -38,6 +39,7 @@ class Filter implements Jsonable, Arrayable, Stringable
         ?int $since = null,
         ?int $until = null,
         ?int $limit = null,
+        ?string $search = null
     ): static {
         return new static(...func_get_args());
     }
@@ -67,7 +69,7 @@ class Filter implements Jsonable, Arrayable, Stringable
     /**
      * Convert an array containing BackedEnum.
      */
-    protected function castEnum(array|int $item): array|int
+    protected function castEnum(mixed $item): mixed
     {
         if (is_array($item)) {
             $item = collect($item)

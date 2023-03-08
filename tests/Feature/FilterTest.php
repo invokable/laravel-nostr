@@ -19,6 +19,7 @@ class FilterTest extends TestCase
             since: 0,
             until: 0,
             limit: 0,
+            search: 'test',
         );
 
         $f->with(['#e' => ['1']]);
@@ -30,6 +31,7 @@ class FilterTest extends TestCase
             'since' => 0,
             'until' => 0,
             'limit' => 0,
+            'search' => 'test',
             '#e' => ['1'],
         ]), (string) $f);
     }
