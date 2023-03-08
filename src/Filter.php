@@ -20,6 +20,7 @@ class Filter implements Jsonable, Arrayable, Stringable
      * @param  int|null  $since
      * @param  int|null  $until
      * @param  int|null  $limit
+     * @param  string|null  $search
      */
     public function __construct(
         public readonly ?array $ids = null,
