@@ -96,12 +96,12 @@ class TestNotification extends \Illuminate\Notifications\Notification
     ) {
     }
 
-    public function via($notifiable): array
+    public function via(object $notifiable): array
     {
         return [NostrChannel::class];
     }
 
-    public function toNostr(mixed $notifiable): NostrMessage
+    public function toNostr(object $notifiable): NostrMessage
     {
         return NostrMessage::create(content: $this->content, tags: $this->tags);
     }
