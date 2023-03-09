@@ -56,7 +56,7 @@ class Event implements Jsonable, Arrayable, Stringable
     }
 
     /**
-     * Make signed event from array
+     * Make signed event from array.
      */
     public static function fromArray(array $event): static
     {
