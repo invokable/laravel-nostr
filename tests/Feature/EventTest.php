@@ -115,10 +115,16 @@ class EventTest extends TestCase
     public function test_root_id()
     {
         $e = Event::make(
-            tags: [['e', 'test', '', 'root']],
+            tags: [['e', 'test', '', 'root'], ['e', 'test2', '', 'root']],
         );
 
         $this->assertSame('test', $e->rootId());
+
+        $e = Event::make(
+            tags: [['e', 'test']],
+        );
+
+        $this->assertNull($e->rootId());
     }
 
     public function test_reply_id()
@@ -128,6 +134,12 @@ class EventTest extends TestCase
         );
 
         $this->assertSame('test', $e->replyId());
+
+        $e = Event::make(
+            tags: [['e', 'test']],
+        );
+
+        $this->assertNull($e->replyId());
     }
 
     public function test_pubkey()
