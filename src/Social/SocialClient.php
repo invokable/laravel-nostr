@@ -347,14 +347,6 @@ class SocialClient
             throw new EventNotFoundException("Event(id:$id) not found on $this->relay");
         }
 
-        return Event::makeSigned(
-            kind: $event['kind'],
-            content: $event['content'] ?? '',
-            created_at: $event['created_at'],
-            tags: $event['tags'] ?? [],
-            id: $event['id'],
-            pubkey: $event['pubkey'],
-            sig: $event['sig']
-        );
+        return Event::fromArray($event);
     }
 }
