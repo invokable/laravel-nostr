@@ -96,6 +96,11 @@ class Event implements Jsonable, Arrayable, Stringable
         return $this->id;
     }
 
+    public function pubkey(): string
+    {
+        return $this->pubkey;
+    }
+
     public function rootId(): ?string
     {
         $root = collect($this->tags)

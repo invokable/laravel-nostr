@@ -277,7 +277,7 @@ class SocialClient
     /**
      * @param  Event  $event  Parent Event
      */
-    public function reply(string $content, Event $event, array $mentions = [], array $hashtags = []): Response
+    public function reply(Event $event, string $content, array $mentions = [], array $hashtags = []): Response
     {
         $rootId = $event->rootId();
 
@@ -309,6 +309,23 @@ class SocialClient
         );
 
         return $this->publishEvent(event: $reply_event);
+    }
+
+    public function reaction(Event $event, string $content = '+'): Response
+    {
+        $tags = collect([
+            EventTag::make(id: $event->id(), relay: $this->relay, marker: 'reply'),
+            PersonTag::make(p: $event->pubkey(), relay: $this->relay),
+        ]);
+
+        $reaction_event = new Event(
+            kind: Kind::Reaction,
+            content: $content,
+            created_at: now()->timestamp,
+            tags: $tags->toArray(),
+        );
+
+        return $this->publishEvent(event: $reaction_event);
     }
 
     public function delete(string $event_id): Response

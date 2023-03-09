@@ -141,15 +141,21 @@ class SocialTestCommand extends Command
 
         $parent_event = Event::fromArray($res->json('event'));
 
-        $res = Social::reply(content: 'reply1', event: $parent_event, mentions: [$pk]);
+        $res = Social::reply(event: $parent_event, content: 'reply1', mentions: [$pk]);
         dump($res->json());
 
-        $res = Social::reply(content: 'reply2', event: $parent_event, mentions: [$pk]);
+        $res = Social::reply(event: $parent_event, content: 'reply2', mentions: [$pk]);
         dump($res->json());
 
         $reply2_event = Event::fromArray($res->json('event'));
 
-        $res = Social::reply(content: 'reply3', event: $reply2_event, hashtags: ['test']);
+        $res = Social::reply(event: $reply2_event, content: 'reply3', hashtags: ['test']);
+        dump($res->json());
+
+        $res = Social::reaction(event: $parent_event, content: '+');
+        dump($res->json());
+
+        $res = Social::reaction(event: $reply2_event, content: '+');
         dump($res->json());
 
         //        try {

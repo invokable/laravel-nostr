@@ -270,9 +270,10 @@ class SocilalTest extends TestCase
 
         $response = $this->social->withKey('sk', 'pk')
                                  ->reply(
-                                     content: 'test',
                                      event: $event,
-                                     mentions: ['1']
+                                     content: 'test',
+                                     mentions: ['1'],
+                                     hashtags: ['test'],
                                  );
 
         $this->assertTrue($response->successful());
@@ -294,9 +295,32 @@ class SocilalTest extends TestCase
 
         $response = $this->social->withKey('sk', 'pk')
                                  ->reply(
-                                     content: 'test',
                                      event: $event,
+                                     content: 'test',
                                      mentions: ['1']
+                                 );
+
+        $this->assertTrue($response->successful());
+    }
+
+    public function test_reaction()
+    {
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+
+        $event = Event::makeSigned(
+            kind: Kind::Text,
+            content: 'test',
+            created_at: 1,
+            tags: [],
+            id: '1',
+            pubkey: '1',
+            sig: '1',
+        );
+
+        $response = $this->social->withKey('sk', 'pk')
+                                 ->reaction(
+                                     event: $event,
+                                     content: '+',
                                  );
 
         $this->assertTrue($response->successful());

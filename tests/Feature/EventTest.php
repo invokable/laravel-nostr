@@ -129,4 +129,11 @@ class EventTest extends TestCase
 
         $this->assertSame('test', $e->replyId());
     }
+
+    public function test_pubkey()
+    {
+        $e = Event::make()->withPublicKey('pk');
+
+        $this->assertSame('pk', $e->pubkey());
+    }
 }

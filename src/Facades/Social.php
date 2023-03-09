@@ -28,7 +28,8 @@ use Revolution\Nostr\Social\SocialClient;
  * @method static Response createNote(string $content, array $tags = [])
  * @method static Response createNoteTo(string $content, string $pk)
  * @method static Response createNoteWithHashTag(string $content, array $hashtags = [])
- * @method static Response reply(string $content, Event $event, array $mentions = [], array $hashtags = [])
+ * @method static Response reply(Event $event, string $content, array $mentions = [], array $hashtags = [])
+ * @method static Response reaction(Event $event, string $content = '+')
  * @method static Response delete(string $event_id)
  * @method static Event getEventById(string $id)
  *
