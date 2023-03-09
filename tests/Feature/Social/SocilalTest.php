@@ -7,9 +7,11 @@ namespace Tests\Feature\Social;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Revolution\Nostr\Event;
 use Revolution\Nostr\Exceptions\EventNotFoundException;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
+use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
 use Revolution\Nostr\Social\SocialClient;
 use Revolution\Nostr\Tags\PersonTag;
@@ -256,8 +258,46 @@ class SocilalTest extends TestCase
     {
         Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
 
+        $event = Event::makeSigned(
+            kind: Kind::Text,
+            content: 'test',
+            created_at: 1,
+            tags: [],
+            id: '1',
+            pubkey: '1',
+            sig: '1',
+        );
+
         $response = $this->social->withKey('sk', 'pk')
-                                 ->reply(content: 'test', event_id: '1', to: ['1']);
+                                 ->reply(
+                                     content: 'test',
+                                     event: $event,
+                                     mentions: ['1']
+                                 );
+
+        $this->assertTrue($response->successful());
+    }
+
+    public function test_reply_root()
+    {
+        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+
+        $event = Event::makeSigned(
+            kind: Kind::Text,
+            content: 'test',
+            created_at: 1,
+            tags: [['e', '1', '', 'root']],
+            id: '1',
+            pubkey: '1',
+            sig: '1',
+        );
+
+        $response = $this->social->withKey('sk', 'pk')
+                                 ->reply(
+                                     content: 'test',
+                                     event: $event,
+                                     mentions: ['1']
+                                 );
 
         $this->assertTrue($response->successful());
     }

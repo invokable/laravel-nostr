@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
@@ -273,28 +274,41 @@ class SocialClient
         return $this->publishEvent(event: $event);
     }
 
-    public function reply(string $content, string $event_id, array $to = [], string $marker = 'root'): Response
+    /**
+     * @param  Event  $event  Parent Event
+     */
+    public function reply(string $content, Event $event, array $mentions = [], array $hashtags = []): Response
     {
-        $tags = collect([
-            new EventTag(
-                id: $event_id,
-                relay: $this->relay,
-                marker: $marker,
-            ),
-        ]);
+        $rootId = $event->rootId();
 
-        foreach ($to as $pk) {
+        $tags = collect()
+            ->when(filled($rootId),
+                fn (Collection $collection) => $collection->push(
+                    EventTag::make(id: $rootId, relay: $this->relay,
+                        marker: 'root'),
+                    EventTag::make(id: $event->id(), relay: $this->relay, marker: 'reply')
+                ),
+                fn (Collection $collection) => $collection->push(
+                    EventTag::make(id: $event->id(), relay: $this->relay,
+                        marker: 'root')
+                ));
+
+        foreach ($mentions as $pk) {
             $tags->push(PersonTag::make(p: $pk)->toArray());
         }
 
-        $event = new Event(
+        foreach ($hashtags as $hashtag) {
+            $tags->push(HashTag::make(t: $hashtag)->toArray());
+        }
+
+        $reply_event = new Event(
             kind: Kind::Text,
             content: $content,
             created_at: now()->timestamp,
             tags: $tags->toArray(),
         );
 
-        return $this->publishEvent(event: $event);
+        return $this->publishEvent(event: $reply_event);
     }
 
     public function delete(string $event_id): Response

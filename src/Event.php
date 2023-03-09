@@ -7,6 +7,7 @@ namespace Revolution\Nostr;
 use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use Stringable;
 
 class Event implements Jsonable, Arrayable, Stringable
@@ -54,6 +55,21 @@ class Event implements Jsonable, Arrayable, Stringable
             ->withSign(sig: $sig);
     }
 
+    /**
+     * Make signed event from array
+     */
+    public static function fromArray(array $event): static
+    {
+        return static::makeSigned(
+            kind: Arr::get($event, 'kind'),
+            content: Arr::get($event, 'content'),
+            created_at: Arr::get($event, 'created_at'),
+            tags: Arr::get($event, 'tags'),
+            id: Arr::get($event, 'id'),
+            pubkey: Arr::get($event, 'pubkey'),
+            sig: Arr::get($event, 'sig'));
+    }
+
     public function withId(string $id): static
     {
         $this->id = $id;
@@ -73,6 +89,27 @@ class Event implements Jsonable, Arrayable, Stringable
         $this->sig = $sig;
 
         return $this;
+    }
+
+    public function id(): string
+    {
+        return $this->id;
+    }
+
+    public function rootId(): ?string
+    {
+        $root = collect($this->tags)
+            ->first(fn (array $tag) => head($tag) === 'e' && last($tag) === 'root');
+
+        return $root[1] ?? null;
+    }
+
+    public function replyId(): ?string
+    {
+        $root = collect($this->tags)
+            ->first(fn (array $tag) => head($tag) === 'e' && last($tag) === 'reply');
+
+        return $root[1] ?? null;
     }
 
     public function toArray(): array

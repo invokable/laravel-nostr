@@ -88,4 +88,45 @@ class EventTest extends TestCase
             'tags' => [],
         ], $e->toArray());
     }
+
+    public function test_make_signed_from_array()
+    {
+        $e = Event::fromArray([
+            'id' => '1',
+            'pubkey' => '1',
+            'sig' => '1',
+            'kind' => 1,
+            'content' => '',
+            'created_at' => 0,
+            'tags' => [],
+        ]);
+
+        $this->assertSame([
+            'id' => '1',
+            'pubkey' => '1',
+            'sig' => '1',
+            'kind' => 1,
+            'content' => '',
+            'created_at' => 0,
+            'tags' => [],
+        ], $e->toArray());
+    }
+
+    public function test_root_id()
+    {
+        $e = Event::make(
+            tags: [['e', 'test', '', 'root']],
+        );
+
+        $this->assertSame('test', $e->rootId());
+    }
+
+    public function test_reply_id()
+    {
+        $e = Event::make(
+            tags: [['e', 'test', '', 'reply']],
+        );
+
+        $this->assertSame('test', $e->replyId());
+    }
 }

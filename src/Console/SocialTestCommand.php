@@ -137,20 +137,20 @@ class SocialTestCommand extends Command
         //            $this->info($response->body());
         //        }
 
-        //        $res = Social::createNote('test');
-        //        $event_id_p = Arr::get($res, 'event.id');
-        //
-        //        $res = Social::reply(content: 'reply1', event_id: $event_id_p, to: [$pk]);
-        //        $event_id = Arr::get($res, 'event.id');
-        //        dump($res->json());
-        //
-        //        $res = Social::reply(content: 'reply2', event_id: $event_id_p, to: [$pk]);
-        //        $event_id = Arr::get($res, 'event.id');
-        //        dump($res->json());
-        //
-        //        $res = Social::reply(content: 'reply3', event_id: $event_id_p);
-        //        $event_id = Arr::get($res, 'event.id');
-        //        dump($res->json());
+        $res = Social::createNote('test');
+
+        $parent_event = Event::fromArray($res->json('event'));
+
+        $res = Social::reply(content: 'reply1', event: $parent_event, mentions: [$pk]);
+        dump($res->json());
+
+        $res = Social::reply(content: 'reply2', event: $parent_event, mentions: [$pk]);
+        dump($res->json());
+
+        $reply2_event = Event::fromArray($res->json('event'));
+
+        $res = Social::reply(content: 'reply3', event: $reply2_event, hashtags: ['test']);
+        dump($res->json());
 
         //        try {
         //            $event = Social::getEventById(id: '');
@@ -205,17 +205,17 @@ class SocialTestCommand extends Command
         //        ]);
         //        dump($res->json());
 
-//        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'test');
-//        dump($encrypt->json('encrypt'));
-//
-//        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $encrypt->json('encrypt', ''));
-//        dump($decrypt->json('decrypt'));
+        //        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'test');
+        //        dump($encrypt->json('encrypt'));
+        //
+        //        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $encrypt->json('encrypt', ''));
+        //        dump($decrypt->json('decrypt'));
 
-//        $res = Social::updateRelays();
-//        dump($res->body());
+        //        $res = Social::updateRelays();
+        //        dump($res->body());
 
-//        $res = Social::relays();
-//        dump($res);
+        //        $res = Social::relays();
+        //        dump($res);
 
         return 0;
     }
