@@ -364,6 +364,6 @@ class SocialClient
             throw new EventNotFoundException("Event(id:$id) not found on $this->relay");
         }
 
-        return Event::fromArray($event);
+        return Event::fromArray(event: $event);
     }
 }
