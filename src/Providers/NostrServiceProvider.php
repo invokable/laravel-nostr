@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Revolution\Nostr;
+namespace Revolution\Nostr\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Revolution\Nostr\Console\NostrServe;
@@ -14,7 +14,7 @@ class NostrServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/nostr.php',
+            __DIR__.'/../../config/nostr.php',
             'nostr'
         );
 
@@ -43,7 +43,7 @@ class NostrServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/../config/nostr.php' => $this->app->configPath('nostr.php'),
+            __DIR__.'/../../config/nostr.php' => $this->app->configPath('nostr.php'),
         ], 'nostr-config');
     }
 }

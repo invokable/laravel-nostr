@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use Illuminate\Foundation\Application;
-use Revolution\Nostr\NostrServiceProvider;
+use Revolution\Nostr\Providers\NostrServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

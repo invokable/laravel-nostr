@@ -36,7 +36,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Revolution\\Nostr\\NostrServiceProvider"
+        "Revolution\\Nostr\\Providers\\NostrServiceProvider"
       ]
     }
   },
