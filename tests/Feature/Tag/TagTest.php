@@ -8,6 +8,7 @@ use Revolution\Nostr\Kind;
 use Revolution\Nostr\Tags\AddressTag;
 use Revolution\Nostr\Tags\ExpirationTag;
 use Revolution\Nostr\Tags\IdentifierTag;
+use Revolution\Nostr\Tags\IdentityTag;
 use Revolution\Nostr\Tags\ReferenceTag;
 use Revolution\Nostr\Tags\SubjectTag;
 use Tests\TestCase;
@@ -65,5 +66,15 @@ class TagTest extends TestCase
 
         $this->assertIsArray($e->toArray());
         $this->assertSame(['expiration', '0'], $e->toArray());
+    }
+
+    public function test_identity()
+    {
+        $i = IdentityTag::make(
+            username: 'github:user',
+            proof: 'proof'
+        )->with(['1', '2']);
+
+        $this->assertSame(['i', 'github:user', 'proof', '1', '2'], $i->toArray());
     }
 }
