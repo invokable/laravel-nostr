@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use Illuminate\Support\Str;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Tags\HashTag;
@@ -147,5 +148,32 @@ class EventTest extends TestCase
         $e = Event::make()->withPublicKey('pk');
 
         $this->assertSame('pk', $e->pubkey());
+    }
+
+    public function test_validate_unsigned()
+    {
+        $e = Event::make(
+            kind: Kind::Text,
+            content: 'test',
+            created_at: 0,
+            tags: [],
+        );
+
+        $this->assertTrue($e->validate());
+    }
+
+    public function test_validate_signed()
+    {
+        $e = Event::makeSigned(
+            kind: Kind::Text,
+            content: 'test',
+            created_at: 0,
+            tags: [],
+            id: Str::random(64),
+            pubkey: Str::random(64),
+            sig: Str::random(128),
+        );
+
+        $this->assertTrue($e->validate());
     }
 }
