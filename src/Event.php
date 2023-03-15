@@ -8,10 +8,14 @@ use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Traits\Tappable;
 use Stringable;
 
 class Event implements Jsonable, Arrayable, Stringable
 {
+    use Tappable;
+
     protected readonly string $id;
     protected readonly string $pubkey;
     protected readonly string $sig;
@@ -68,6 +72,19 @@ class Event implements Jsonable, Arrayable, Stringable
             id: Arr::get($event, 'id'),
             pubkey: Arr::get($event, 'pubkey'),
             sig: Arr::get($event, 'sig'));
+    }
+
+    public function validate(): bool
+    {
+        return Validator::make(data: $this->toArray(), rules: [
+            'kind' => 'required|filled|numeric|integer',
+            'content' => 'string',
+            'created_at' => 'required|filled|numeric|integer',
+            'tags' => 'array',
+            'id' => 'sometimes|required|filled|string|size:64',
+            'pubkey' => 'sometimes|required|filled|string|size:64',
+            'sig' => 'sometimes|required|filled|string|size:128',
+        ])->passes();
     }
 
     public function withId(string $id): static
