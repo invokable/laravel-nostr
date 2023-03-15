@@ -22,6 +22,7 @@ use Revolution\Nostr\Tags\EventTag;
 use Revolution\Nostr\Tags\HashTag;
 use Revolution\Nostr\Tags\PersonTag;
 use Revolution\Nostr\Tags\ReferenceTag;
+use TypeError;
 
 /**
  * Implementation for social networking.
@@ -342,7 +343,7 @@ class SocialClient
     }
 
     /**
-     * @throws RequestException|EventNotFoundException
+     * @throws RequestException|TypeError|EventNotFoundException
      */
     public function getEventById(string $id): Event
     {
@@ -350,20 +351,7 @@ class SocialClient
                     ->get(filter: Filter::make(ids: [$id]), relay: $this->relay)
                     ->throw();
 
-        $validator = validator(data: $event = $res->json('event') ?? [], rules: [
-            'kind' => 'required|filled|numeric|integer',
-            'content' => 'string',
-            'created_at' => 'required|filled|numeric|integer',
-            'tags' => 'array',
-            'id' => 'required|filled|string|size:64',
-            'pubkey' => 'required|filled|string|size:64',
-            'sig' => 'required|filled|string|size:128',
-        ]);
-
-        if ($validator->fails()) {
-            throw new EventNotFoundException("Event(id:$id) not found on $this->relay");
-        }
-
-        return Event::fromArray(event: $event);
+        return Event::fromArray(event: $res->json('event'))
+                    ->tap(fn (Event $event) => throw_unless($event->validate(), EventNotFoundException::class));
     }
 }
