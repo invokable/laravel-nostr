@@ -378,9 +378,29 @@ class SocilalTest extends TestCase
                               ->getEventById(id: '1');
     }
 
-    public function test_get_event_by_id_validator_fails()
+    public function test_get_event_by_id_type_error()
     {
         Http::fake(fn () => Http::response(['event' => []]));
+
+        $this->expectException(\TypeError::class);
+
+        $event = $this->social->withKey('sk', 'pk')
+                              ->getEventById(id: '1');
+    }
+
+    public function test_get_event_by_id_validator_fails()
+    {
+        Http::fake(fn () => Http::response([
+            'event' => [
+                'kind' => 1,
+                'content' => '',
+                'created_at' => 0,
+                'tags' => [],
+                'pubkey' => '',
+                'id' => '',
+                'sig' => '',
+            ],
+        ]));
 
         $this->expectException(EventNotFoundException::class);
 
