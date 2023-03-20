@@ -181,13 +181,13 @@ class EventTest extends TestCase
     {
         $e = Event::make(
             kind: Kind::Text,
-            content: '',
+            content: 'い/ろ/は',
             created_at: 0,
             tags: [])->withPublicKey('pk');
 
         $hash = $e->hash();
 
         $this->assertNotEmpty($hash);
-        $this->assertSame('44841bded108df537c1633e2230d81c11257aec8c0dc533432c477b16e2212a5', $hash);
+        $this->assertSame('ded9530cc6aee3243d0ca46783d0c3c54c13ea2c67b0ae3166e683af5d64ee40', $hash);
     }
 }
