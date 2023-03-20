@@ -118,6 +118,20 @@ class Event implements Jsonable, Arrayable, Stringable
         return $this->pubkey;
     }
 
+    public function hash(): string
+    {
+        $json = json_encode([
+            0,
+            $this->pubkey,
+            $this->created_at,
+            $this->kind,
+            collect($this->tags)->toArray(),
+            $this->content,
+        ]);
+
+        return bin2hex(hash(algo: 'sha256', data: $json, binary: true));
+    }
+
     public function rootId(): ?string
     {
         $root = collect($this->tags)
