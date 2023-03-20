@@ -121,6 +121,7 @@ class Event implements Jsonable, Arrayable, Stringable
 
     /**
      * @return string Hash for event.id
+     *
      * @throws Throwable
      */
     public function hash(): string
