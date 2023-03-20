@@ -130,7 +130,7 @@ class Event implements Jsonable, Arrayable, Stringable
             $this->kind,
             collect($this->tags)->toArray(),
             $this->content,
-        ]);
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         return bin2hex(hash(algo: 'sha256', data: $json, binary: true));
     }
