@@ -118,6 +118,9 @@ class Event implements Jsonable, Arrayable, Stringable
         return $this->pubkey;
     }
 
+    /**
+     * @return  string  Hash for event.id
+     */
     public function hash(): string
     {
         $json = json_encode([
