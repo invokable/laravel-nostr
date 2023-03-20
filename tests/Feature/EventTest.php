@@ -186,7 +186,7 @@ class EventTest extends TestCase
             tags: [])->withPublicKey('pk');
 
         $hash = $e->hash();
-        
+
         $this->assertNotEmpty($hash);
         $this->assertSame('44841bded108df537c1633e2230d81c11257aec8c0dc533432c477b16e2212a5', $hash);
     }

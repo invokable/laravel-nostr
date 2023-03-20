@@ -52,7 +52,7 @@ class NostrServe extends Command
         $sub_id = Str::random();
 
         try {
-            $client = new Client(Arr::first((config('nostr.relays'))));
+            $client = new Client(Arr::first(config('nostr.relays')));
 
             $client->send(json_encode([
                 'REQ',

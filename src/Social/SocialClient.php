@@ -37,7 +37,7 @@ class SocialClient
 
     public function __construct()
     {
-        $this->relay = Arr::first((Config::get('nostr.relays')));
+        $this->relay = Arr::first(Config::get('nostr.relays'));
     }
 
     public function withRelay(string $relay): static

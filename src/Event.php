@@ -119,7 +119,7 @@ class Event implements Jsonable, Arrayable, Stringable
     }
 
     /**
-     * @return  string  Hash for event.id
+     * @return string Hash for event.id
      */
     public function hash(): string
     {
