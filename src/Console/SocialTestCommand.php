@@ -137,26 +137,26 @@ class SocialTestCommand extends Command
         //            $this->info($response->body());
         //        }
 
-        $res = Social::createNote('test');
-
-        $parent_event = Event::fromArray($res->json('event'));
-
-        $res = Social::reply(event: $parent_event, content: 'reply1', mentions: [$pk]);
-        dump($res->json());
-
-        $res = Social::reply(event: $parent_event, content: 'reply2', mentions: [$pk]);
-        dump($res->json());
-
-        $reply2_event = Event::fromArray($res->json('event'));
-
-        $res = Social::reply(event: $reply2_event, content: 'reply3', hashtags: ['test']);
-        dump($res->json());
-
-        $res = Social::reaction(event: $parent_event, content: '+');
-        dump($res->json());
-
-        $res = Social::reaction(event: $reply2_event, content: '+');
-        dump($res->json());
+//        $res = Social::createNote('test');
+//
+//        $parent_event = Event::fromArray($res->json('event'));
+//
+//        $res = Social::reply(event: $parent_event, content: 'reply1', mentions: [$pk]);
+//        dump($res->json());
+//
+//        $res = Social::reply(event: $parent_event, content: 'reply2', mentions: [$pk]);
+//        dump($res->json());
+//
+//        $reply2_event = Event::fromArray($res->json('event'));
+//
+//        $res = Social::reply(event: $reply2_event, content: 'reply3', hashtags: ['test']);
+//        dump($res->json());
+//
+//        $res = Social::reaction(event: $parent_event, content: '+');
+//        dump($res->json());
+//
+//        $res = Social::reaction(event: $reply2_event, content: '+');
+//        dump($res->json());
 
         //        try {
         //            $event = Social::getEventById(id: '');
@@ -211,11 +211,11 @@ class SocialTestCommand extends Command
         //        ]);
         //        dump($res->json());
 
-        //        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'test');
-        //        dump($encrypt->json('encrypt'));
-        //
-        //        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $encrypt->json('encrypt', ''));
-        //        dump($decrypt->json('decrypt'));
+                $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'テスト');
+                dump($encrypt->json('encrypt'));
+
+                $decrypt = Nostr::nip04()->decrypt($sk, $pk, $encrypt->json('encrypt', ''));
+                dump($decrypt->json('decrypt'));
 
         //        $res = Social::updateRelays();
         //        dump($res->body());
