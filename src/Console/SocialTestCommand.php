@@ -211,10 +211,28 @@ class SocialTestCommand extends Command
         //        ]);
         //        dump($res->json());
 
-        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'テスト');
-        dump($encrypt->json('encrypt'));
+        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'テスト'.now()->toDateTimeString());
+        dump($dm = $encrypt->json('encrypt'));
 
-        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $encrypt->json('encrypt', ''));
+        $e = Event::make(
+            kind: Kind::EncryptedDirectMessage,
+            content: $dm,
+            created_at: now()->timestamp,
+            tags: [PersonTag::make(p: $pk)],
+        );
+
+        $r = Nostr::event()->publish(event: $e, sk: $sk);
+        dump($r->json());
+
+        $f = Filter::make(
+            kinds: [Kind::EncryptedDirectMessage],
+            limit: 1,
+        )->with(['#p' => [$pk]]);
+
+        $r_e = Nostr::event()->get(filter: $f, relay: Arr::first(Config::get('nostr.relays')));
+        dump($r_e->json());
+
+        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $r_e->json('event.content'));
         dump($decrypt->json('decrypt'));
 
         //        $res = Social::updateRelays();
