@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Tappable;
 use Stringable;
+use Throwable;
 
 class Event implements Jsonable, Arrayable, Stringable
 {
@@ -120,9 +121,12 @@ class Event implements Jsonable, Arrayable, Stringable
 
     /**
      * @return string Hash for event.id
+     * @throws Throwable
      */
     public function hash(): string
     {
+        throw_unless(isset($this->pubkey));
+
         $json = json_encode([
             0,
             $this->pubkey,
