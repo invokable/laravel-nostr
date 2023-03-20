@@ -176,4 +176,18 @@ class EventTest extends TestCase
 
         $this->assertTrue($e->validate());
     }
+
+    public function test_hash()
+    {
+        $e = Event::make(
+            kind: Kind::Text,
+            content: '',
+            created_at: 0,
+            tags: [])->withPublicKey('pk');
+
+        $hash = $e->hash();
+        
+        $this->assertNotEmpty($hash);
+        $this->assertSame('44841bded108df537c1633e2230d81c11257aec8c0dc533432c477b16e2212a5', $hash);
+    }
 }
