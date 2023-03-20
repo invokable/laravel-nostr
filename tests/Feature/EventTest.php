@@ -183,11 +183,26 @@ class EventTest extends TestCase
             kind: Kind::Text,
             content: 'い/ろ/は',
             created_at: 0,
-            tags: [])->withPublicKey('pk');
+            tags: [],
+        )->withPublicKey('pk');
 
         $hash = $e->hash();
 
         $this->assertNotEmpty($hash);
         $this->assertSame('ded9530cc6aee3243d0ca46783d0c3c54c13ea2c67b0ae3166e683af5d64ee40', $hash);
+    }
+
+    public function test_hash_fail()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $e = Event::make(
+            kind: Kind::Text,
+            content: 'い/ろ/は',
+            created_at: 0,
+            tags: [],
+        );
+
+        $hash = $e->hash();
     }
 }
