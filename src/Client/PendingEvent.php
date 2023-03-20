@@ -72,10 +72,11 @@ class PendingEvent
         ]);
     }
 
-    public function sign(Event|array $event): Response
+    public function sign(Event|array $event, string $sk): Response
     {
         return $this->http()->post('event/sign', [
             'event' => collect($event)->toArray(),
+            'sk' => $sk,
         ]);
     }
 
