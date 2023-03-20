@@ -77,7 +77,7 @@ class ClientEventTest extends TestCase
 
         $event = new Event(kind: Kind::Text);
 
-        $response = Nostr::event()->sign(event: $event);
+        $response = Nostr::event()->sign(event: $event, sk: 'sk');
 
         $this->assertSame([
             'sign' => 'sign',
