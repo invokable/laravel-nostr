@@ -108,6 +108,9 @@ class SocialClient
                     ->json('event') ?? [];
     }
 
+    /**
+     * @return array<string>
+     */
     public function follows(): array
     {
         $filter = new Filter(
@@ -150,12 +153,15 @@ class SocialClient
                     ->json('event') ?? [];
     }
 
+    /**
+     * @param  array<string>  $relays
+     */
     public function updateRelays(array $relays = []): Response
     {
         $relays = blank($relays) ? config('nostr.relays') : $relays;
 
         $relays = collect($relays)
-            ->map(fn ($relay) => ReferenceTag::make(r: $relay));
+            ->map(fn (string $relay) => ReferenceTag::make(r: $relay));
 
         $event = new Event(
             kind: Kind::RelayList,
@@ -219,7 +225,7 @@ class SocialClient
             })->toArray();
     }
 
-    public function timeline(?int $since = null, ?int $until = null, ?int $limit = 10): array
+    public function timeline(?int $since = null, ?int $until = null, int $limit = 10): array
     {
         $follows = $this->follows();
 
@@ -257,6 +263,9 @@ class SocialClient
         return $this->publishEvent(event: $event);
     }
 
+    /**
+     * @param  array<string>  $hashtags
+     */
     public function createNoteWithHashTag(string $content, array $hashtags = []): Response
     {
         $tags = collect();
@@ -277,6 +286,8 @@ class SocialClient
 
     /**
      * @param  Event  $event  Parent Event
+     * @param  array<string>  $mentions
+     * @param  array<string>  $hashtags
      */
     public function reply(Event $event, string $content, array $mentions = [], array $hashtags = []): Response
     {
