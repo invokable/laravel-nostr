@@ -46,7 +46,7 @@ class Filter implements Jsonable, Arrayable, Stringable
      *
      * Example:
      * <code>
-     * $filter->with(['#e' => ['...', '...'], '#r' => [...]]);
+     * $filter->with(['#e' => ['...', '...'], '#r' => ['...']]);
      * </code>
      *
      * @param  array<string, array<string>>  $parameters
