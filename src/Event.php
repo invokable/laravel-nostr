@@ -7,7 +7,6 @@ namespace Revolution\Nostr;
 use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Tappable;
 use Stringable;
@@ -17,15 +16,15 @@ class Event implements Jsonable, Arrayable, Stringable
 {
     use Tappable;
 
-    protected readonly string $id;
-    protected readonly string $pubkey;
-    protected readonly string $sig;
+    public readonly string $id;
+    public readonly string $pubkey;
+    public readonly string $sig;
 
     public function __construct(
-        protected readonly int|Kind $kind = Kind::Metadata,
-        protected readonly string $content = '',
-        protected readonly int $created_at = 0,
-        protected readonly array $tags = [],
+        public readonly int|Kind $kind = Kind::Metadata,
+        public readonly string $content = '',
+        public readonly int $created_at = 0,
+        public readonly array $tags = [],
     ) {
     }
 
@@ -62,17 +61,20 @@ class Event implements Jsonable, Arrayable, Stringable
 
     /**
      * Make signed event from array.
+     *
+     * @param  array{
+     *     kind: int|Kind,
+     *     content: string,
+     *     created_at: int,
+     *     tags: array,
+     *     id: int,
+     *     pubkey: string,
+     *     sig: string
+     * }  $event
      */
     public static function fromArray(array $event): static
     {
-        return static::makeSigned(
-            kind: Arr::get($event, 'kind'),
-            content: Arr::get($event, 'content'),
-            created_at: Arr::get($event, 'created_at'),
-            tags: Arr::get($event, 'tags'),
-            id: Arr::get($event, 'id'),
-            pubkey: Arr::get($event, 'pubkey'),
-            sig: Arr::get($event, 'sig'));
+        return static::makeSigned(...$event);
     }
 
     public function validate(): bool
@@ -107,16 +109,6 @@ class Event implements Jsonable, Arrayable, Stringable
         $this->sig = $sig;
 
         return $this;
-    }
-
-    public function id(): string
-    {
-        return $this->id;
-    }
-
-    public function pubkey(): string
-    {
-        return $this->pubkey;
     }
 
     /**
@@ -156,6 +148,18 @@ class Event implements Jsonable, Arrayable, Stringable
         return $root[1] ?? null;
     }
 
+    /**
+     * @return array{
+     *     kind: int|Kind,
+     *     content: string,
+     *     created_at: int,
+     *     tags: array,
+     *     id?: int,
+     *     pubkey?:
+     *     string,
+     *     sig?: string
+     * }
+     */
     public function toArray(): array
     {
         return collect(get_object_vars($this))
