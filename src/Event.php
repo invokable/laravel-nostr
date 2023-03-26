@@ -155,8 +155,7 @@ class Event implements Jsonable, Arrayable, Stringable
      *     created_at: int,
      *     tags: array,
      *     id?: int,
-     *     pubkey?:
-     *     string,
+     *     pubkey?: string,
      *     sig?: string
      * }
      */
