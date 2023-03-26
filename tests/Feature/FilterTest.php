@@ -69,4 +69,14 @@ class FilterTest extends TestCase
 
         $this->assertSame([['authors' => ['1'], 'kinds' => [0]], ['authors' => ['2']]], $f);
     }
+
+    public function test_filter_array_shapes()
+    {
+        $f = Filter::make(
+            kinds: [Kind::Metadata, 1],
+        )->with(['#e' => ['test']]);
+
+        $this->assertSame(Kind::Metadata->value, $f->toArray()['kinds'][0]);
+        $this->assertSame(['test'], $f->toArray()['#e']);
+    }
 }
