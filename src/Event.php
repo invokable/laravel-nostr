@@ -52,11 +52,12 @@ class Event implements Jsonable, Arrayable, Stringable
         string $pubkey,
         string $sig,
     ): static {
-        return (new static(kind: $kind, content: $content, created_at: $created_at,
-            tags: $tags))
-            ->withId(id: $id)
-            ->withPublicKey(pubkey: $pubkey)
-            ->withSign(sig: $sig);
+        return static::make(
+            kind: $kind,
+            content: $content,
+            created_at: $created_at,
+            tags: $tags,
+        )->withId(id: $id)->withPublicKey(pubkey: $pubkey)->withSign(sig: $sig);
     }
 
     /**
