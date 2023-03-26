@@ -7,7 +7,6 @@ namespace Revolution\Nostr;
 use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use JetBrains\PhpStorm\ArrayShape;
 use Stringable;
 
 class Filter implements Jsonable, Arrayable, Stringable
@@ -59,15 +58,17 @@ class Filter implements Jsonable, Arrayable, Stringable
         return $this;
     }
 
-    #[ArrayShape([
-        'ids' => 'array',
-        'authors' => 'array',
-        'kinds' => 'array',
-        'since' => 'int',
-        'until' => 'int',
-        'limit' => 'int',
-        'search' => 'string',
-    ])]
+    /**
+     * @return array{
+     *     ids?: array<string>,
+     *     authors?: array<string>,
+     *     kinds?: array<int>,
+     *     since?: int,
+     *     until?: int,
+     *     limit?: int,
+     *     search?: string,
+     * }
+     */
     public function toArray(): array
     {
         return collect(get_object_vars($this))
