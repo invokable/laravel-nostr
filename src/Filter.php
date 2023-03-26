@@ -49,7 +49,7 @@ class Filter implements Jsonable, Arrayable, Stringable
      * $filter->with(['#e' => ['...', '...'], '#r' => [...]]);
      * </code>
      *
-     * @param  array<array-key, array<string>>  $parameters
+     * @param  array<string, array<string>>  $parameters
      */
     public function with(array $parameters): static
     {
