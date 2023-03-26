@@ -47,7 +47,12 @@ class Filter implements Jsonable, Arrayable, Stringable
     }
 
     /**
-     * Set extra parameters. ->with(['#e' => ['...'], '#r' => [...]]).
+     * Set extra parameters.
+     *
+     * Example:
+     * <code>
+     * $filter->with(['#e' => ['...', '...'], '#r' => [...]]);
+     * </code>
      *
      * @param  array<array-key, array<string>>  $parameters
      */
