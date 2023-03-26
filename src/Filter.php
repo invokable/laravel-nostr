@@ -18,10 +18,6 @@ class Filter implements Jsonable, Arrayable, Stringable
      * @param  array<string>|null  $ids
      * @param  array<string>|null  $authors
      * @param  array<int|Kind>|null  $kinds
-     * @param  int|null  $since
-     * @param  int|null  $until
-     * @param  int|null  $limit
-     * @param  string|null  $search
      */
     public function __construct(
         public readonly ?array $ids = null,
