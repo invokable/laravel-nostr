@@ -6,6 +6,7 @@ namespace Revolution\Nostr;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use JetBrains\PhpStorm\ArrayShape;
 use Stringable;
 
 class Profile implements Jsonable, Arrayable, Stringable
@@ -23,19 +24,22 @@ class Profile implements Jsonable, Arrayable, Stringable
     ) {
     }
 
+    /**
+     * @param  array{
+     *     name?: string,
+     *     display_name?: string,
+     *     about?: string,
+     *     picture?: string,
+     *     banner?: string,
+     *     website?: string,
+     *     nip05?: string,
+     *     lud06?: string,
+     *     lud16?: string,
+     * }  $profile
+     */
     public static function fromArray(array $profile): static
     {
-        return new static(
-            name: $profile['name'] ?? '',
-            display_name: $profile['display_name'] ?? '',
-            about: $profile['about'] ?? '',
-            picture: $profile['picture'] ?? '',
-            banner: $profile['banner'] ?? '',
-            website: $profile['website'] ?? '',
-            nip05: $profile['nip05'] ?? '',
-            lud06: $profile['lud06'] ?? '',
-            lud16: $profile['lud16'] ?? '',
-        );
+        return new static(...$profile);
     }
 
     public static function fromJson(string $profile): static
@@ -43,6 +47,17 @@ class Profile implements Jsonable, Arrayable, Stringable
         return static::fromArray(json_decode($profile, true));
     }
 
+    #[ArrayShape([
+        'name' => 'string',
+        'display_name' => 'string',
+        'about' => 'string',
+        'picture' => 'string',
+        'banner' => 'string',
+        'website' => 'string',
+        'nip05' => 'string',
+        'lud06' => 'string',
+        'lud16' => 'string',
+    ])]
     public function toArray(): array
     {
         return get_object_vars($this);
