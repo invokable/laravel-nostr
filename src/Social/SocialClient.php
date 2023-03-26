@@ -287,10 +287,10 @@ class SocialClient
                 fn (Collection $collection) => $collection->push(
                     EventTag::make(id: $rootId, relay: $this->relay,
                         marker: 'root'),
-                    EventTag::make(id: $event->id(), relay: $this->relay, marker: 'reply')
+                    EventTag::make(id: $event->id, relay: $this->relay, marker: 'reply')
                 ),
                 fn (Collection $collection) => $collection->push(
-                    EventTag::make(id: $event->id(), relay: $this->relay,
+                    EventTag::make(id: $event->id, relay: $this->relay,
                         marker: 'root')
                 ));
 
@@ -315,8 +315,8 @@ class SocialClient
     public function reaction(Event $event, string $content = '+'): Response
     {
         $tags = collect([
-            EventTag::make(id: $event->id(), relay: $this->relay, marker: 'reply'),
-            PersonTag::make(p: $event->pubkey(), relay: $this->relay),
+            EventTag::make(id: $event->id, relay: $this->relay, marker: 'reply'),
+            PersonTag::make(p: $event->pubkey, relay: $this->relay),
         ]);
 
         $reaction_event = new Event(

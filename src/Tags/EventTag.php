@@ -27,7 +27,7 @@ class EventTag implements Arrayable
     }
 
     /**
-     * @return array<string, string, string, string>
+     * @return array{0: string, 1: string, 2: string, 3: string}
      */
     public function toArray(): array
     {

@@ -28,7 +28,7 @@ class IdentifierTag implements Arrayable
     }
 
     /**
-     * @return array<string, string>
+     * @return array{0: string, 1: string}
      */
     public function toArray(): array
     {

@@ -30,7 +30,7 @@ class AddressTag implements Arrayable
     }
 
     /**
-     * @return array<string, string, string>
+     * @return array{0: string, 1: string, 2: string}
      */
     public function toArray(): array
     {

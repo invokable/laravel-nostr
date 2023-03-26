@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 use Illuminate\Support\Traits\Macroable;
+use JetBrains\PhpStorm\ArrayShape;
 
 class PendingNip05
 {
@@ -17,6 +18,11 @@ class PendingNip05
     /**
      * @throws RequestException
      */
+    #[ArrayShape([
+        'user' => 'string',
+        'pubkey' => 'string',
+        'relays' => 'array',
+    ])]
     public function profile(string $user): array
     {
         [$name, $domain] = Str::of($user)

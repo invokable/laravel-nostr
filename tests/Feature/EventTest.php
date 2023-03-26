@@ -113,6 +113,14 @@ class EventTest extends TestCase
         ], $e->toArray());
     }
 
+    public function test_readonly()
+    {
+        $this->expectException(\Error::class);
+
+        $e = new Event();
+        $e->kind = 0;
+    }
+
     public function test_root_id()
     {
         $e = Event::make(
@@ -141,13 +149,6 @@ class EventTest extends TestCase
         );
 
         $this->assertNull($e->replyId());
-    }
-
-    public function test_pubkey()
-    {
-        $e = Event::make()->withPublicKey('pk');
-
-        $this->assertSame('pk', $e->pubkey());
     }
 
     public function test_validate_unsigned()
