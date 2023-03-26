@@ -285,13 +285,11 @@ class SocialClient
         $tags = collect()
             ->when(filled($rootId),
                 fn (Collection $collection) => $collection->push(
-                    EventTag::make(id: $rootId, relay: $this->relay,
-                        marker: 'root'),
+                    EventTag::make(id: $rootId, relay: $this->relay, marker: 'root'),
                     EventTag::make(id: $event->id, relay: $this->relay, marker: 'reply')
                 ),
                 fn (Collection $collection) => $collection->push(
-                    EventTag::make(id: $event->id, relay: $this->relay,
-                        marker: 'root')
+                    EventTag::make(id: $event->id, relay: $this->relay, marker: 'root')
                 ));
 
         foreach ($mentions as $pk) {
