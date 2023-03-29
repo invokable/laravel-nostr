@@ -29,6 +29,11 @@ class Filter implements Jsonable, Arrayable, Stringable
     ) {
     }
 
+    /**
+     * @param  array<string>|null  $ids
+     * @param  array<string>|null  $authors
+     * @param  array<int|Kind>|null  $kinds
+     */
     public static function make(
         ?array $ids = null,
         ?array $authors = null,
