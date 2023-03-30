@@ -72,6 +72,7 @@ class ClientNip19Test extends TestCase
         $res = Nostr::nip19()->nevent(event: $e = EventPointer::make(
             id: '1',
             relays: [],
+            author: 'pk',
         ));
 
         $this->assertSame([
