@@ -13,6 +13,7 @@ enum Kind: int
     case EncryptedDirectMessage = 4;
     case EventDeletion = 5;
     case Reaction = 7;
+    case BadgeAward = 8;
     case ChannelCreation = 40;
     case ChannelMetadata = 41;
     case ChannelMessage = 42;
@@ -23,5 +24,7 @@ enum Kind: int
     case Zap = 9735;
     case RelayList = 10002;
     case ClientAuth = 22242;
+    case BadgeDefinition = 30008;
+    case ProfileBadge = 30009;
     case Article = 30023;
 }
