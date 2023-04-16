@@ -67,4 +67,14 @@ class PendingNip19
             'addr' => $addr->toArray(),
         ]);
     }
+
+    /**
+     * encode relay url.
+     */
+    public function nrelay(string $relay): Response
+    {
+        return $this->http()->post('nip19/nrelay', [
+            'relay' => $relay,
+        ]);
+    }
 }

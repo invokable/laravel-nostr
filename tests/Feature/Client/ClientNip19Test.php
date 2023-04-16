@@ -17,7 +17,7 @@ class ClientNip19Test extends TestCase
 {
     public function test_nip19_decode()
     {
-        Http::fake(fn () => Http::response([
+        Http::fake(fn() => Http::response([
             'type' => 'note',
             'data' => [],
         ]));
@@ -32,7 +32,7 @@ class ClientNip19Test extends TestCase
 
     public function test_nip19_encode_note()
     {
-        Http::fake(fn () => Http::response([
+        Http::fake(fn() => Http::response([
             'note' => 'note1aaa',
         ]));
 
@@ -42,12 +42,12 @@ class ClientNip19Test extends TestCase
             'note' => 'note1aaa',
         ], $res->json());
 
-        Http::assertSent(fn (Request $request) => $request['note'] === '1');
+        Http::assertSent(fn(Request $request) => $request['note'] === '1');
     }
 
     public function test_nip19_encode_profile()
     {
-        Http::fake(fn () => Http::response([
+        Http::fake(fn() => Http::response([
             'nprofile' => 'nprofile1',
         ]));
 
@@ -60,12 +60,12 @@ class ClientNip19Test extends TestCase
             'nprofile' => 'nprofile1',
         ], $res->json());
 
-        Http::assertSent(fn (Request $request) => $request['profile'] === $p->toArray());
+        Http::assertSent(fn(Request $request) => $request['profile'] === $p->toArray());
     }
 
     public function test_nip19_encode_event()
     {
-        Http::fake(fn () => Http::response([
+        Http::fake(fn() => Http::response([
             'nevent' => 'nevent1',
         ]));
 
@@ -79,12 +79,12 @@ class ClientNip19Test extends TestCase
             'nevent' => 'nevent1',
         ], $res->json());
 
-        Http::assertSent(fn (Request $request) => $request['event'] === $e->toArray());
+        Http::assertSent(fn(Request $request) => $request['event'] === $e->toArray());
     }
 
     public function test_nip19_encode_addr()
     {
-        Http::fake(fn () => Http::response([
+        Http::fake(fn() => Http::response([
             'naddr' => 'naddr1',
         ]));
 
@@ -99,6 +99,21 @@ class ClientNip19Test extends TestCase
             'naddr' => 'naddr1',
         ], $res->json());
 
-        Http::assertSent(fn (Request $request) => $request['addr'] === $a->toArray());
+        Http::assertSent(fn(Request $request) => $request['addr'] === $a->toArray());
+    }
+
+    public function test_nip19_encode_relay()
+    {
+        Http::fake(fn() => Http::response([
+            'nrelay' => 'nrelay1',
+        ]));
+
+        $res = Nostr::nip19()->nrelay(relay: $relay = 'wss://');
+
+        $this->assertSame([
+            'nrelay' => 'nrelay1',
+        ], $res->json());
+
+        Http::assertSent(fn(Request $request) => $request['relay'] === $relay);
     }
 }
