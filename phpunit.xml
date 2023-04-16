@@ -4,13 +4,15 @@
          bootstrap="vendor/autoload.php"
          colors="true"
 >
-    <coverage>
+    <source>
         <include>
             <directory suffix=".php">src/</directory>
         </include>
         <exclude>
             <directory suffix=".php">src/Console/</directory>
         </exclude>
+    </source>
+    <coverage>
         <report>
             <clover outputFile="build/logs/clover.xml"/>
         </report>
