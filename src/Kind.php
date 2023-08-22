@@ -19,12 +19,15 @@ enum Kind: int
     case ChannelMessage = 42;
     case ChannelHideMessage = 43;
     case ChannelMuteUser = 44;
+    case Blank = 255;
+    case FileMetadata = 1063;
     case Report = 1984;
     case ZapRequest = 9734;
     case Zap = 9735;
     case RelayList = 10002;
     case ClientAuth = 22242;
-    case BadgeDefinition = 30008;
-    case ProfileBadge = 30009;
+    case HttpAuth = 27235;
+    case ProfileBadge = 30008;
+    case BadgeDefinition = 30009;
     case Article = 30023;
 }
