@@ -26,6 +26,7 @@ enum Kind: int
     case Zap = 9735;
     case RelayList = 10002;
     case ClientAuth = 22242;
+    case NwcRequest = 23194;
     case HttpAuth = 27235;
     case ProfileBadge = 30008;
     case BadgeDefinition = 30009;
