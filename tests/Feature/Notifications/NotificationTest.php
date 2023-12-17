@@ -103,7 +103,7 @@ class TestNotification extends \Illuminate\Notifications\Notification
 
     public function toNostr(object $notifiable): NostrMessage
     {
-        return NostrMessage::create(content: $this->content, tags: $this->tags);
+        return NostrMessage::create(content: $this->content, kind: 1, tags: $this->tags);
     }
 }
 

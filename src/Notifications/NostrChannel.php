@@ -44,7 +44,7 @@ class NostrChannel
     protected function publish(NostrMessage $message, NostrRoute $route): void
     {
         $event = Event::make(
-            kind: Kind::Text,
+            kind: $message->kind,
             content: $message->content,
             created_at: now()->timestamp,
             tags: collect($message->tags)->toArray(),
