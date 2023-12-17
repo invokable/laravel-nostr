@@ -11,6 +11,7 @@ use Revolution\Nostr\Tags\IdentifierTag;
 use Revolution\Nostr\Tags\IdentityTag;
 use Revolution\Nostr\Tags\ReferenceTag;
 use Revolution\Nostr\Tags\SubjectTag;
+use Revolution\Nostr\Tags\TitleTag;
 use Tests\TestCase;
 
 class TagTest extends TestCase
@@ -76,5 +77,15 @@ class TagTest extends TestCase
         )->with(['1', '2']);
 
         $this->assertSame(['i', 'github:user', 'proof', '1', '2'], $i->toArray());
+    }
+
+    public function test_title()
+    {
+        $t = TitleTag::make(
+            title: 'title',
+        );
+
+        $this->assertIsArray($t->toArray());
+        $this->assertSame(['title', 'title'], $t->toArray());
     }
 }
