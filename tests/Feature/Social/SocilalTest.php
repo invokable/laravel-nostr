@@ -152,7 +152,7 @@ class SocilalTest extends TestCase
             ['id' => '2'],
         ]);
 
-        $notes = $this->social->notes(authors: ['1', '2'], since: 0, until: 0, limit: 10);
+        $notes = $this->social->notes(authors: ['1', '2'], kinds: [1], since: 0, until: 0, limit: 10);
 
         $this->assertIsArray($notes);
     }

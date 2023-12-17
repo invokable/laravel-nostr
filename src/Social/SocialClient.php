@@ -191,11 +191,11 @@ class SocialClient
     /**
      * @param  array<string>  $authors
      */
-    public function notes(array $authors, ?int $since = null, ?int $until = null, ?int $limit = null): array
+    public function notes(array $authors, array $kinds = [Kind::Text, Kind::Article], ?int $since = null, ?int $until = null, ?int $limit = null): array
     {
         $filter = new Filter(
             authors: $authors,
-            kinds: [Kind::Text],
+            kinds: $kinds,
             since: $since,
             until: $until,
             limit: $limit,
