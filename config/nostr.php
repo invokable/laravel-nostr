@@ -30,8 +30,10 @@ return [
         'wss://nostr.lnprivate.network',
         'wss://nostr-pub.wellorder.net',
 
+        'wss://yabu.me',
         'wss://nostr.h3z.jp',
         'wss://nostr.holybea.com',
+        'wss://relay.plebstr.com',
         'wss://nostr.fediverse.jp',
         'wss://relay.nostr.wirednet.jp',
         'wss://nostr-relay.nokotaro.com',
