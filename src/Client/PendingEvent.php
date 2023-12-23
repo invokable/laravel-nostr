@@ -44,15 +44,12 @@ class PendingEvent
         ]);
     }
 
-    /**
-     * @param  array<Filter|array>  $filters
-     */
-    public function list(array $filters, ?string $relay = null): Response
+    public function list(Filter|array $filter, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
         return $this->http()->post('event/list', [
-            'filters' => collect($filters)->toArray(),
+            'filter' => collect($filter)->toArray(),
             'relay' => $relay,
         ]);
     }

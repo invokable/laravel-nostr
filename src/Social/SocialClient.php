@@ -184,7 +184,7 @@ class SocialClient
         );
 
         return Nostr::event()
-                    ->list(filters: [$filter], relay: $this->relay)
+                    ->list(filter: $filter, relay: $this->relay)
                     ->json('events') ?? [];
     }
 
@@ -201,7 +201,7 @@ class SocialClient
             limit: $limit,
         );
 
-        $response = Nostr::event()->list(filters: [$filter], relay: $this->relay);
+        $response = Nostr::event()->list(filter: $filter, relay: $this->relay);
 
         return $response->collect('events')
                         ->sortByDesc('created_at')
