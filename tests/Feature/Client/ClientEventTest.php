@@ -32,13 +32,9 @@ class ClientEventTest extends TestCase
     {
         Http::fake(fn () => Http::response(['events' => []]));
 
-        $filters = [
-            new Filter(authors: []),
-            new Filter(ids: []),
-            [],
-        ];
+        $filter = new Filter(authors: []);
 
-        $response = Nostr::event()->list(filters: $filters, relay: '');
+        $response = Nostr::event()->list(filter: $filter, relay: '');
 
         $this->assertSame([
             'events' => [],

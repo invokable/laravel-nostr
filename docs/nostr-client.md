@@ -107,7 +107,7 @@ $filter = Filter::make(
         );
 
 /** @var Response $response */
-$response = Nostr::event()->list(filters: [$filter]);
+$response = Nostr::event()->list(filter: $filter);
 $events = $response->json('events');
 // [
 //     [
