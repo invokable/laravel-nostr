@@ -5,6 +5,7 @@ namespace Revolution\Nostr\Facades;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Facade;
 use Revolution\Nostr\Event;
+use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
 use Revolution\Nostr\Social\SocialClient;
 
@@ -22,7 +23,7 @@ use Revolution\Nostr\Social\SocialClient;
  * @method static array relays()
  * @method static Response updateRelays(array $relays = [])
  * @method static array profiles(array $authors)
- * @method static array notes(array $authors, ?int $since = null, ?int $until = null, ?int $limit = null)
+ * @method static array notes(array $authors, array $kinds = [Kind::Text, Kind::Article], ?int $since = null, ?int $until = null, ?int $limit = null)
  * @method static array mergeNotesAndProfiles(array $notes, array $profiles)
  * @method static array timeline(?int $since = null, ?int $until = null, ?int $limit = 10)
  * @method static Response createNote(string $content, array $tags = [])
