@@ -1,4 +1,5 @@
 env:
+  - APP_ENV=testing
   - NOSTR_SK=
   - NOSTR_NSEC=
   - NOSTR_PK=
