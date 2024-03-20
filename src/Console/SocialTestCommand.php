@@ -53,6 +53,9 @@ class SocialTestCommand extends Command
 
         Social::withKey(sk: $sk, pk: $pk);
 
+        $notes = Social::notes(authors: [$pk], limit: 2);
+        dump($notes);
+
         //        $profile = new Profile(
         //            name: 'test',
         //            display_name: 'test1',
@@ -80,8 +83,8 @@ class SocialTestCommand extends Command
         //                $profiles = Social::profiles(authors: $follow_ids);
         //                dump($profiles);
         //
-        //        $notes = Social::notes(authors: $follow_ids, limit: 2);
-        //        dump($notes);
+//                $notes = Social::notes(authors: $follow_ids, limit: 2);
+//                dump($notes);
         //
         //        $texts = Social::mergeNotesAndProfiles($notes, $profiles);
         //        dump($texts);
@@ -211,29 +214,29 @@ class SocialTestCommand extends Command
         //        ]);
         //        dump($res->json());
 
-        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'テスト'.now()->toDateTimeString());
-        dump($dm = $encrypt->json('encrypt'));
-
-        $e = Event::make(
-            kind: Kind::EncryptedDirectMessage,
-            content: $dm,
-            created_at: now()->timestamp,
-            tags: [PersonTag::make(p: $pk)],
-        );
-
-        $r = Nostr::event()->publish(event: $e, sk: $sk);
-        dump($r->json());
-
-        $f = Filter::make(
-            kinds: [Kind::EncryptedDirectMessage],
-            limit: 1,
-        )->with(['#p' => [$pk]]);
-
-        $r_e = Nostr::event()->get(filter: $f, relay: Arr::first(Config::get('nostr.relays')));
-        dump($r_e->json());
-
-        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $r_e->json('event.content'));
-        dump($decrypt->json('decrypt'));
+//        $encrypt = Nostr::nip04()->encrypt($sk, $pk, 'テスト'.now()->toDateTimeString());
+//        dump($dm = $encrypt->json('encrypt'));
+//
+//        $e = Event::make(
+//            kind: Kind::EncryptedDirectMessage,
+//            content: $dm,
+//            created_at: now()->timestamp,
+//            tags: [PersonTag::make(p: $pk)],
+//        );
+//
+//        $r = Nostr::event()->publish(event: $e, sk: $sk);
+//        dump($r->json());
+//
+//        $f = Filter::make(
+//            kinds: [Kind::EncryptedDirectMessage],
+//            limit: 1,
+//        )->with(['#p' => [$pk]]);
+//
+//        $r_e = Nostr::event()->get(filter: $f, relay: Arr::first(Config::get('nostr.relays')));
+//        dump($r_e->json());
+//
+//        $decrypt = Nostr::nip04()->decrypt($sk, $pk, $r_e->json('event.content'));
+//        dump($decrypt->json('decrypt'));
 
         //        $res = Social::updateRelays();
         //        dump($res->body());
