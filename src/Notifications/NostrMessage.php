@@ -10,9 +10,9 @@ use Revolution\Nostr\Kind;
 class NostrMessage implements Arrayable
 {
     public function __construct(
-        public readonly string   $content,
+        public readonly string $content,
         public readonly int|Kind $kind = Kind::Text,
-        public readonly array    $tags = [],
+        public readonly array $tags = [],
     )
     {
         //
