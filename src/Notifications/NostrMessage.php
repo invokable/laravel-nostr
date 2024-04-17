@@ -13,9 +13,7 @@ class NostrMessage implements Arrayable
         public readonly string $content,
         public readonly int|Kind $kind = Kind::Text,
         public readonly array $tags = [],
-    ) {
-        //
-    }
+    ) {}
 
     public static function create(string $content, int|Kind $kind = Kind::Text, array $tags = []): static
     {
