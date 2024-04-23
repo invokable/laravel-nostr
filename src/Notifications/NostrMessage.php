@@ -19,7 +19,7 @@ class NostrMessage implements Arrayable
 
     public static function create(string $content, int|Kind $kind = Kind::Text, array $tags = []): static
     {
-        return new static(content: $content, kind: $kind, tags: $tags);
+        return new static(...func_get_args());
     }
 
     public function toArray(): array
