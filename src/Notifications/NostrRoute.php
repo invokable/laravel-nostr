@@ -14,6 +14,6 @@ class NostrRoute
 
     public static function to(string $sk, ?array $relays = null): static
     {
-        return new static(sk: $sk, relays: $relays);
+        return new static(...func_get_args());
     }
 }
