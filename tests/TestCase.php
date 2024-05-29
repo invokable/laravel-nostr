@@ -7,7 +7,7 @@ namespace Tests;
 use Illuminate\Foundation\Application;
 use Revolution\Nostr\Providers\NostrServiceProvider;
 
-class TestCase extends \Orchestra\Testbench\TestCase
+abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
      * Load package service provider.
