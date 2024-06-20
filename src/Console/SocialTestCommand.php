@@ -104,25 +104,25 @@ class SocialTestCommand extends Command
         //        }
 
         //
-        //                $res = Social::createNote('test');
-        //                dump($res->json());
+//                        $res = Social::createNote('test');
+//                        dump($res->json());
 
-        //        $event = new Event(
-        //            kind: Kind::Text,
-        //            content: 'publish test',
-        //            created_at: now()->timestamp,
-        //            tags: [],
-        //        );
-        //
-        //        $responses = Nostr::pool()->publish(event: $event, sk: $sk);
-        //        foreach ($responses as $relay => $response) {
-        //            $this->line($relay);
-        //
-        //            $this->table(
-        //                ['kind', 'content', 'created_at'],
-        //                [$response->collect('event')->only(['kind', 'content', 'created_at'])->toArray()]
-        //            );
-        //        }
+                $event = new Event(
+                    kind: Kind::Text,
+                    content: 'publish test',
+                    created_at: now()->timestamp,
+                    tags: [],
+                );
+
+                $responses = Nostr::pool()->publish(event: $event, sk: $sk);
+                foreach ($responses as $relay => $response) {
+                    $this->line($relay);
+
+                    $this->table(
+                        ['kind', 'content', 'created_at'],
+                        [$response->collect('event')->only(['kind', 'content', 'created_at'])->toArray()]
+                    );
+                }
         //
         //        $event_id = Arr::first($responses)['event']['id'];
         //        $this->info($event_id);
