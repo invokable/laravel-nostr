@@ -47,7 +47,7 @@ class SocialClient
         return $this;
     }
 
-    public function withKey(string $sk = '', string $pk = ''): static
+    public function withKey(string $sk = '', #[\SensitiveParameter] string $pk = ''): static
     {
         $this->sk = $sk;
         $this->pk = $pk;

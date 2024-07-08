@@ -39,7 +39,7 @@ class PendingPool
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
-    public function publish(Event|array $event, string $sk, array $relays = []): array
+    public function publish(Event|array $event, #[\SensitiveParameter] string $sk, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
@@ -53,7 +53,7 @@ class PendingPool
         );
     }
 
-    private function publishRequests(Pool $pool, Event|array $event, string $sk, array $relays): array
+    private function publishRequests(Pool $pool, Event|array $event, #[\SensitiveParameter] string $sk, array $relays): array
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)

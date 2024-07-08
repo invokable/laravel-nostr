@@ -33,7 +33,7 @@ class PendingEvent
         return $this;
     }
 
-    public function publish(Event|array $event, string $sk, ?string $relay = null): Response
+    public function publish(Event|array $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
@@ -69,7 +69,7 @@ class PendingEvent
         ]);
     }
 
-    public function sign(Event|array $event, string $sk): Response
+    public function sign(Event|array $event, #[\SensitiveParameter] string $sk): Response
     {
         return $this->http()->post('event/sign', [
             'event' => collect($event)->toArray(),

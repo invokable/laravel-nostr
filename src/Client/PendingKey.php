@@ -18,14 +18,14 @@ class PendingKey
         return $this->http()->get('key/generate');
     }
 
-    public function fromSecretKey(string $sk): Response
+    public function fromSecretKey(#[\SensitiveParameter] string $sk): Response
     {
         return $this->http()->get('key/from_sk', [
             'sk' => $sk,
         ]);
     }
 
-    public function fromNsec(string $nsec): Response
+    public function fromNsec(#[\SensitiveParameter] string $nsec): Response
     {
         return $this->http()->get('key/from_nsec', [
             'nsec' => $nsec,
