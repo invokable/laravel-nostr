@@ -18,7 +18,7 @@ class NostrServiceProvider extends ServiceProvider
             'nostr'
         );
 
-        $this->app->singleton(SocialClient::class, SocialClient::class);
+        $this->app->scoped(SocialClient::class, SocialClient::class);
     }
 
     public function boot(): void
