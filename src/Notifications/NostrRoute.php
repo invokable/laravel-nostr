@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Notifications;
 
-class NostrRoute
+final class NostrRoute
 {
     public function __construct(
         #[\SensitiveParameter]
@@ -13,8 +13,8 @@ class NostrRoute
     ) {
     }
 
-    public static function to(#[\SensitiveParameter] string $sk, ?array $relays = null): static
+    public static function to(#[\SensitiveParameter] string $sk, ?array $relays = null): self
     {
-        return new static(...func_get_args());
+        return new self(...func_get_args());
     }
 }
