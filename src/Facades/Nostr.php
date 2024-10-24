@@ -11,7 +11,6 @@ use Revolution\Nostr\Client\PendingNip05;
 use Revolution\Nostr\Client\PendingNip19;
 use Revolution\Nostr\Client\PendingPool;
 use Revolution\Nostr\Contracts\NostrFactory;
-use Revolution\Nostr\NostrManager;
 
 /**
  * Basic Nostr client.
@@ -25,7 +24,6 @@ use Revolution\Nostr\NostrManager;
  * @method static PendingNip19 nip19()
  *
  * @see NostrClient
- * @mixin NostrManager
  */
 class Nostr extends Facade
 {

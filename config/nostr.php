@@ -2,7 +2,7 @@
 
 return [
     /**
-     * Supported: "node"
+     * Supported: "node".
      */
     'driver' => env('NOSTR_DRIVER', 'node'),
 
