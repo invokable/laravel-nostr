@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Revolution\Nostr\Client;
+namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Traits\Macroable;
-use Revolution\Nostr\Client\Concerns\HasHttp;
+use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
 

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Revolution\Nostr\Client\PendingEvent;
-use Revolution\Nostr\Client\PendingKey;
+use Revolution\Nostr\Client\Node\PendingEvent;
+use Revolution\Nostr\Client\Node\PendingKey;
 use Revolution\Nostr\Facades\Nostr;
 use Tests\TestCase;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Revolution\Nostr\Client;
+namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\Response;

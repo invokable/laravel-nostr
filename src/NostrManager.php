@@ -3,7 +3,7 @@
 namespace Revolution\Nostr;
 
 use Illuminate\Support\Manager;
-use Revolution\Nostr\Client\NostrClient;
+use Revolution\Nostr\Client\Node\NostrClient;
 use Revolution\Nostr\Contracts\NostrDriver;
 use Revolution\Nostr\Contracts\NostrFactory;
 
