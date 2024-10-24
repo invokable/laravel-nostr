@@ -47,7 +47,7 @@ class SocialClient
         return $this;
     }
 
-    public function withKey(string $sk = '', #[\SensitiveParameter] string $pk = ''): static
+    public function withKey(#[\SensitiveParameter] string $sk = '', string $pk = ''): static
     {
         $this->sk = $sk;
         $this->pk = $pk;
@@ -104,8 +104,8 @@ class SocialClient
         );
 
         return Nostr::event()
-                    ->get(filter: $filter, relay: $this->relay)
-                    ->json('event') ?? [];
+            ->get(filter: $filter, relay: $this->relay)
+            ->json('event') ?? [];
     }
 
     /**
@@ -121,9 +121,9 @@ class SocialClient
         $response = Nostr::event()->get(filter: $filter, relay: $this->relay);
 
         return $response->collect('event.tags')
-                        ->mapToGroups(fn ($tag) => [$tag[0] => $tag[1]])
-                        ->get('p')
-                        ?->toArray() ?? [];
+            ->mapToGroups(fn ($tag) => [$tag[0] => $tag[1]])
+            ->get('p')
+            ?->toArray() ?? [];
     }
 
     /**
@@ -149,8 +149,8 @@ class SocialClient
         );
 
         return Nostr::event()
-                    ->get(filter: $filter, relay: $this->relay)
-                    ->json('event') ?? [];
+            ->get(filter: $filter, relay: $this->relay)
+            ->json('event') ?? [];
     }
 
     /**
@@ -184,8 +184,8 @@ class SocialClient
         );
 
         return Nostr::event()
-                    ->list(filter: $filter, relay: $this->relay)
-                    ->json('events') ?? [];
+            ->list(filter: $filter, relay: $this->relay)
+            ->json('events') ?? [];
     }
 
     /**
@@ -204,8 +204,8 @@ class SocialClient
         $response = Nostr::event()->list(filter: $filter, relay: $this->relay);
 
         return $response->collect('events')
-                        ->sortByDesc('created_at')
-                        ->toArray() ?? [];
+            ->sortByDesc('created_at')
+            ->toArray() ?? [];
     }
 
     public function mergeNotesAndProfiles(array $notes, array $profiles): array
@@ -297,10 +297,10 @@ class SocialClient
             ->when(filled($rootId),
                 fn (Collection $collection) => $collection->push(
                     EventTag::make(id: $rootId, relay: $this->relay, marker: 'root'),
-                    EventTag::make(id: $event->id, relay: $this->relay, marker: 'reply')
+                    EventTag::make(id: $event->id, relay: $this->relay, marker: 'reply'),
                 ),
                 fn (Collection $collection) => $collection->push(
-                    EventTag::make(id: $event->id, relay: $this->relay, marker: 'root')
+                    EventTag::make(id: $event->id, relay: $this->relay, marker: 'root'),
                 ));
 
         foreach ($mentions as $pk) {
@@ -357,10 +357,10 @@ class SocialClient
     public function getEventById(string $id): Event
     {
         $res = Nostr::event()
-                    ->get(filter: Filter::make(ids: [$id]), relay: $this->relay)
-                    ->throw();
+            ->get(filter: Filter::make(ids: [$id]), relay: $this->relay)
+            ->throw();
 
         return Event::fromArray(event: $res->json('event'))
-                    ->tap(fn (Event $event) => throw_unless($event->validate(), EventNotFoundException::class));
+            ->tap(fn (Event $event) => throw_unless($event->validate(), EventNotFoundException::class));
     }
 }
