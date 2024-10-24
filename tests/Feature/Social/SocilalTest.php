@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Exceptions\EventNotFoundException;
-use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
@@ -25,26 +24,28 @@ class SocilalTest extends TestCase
     {
         parent::setUp();
 
+        Http::preventStrayRequests();
+
         $this->social = new SocialClient();
+        $this->social->driver('node');
     }
 
     public function test_facade()
     {
-        $social = Social::withRelay(relay: 'wss://')->withKey(sk: 'sk', pk: 'pk');
+        $social = Social::driver('node')
+            ->withRelay(relay: 'wss://')
+            ->withKey(sk: 'sk', pk: 'pk');
 
         $this->assertInstanceOf(SocialClient::class, $social);
     }
 
     public function test_create_new_user()
     {
-        Nostr::shouldReceive('key->generate->collect')->once()->andReturn(collect([
-            'sk' => 'sk',
-            'pk' => 'pk',
-        ]));
-
-        Nostr::shouldReceive('event->publish->throw')->once();
-
-        Nostr::shouldReceive('event->publish->throw')->once();
+        Http::fakeSequence()
+            ->push([
+                'sk' => 'sk',
+                'pk' => 'pk',
+            ])->whenEmpty(Http::response());
 
         $p = new Profile(name: 'name');
 
@@ -52,15 +53,15 @@ class SocilalTest extends TestCase
 
         $this->assertArrayHasKey('keys', $response);
         $this->assertArrayHasKey('profile', $response);
+        $this->assertSame('name', data_get($response, 'profile.name'));
     }
 
     public function test_create_new_user_fail()
     {
         $this->expectException(\Exception::class);
 
-        Nostr::shouldReceive('key->generate->collect')->once()->andReturn(collect());
-
-        Nostr::shouldReceive('event->publish->throw')->never();
+        Http::fakeSequence()
+            ->push([]);
 
         $p = new Profile(name: 'name');
 
@@ -68,23 +69,31 @@ class SocilalTest extends TestCase
 
         $this->assertArrayNotHasKey('keys', $response);
         $this->assertArrayNotHasKey('profile', $response);
+
+        Http::assertNothingSent();
     }
 
     public function test_profile()
     {
-        Nostr::shouldReceive('event->get->json')->once()->andReturn(['name' => 'name']);
+        Http::fakeSequence()
+            ->push(['event' => ['name' => 'name']]);
 
         $response = $this->social->profile(pk: 'pk');
 
         $this->assertIsArray($response);
+        $this->assertSame('name', $response['name']);
     }
 
     public function test_follows()
     {
-        Nostr::shouldReceive('event->get->collect')->once()->andReturn(collect([
-            ['p', '1'],
-            ['p', '2'],
-        ]));
+        Http::fakeSequence()
+            ->push([
+                'event' => [
+                    'tags' => [
+                        ['p', '1'],
+                        ['p', '2'],
+                    ],
+                ]]);
 
         $follows = $this->social->withKey('sk', 'pk')->follows();
 
@@ -93,7 +102,7 @@ class SocilalTest extends TestCase
 
     public function test_update_follows()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $follows = [
             new PersonTag(p: '1'),
@@ -101,17 +110,19 @@ class SocilalTest extends TestCase
         ];
 
         $res = $this->social->withKey('sk', 'pk')
-                            ->updateFollows(follows: $follows);
+            ->updateFollows(follows: $follows);
 
         $this->assertTrue($res->successful());
     }
 
     public function test_relays()
     {
-        Nostr::shouldReceive('event->get->json')->once()->andReturn([
-            ['r', 'wss://1'],
-            ['r', 'wss://2'],
-        ]);
+        Http::fakeSequence()
+            ->push([
+                'event' => [
+                    ['r', 'wss://1'],
+                    ['r', 'wss://2'],
+                ]]);
 
         $follows = $this->social->withKey('sk', 'pk')->relays();
 
@@ -120,7 +131,7 @@ class SocilalTest extends TestCase
 
     public function test_update_relays()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $relays = [
             'wss://1',
@@ -128,17 +139,14 @@ class SocilalTest extends TestCase
         ];
 
         $res = $this->social->withKey('sk', 'pk')
-                            ->updateRelays(relays: $relays);
+            ->updateRelays(relays: $relays);
 
         $this->assertTrue($res->successful());
     }
 
     public function test_profiles()
     {
-        Nostr::shouldReceive('event->list->json')->once()->andReturn([
-            ['name' => '1'],
-            ['name' => '2'],
-        ]);
+        Http::fake();
 
         $profiles = $this->social->profiles(['1', '2']);
 
@@ -147,10 +155,7 @@ class SocilalTest extends TestCase
 
     public function test_notes()
     {
-        Nostr::shouldReceive('event->list->collect->sortByDesc->toArray')->once()->andReturn([
-            ['id' => '1'],
-            ['id' => '2'],
-        ]);
+        Http::fake();
 
         $notes = $this->social->notes(authors: ['1', '2'], kinds: [1], since: 0, until: 0, limit: 10);
 
@@ -200,63 +205,47 @@ class SocilalTest extends TestCase
 
     public function test_timeline()
     {
-        //follows
-        Nostr::shouldReceive('event->get->collect')->once()->andReturn(collect([
-            ['p', '1'],
-            ['p', '2'],
-        ]));
-
-        //profiles
-        Nostr::shouldReceive('event->list->json')->once()->andReturn([
-            ['name' => '1', 'pubkey' => '1'],
-            ['name' => '2', 'pubkey' => '2'],
-        ]);
-
-        //notes
-        Nostr::shouldReceive('event->list->collect->sortByDesc->toArray')->once()->andReturn([
-            ['id' => '1', 'pubkey' => '1'],
-            ['id' => '2', 'pubkey' => '2'],
-        ]);
+        Http::fake();
 
         $notes = $this->social->withKey('sk', 'pk')
-                              ->timeline(since: 0, until: 0, limit: 20);
+            ->timeline(since: 0, until: 0, limit: 20);
 
         $this->assertIsArray($notes);
     }
 
     public function test_create_note()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->createNote(content: 'test', tags: []);
+            ->createNote(content: 'test', tags: []);
 
         $this->assertTrue($response->successful());
     }
 
     public function test_create_note_to()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->createNoteTo(content: 'test', pk: 'to');
+            ->createNoteTo(content: 'test', pk: 'to');
 
         $this->assertTrue($response->successful());
     }
 
     public function test_create_note_hashtag()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->createNoteWithHashTag(content: 'test', hashtags: ['test']);
+            ->createNoteWithHashTag(content: 'test', hashtags: ['test']);
 
         $this->assertTrue($response->successful());
     }
 
     public function test_reply()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $event = Event::makeSigned(
             kind: Kind::Text,
@@ -269,19 +258,19 @@ class SocilalTest extends TestCase
         );
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->reply(
-                                     event: $event,
-                                     content: 'test',
-                                     mentions: ['1'],
-                                     hashtags: ['test'],
-                                 );
+            ->reply(
+                event: $event,
+                content: 'test',
+                mentions: ['1'],
+                hashtags: ['test'],
+            );
 
         $this->assertTrue($response->successful());
     }
 
     public function test_reply_root()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $event = Event::makeSigned(
             kind: Kind::Text,
@@ -294,18 +283,18 @@ class SocilalTest extends TestCase
         );
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->reply(
-                                     event: $event,
-                                     content: 'test',
-                                     mentions: ['1']
-                                 );
+            ->reply(
+                event: $event,
+                content: 'test',
+                mentions: ['1'],
+            );
 
         $this->assertTrue($response->successful());
     }
 
     public function test_reaction()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $event = Event::makeSigned(
             kind: Kind::Text,
@@ -318,20 +307,20 @@ class SocilalTest extends TestCase
         );
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->reaction(
-                                     event: $event,
-                                     content: '+',
-                                 );
+            ->reaction(
+                event: $event,
+                content: '+',
+            );
 
         $this->assertTrue($response->successful());
     }
 
     public function test_delete()
     {
-        Nostr::shouldReceive('event->publish->successful')->once()->andReturnTrue();
+        Http::fake();
 
         $response = $this->social->withKey('sk', 'pk')
-                                 ->delete(event_id: '1');
+            ->delete(event_id: '1');
 
         $this->assertTrue($response->successful());
     }
@@ -355,7 +344,7 @@ class SocilalTest extends TestCase
         ]));
 
         $event = $this->social->withKey('sk', 'pk')
-                              ->getEventById(id: $id);
+            ->getEventById(id: $id);
 
         $this->assertSame([
             'id' => $id,
@@ -375,7 +364,7 @@ class SocilalTest extends TestCase
         $this->expectException(RequestException::class);
 
         $event = $this->social->withKey('sk', 'pk')
-                              ->getEventById(id: '1');
+            ->getEventById(id: '1');
     }
 
     public function test_get_event_by_id_type_error()
@@ -385,7 +374,7 @@ class SocilalTest extends TestCase
         $this->expectException(\TypeError::class);
 
         $event = $this->social->withKey('sk', 'pk')
-                              ->getEventById(id: '1');
+            ->getEventById(id: '1');
     }
 
     public function test_get_event_by_id_validator_fails()
@@ -405,6 +394,6 @@ class SocilalTest extends TestCase
         $this->expectException(EventNotFoundException::class);
 
         $event = $this->social->withKey('sk', 'pk')
-                              ->getEventById(id: '1');
+            ->getEventById(id: '1');
     }
 }

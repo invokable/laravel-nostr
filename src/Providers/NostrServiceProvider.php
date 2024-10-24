@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Revolution\Nostr\Console\NostrServe;
 use Revolution\Nostr\Console\SocialTestCommand;
+use Revolution\Nostr\Contracts\NostrFactory;
+use Revolution\Nostr\NostrManager;
 use Revolution\Nostr\Social\SocialClient;
 
 class NostrServiceProvider extends ServiceProvider
@@ -15,8 +16,10 @@ class NostrServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(
             __DIR__.'/../../config/nostr.php',
-            'nostr'
+            'nostr',
         );
+
+        $this->app->scoped(NostrFactory::class, NostrManager::class);
 
         $this->app->scoped(SocialClient::class, SocialClient::class);
     }
@@ -28,7 +31,6 @@ class NostrServiceProvider extends ServiceProvider
         if ($this->app->runningUnitTests() && class_exists(SocialTestCommand::class)) {
             $this->commands([
                 SocialTestCommand::class,
-                NostrServe::class,
             ]);
         }
     }

@@ -3,17 +3,19 @@
 namespace Revolution\Nostr\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Revolution\Nostr\Client\NostrClient;
-use Revolution\Nostr\Client\PendingEvent;
-use Revolution\Nostr\Client\PendingKey;
-use Revolution\Nostr\Client\PendingNip04;
+use Revolution\Nostr\Client\Node\NostrClient;
+use Revolution\Nostr\Client\Node\PendingEvent;
+use Revolution\Nostr\Client\Node\PendingKey;
+use Revolution\Nostr\Client\Node\PendingNip04;
+use Revolution\Nostr\Client\Node\PendingNip19;
+use Revolution\Nostr\Client\Node\PendingPool;
 use Revolution\Nostr\Client\PendingNip05;
-use Revolution\Nostr\Client\PendingNip19;
-use Revolution\Nostr\Client\PendingPool;
+use Revolution\Nostr\Contracts\NostrFactory;
 
 /**
  * Basic Nostr client.
  *
+ * @method static static driver(string $driver)
  * @method static PendingKey key()
  * @method static PendingEvent event()
  * @method static PendingPool pool()
@@ -27,6 +29,6 @@ class Nostr extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return NostrClient::class;
+        return NostrFactory::class;
     }
 }

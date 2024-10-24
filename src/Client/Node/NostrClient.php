@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Revolution\Nostr\Client;
+namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Support\Traits\Macroable;
+use Revolution\Nostr\Client\PendingNip05;
+use Revolution\Nostr\Contracts\NostrDriver;
 
 /**
  * Basic Nostr client.
  */
-class NostrClient
+class NostrClient implements NostrDriver
 {
     use Macroable;
 

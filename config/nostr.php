@@ -2,6 +2,11 @@
 
 return [
     /**
+     * Supported: "node".
+     */
+    'driver' => env('NOSTR_DRIVER', 'node'),
+
+    /**
      * @see https://github.com/kawax/nostr-vercel-api
      */
     'api_base' => env('NOSTR_API_BASE', 'https://nostr-api.vercel.app/api/'),

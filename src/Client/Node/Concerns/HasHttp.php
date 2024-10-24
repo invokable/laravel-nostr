@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Revolution\Nostr\Client\Concerns;
+namespace Revolution\Nostr\Client\Node\Concerns;
 
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Config;

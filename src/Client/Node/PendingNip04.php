@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Revolution\Nostr\Client;
+namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Macroable;
-use Revolution\Nostr\Client\Concerns\HasHttp;
+use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 
 class PendingNip04
 {

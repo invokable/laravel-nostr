@@ -29,15 +29,31 @@ use TypeError;
  */
 class SocialClient
 {
-    use Macroable, Conditionable;
+    use Macroable;
+    use Conditionable;
+
+    protected string $driver;
 
     protected string $relay;
+
     protected string $sk;
+
     protected string $pk;
 
     public function __construct()
     {
+        $this->driver(Config::get('nostr.driver', 'node'));
+
         $this->relay = Arr::first(Config::get('nostr.relays'));
+    }
+
+    public function driver(string $driver): self
+    {
+        $this->driver = $driver;
+
+        Nostr::driver($this->driver);
+
+        return $this;
     }
 
     public function withRelay(string $relay): static
