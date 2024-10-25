@@ -7,10 +7,13 @@ namespace Revolution\Nostr;
 use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use Stringable;
 
 class Filter implements Jsonable, Arrayable, Stringable
 {
+    protected const LIMIT = 100;
+
     protected array $parameters = [];
 
     /**
@@ -21,10 +24,10 @@ class Filter implements Jsonable, Arrayable, Stringable
     public function __construct(
         public readonly ?array $ids = null,
         public readonly ?array $authors = null,
-        public readonly ?array $kinds = null,
+        public readonly ?array $kinds = [Kind::Text],
         public readonly ?int $since = null,
         public readonly ?int $until = null,
-        public readonly ?int $limit = null,
+        public readonly ?int $limit = self::LIMIT,
         public readonly ?string $search = null,
     ) {
     }
@@ -37,13 +40,33 @@ class Filter implements Jsonable, Arrayable, Stringable
     public static function make(
         ?array $ids = null,
         ?array $authors = null,
-        ?array $kinds = null,
+        ?array $kinds = [Kind::Text],
         ?int $since = null,
         ?int $until = null,
-        ?int $limit = null,
+        ?int $limit = self::LIMIT,
         ?string $search = null,
     ): static {
         return new static(...func_get_args());
+    }
+
+    public static function fromArray(array $filter): static
+    {
+        $keys = collect(get_class_vars(self::class))
+            ->except('parameters')
+            ->keys()
+            ->toArray();
+
+        $self = static::make(...Arr::only($filter, $keys));
+
+        if (Arr::has($filter, '#e')) {
+            $self->parameters['#e'] = $filter['#e'];
+        }
+
+        if (Arr::has($filter, '#p')) {
+            $self->parameters['#p'] = $filter['#p'];
+        }
+
+        return $self;
     }
 
     /**
@@ -79,6 +102,13 @@ class Filter implements Jsonable, Arrayable, Stringable
         return collect(get_object_vars($this))
             ->except(['parameters'])
             ->merge($this->parameters)
+            ->map(function ($value, $key) {
+                if ($key === 'limit' && blank($value)) {
+                    return self::LIMIT;
+                }
+
+                return $value;
+            })
             ->reject(fn ($item) => is_null($item))
             ->map($this->castEnum(...))
             ->toArray();

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Client;
+namespace Tests\Feature\Client\Node;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -15,7 +15,8 @@ class ClientNip04Test extends TestCase
     {
         Http::fake(fn () => Http::response(['encrypt' => 'encrypt text']));
 
-        $res = Nostr::nip04()->encrypt(sk: 'sk', pk: 'pk', content: 'content');
+        $res = Nostr::driver('node')
+            ->nip04()->encrypt(sk: 'sk', pk: 'pk', content: 'content');
 
         $this->assertSame(['encrypt' => 'encrypt text'], $res->json());
 
@@ -26,7 +27,8 @@ class ClientNip04Test extends TestCase
     {
         Http::fake(fn () => Http::response(['decrypt' => 'decrypt text']));
 
-        $res = Nostr::nip04()->decrypt(sk: 'sk', pk: 'pk', content: 'content');
+        $res = Nostr::driver('node')
+            ->nip04()->decrypt(sk: 'sk', pk: 'pk', content: 'content');
 
         $this->assertSame(['decrypt' => 'decrypt text'], $res->json());
 

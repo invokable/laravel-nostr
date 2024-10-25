@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Client;
+namespace Tests\Feature\Client\Node;
 
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Facades\Nostr;
@@ -14,7 +14,8 @@ class ClientKeyTest extends TestCase
     {
         Http::fake(fn () => Http::response(['sk' => 'sk']));
 
-        $response = Nostr::key()->generate();
+        $response = Nostr::driver('node')
+            ->key()->generate();
 
         $this->assertSame([
             'sk' => 'sk',
@@ -25,7 +26,8 @@ class ClientKeyTest extends TestCase
     {
         Http::fake(fn () => Http::response(['sk' => 'sk']));
 
-        $response = Nostr::key()->fromSecretKey(sk: 'sk');
+        $response = Nostr::driver('node')
+            ->key()->fromSecretKey(sk: 'sk');
 
         $this->assertSame([
             'sk' => 'sk',
@@ -36,7 +38,8 @@ class ClientKeyTest extends TestCase
     {
         Http::fake(fn () => Http::response(['nsec' => 'nsec']));
 
-        $response = Nostr::key()->fromNsec(nsec: 'nsec');
+        $response = Nostr::driver('node')
+            ->key()->fromNsec(nsec: 'nsec');
 
         $this->assertSame([
             'nsec' => 'nsec',
@@ -47,7 +50,8 @@ class ClientKeyTest extends TestCase
     {
         Http::fake(fn () => Http::response(['pk' => 'pk']));
 
-        $response = Nostr::key()->fromPublicKey(pk: 'pk');
+        $response = Nostr::driver('node')
+            ->key()->fromPublicKey(pk: 'pk');
 
         $this->assertSame([
             'pk' => 'pk',
@@ -58,7 +62,8 @@ class ClientKeyTest extends TestCase
     {
         Http::fake(fn () => Http::response(['npub' => 'npub']));
 
-        $response = Nostr::key()->fromNpub(npub: 'npub');
+        $response = Nostr::driver('node')
+            ->key()->fromNpub(npub: 'npub');
 
         $this->assertSame([
             'npub' => 'npub',

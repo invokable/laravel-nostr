@@ -9,13 +9,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
+use Revolution\Nostr\Contracts\Client\ClientEvent;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
 
 /**
  * Working with single relay.
  */
-class PendingEvent
+class NodeEvent implements ClientEvent
 {
     use HasHttp;
     use Macroable;
@@ -54,8 +55,10 @@ class PendingEvent
         ]);
     }
 
-    public function get(Filter|array $filter, string $relay): Response
+    public function get(Filter|array $filter, ?string $relay = null): Response
     {
+        $relay = $relay ?? $this->relay;
+
         return $this->http()->post('event/get', [
             'filter' => collect($filter)->toArray(),
             'relay' => $relay,

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Client;
+namespace Tests\Feature\Client\Native;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -24,7 +24,7 @@ class ClientNip05Test extends TestCase
             ],
         ]));
 
-        $user = Nostr::nip05()->profile(user: 'user@example.com');
+        $user = Nostr::driver('native')->nip05()->profile(user: 'user@example.com');
 
         $this->assertSame([
             'user' => 'user@example.com',

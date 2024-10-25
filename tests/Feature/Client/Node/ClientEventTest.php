@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Client;
+namespace Tests\Feature\Client\Node;
 
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Event;
@@ -19,9 +19,10 @@ class ClientEventTest extends TestCase
 
         $event = new Event(kind: Kind::Text);
 
-        $response = Nostr::event()
-                         ->withRelay(relay: '')
-                         ->publish(event: $event, sk: '');
+        $response = Nostr::driver('node')
+            ->event()
+            ->withRelay(relay: '')
+            ->publish(event: $event, sk: '');
 
         $this->assertSame([
             'message' => 'ok',
@@ -34,7 +35,8 @@ class ClientEventTest extends TestCase
 
         $filter = new Filter(authors: []);
 
-        $response = Nostr::event()->list(filter: $filter, relay: '');
+        $response = Nostr::driver('node')
+            ->event()->list(filter: $filter, relay: '');
 
         $this->assertSame([
             'events' => [],
@@ -47,7 +49,8 @@ class ClientEventTest extends TestCase
 
         $filter = new Filter(authors: []);
 
-        $response = Nostr::event()->get(filter: $filter, relay: '');
+        $response = Nostr::driver('node')
+            ->event()->get(filter: $filter, relay: '');
 
         $this->assertSame([
             'event' => [],
@@ -60,7 +63,8 @@ class ClientEventTest extends TestCase
 
         $event = new Event(kind: Kind::Text);
 
-        $response = Nostr::event()->hash(event: $event);
+        $response = Nostr::driver('node')
+            ->event()->hash(event: $event);
 
         $this->assertSame([
             'hash' => 'hash',
@@ -73,7 +77,8 @@ class ClientEventTest extends TestCase
 
         $event = new Event(kind: Kind::Text);
 
-        $response = Nostr::event()->sign(event: $event, sk: 'sk');
+        $response = Nostr::driver('node')
+            ->event()->sign(event: $event, sk: 'sk');
 
         $this->assertSame([
             'sign' => 'sign',
@@ -86,7 +91,8 @@ class ClientEventTest extends TestCase
 
         $event = new Event(kind: Kind::Text);
 
-        $response = Nostr::event()->verify(event: $event);
+        $response = Nostr::driver('node')
+            ->event()->verify(event: $event);
 
         $this->assertSame([
             'verify' => true,

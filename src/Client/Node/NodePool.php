@@ -9,13 +9,14 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Traits\Macroable;
+use Revolution\Nostr\Contracts\Client\ClientPool;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
 
 /**
  * Working with multiple relays.
  */
-class PendingPool
+class NodePool implements ClientPool
 {
     use Macroable;
 
@@ -67,30 +68,29 @@ class PendingPool
     }
 
     /**
-     * @param  array<Filter|array>  $filters
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
-    public function list(array $filters, array $relays = []): array
+    public function list(Filter|array $filter, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
         return Http::pool(
             fn (Pool $pool) => $this->listRequests(
                 pool: $pool,
-                filters: $filters,
+                filter: $filter,
                 relays: $relays
             )
         );
     }
 
-    private function listRequests(Pool $pool, array $filters, array $relays): array
+    private function listRequests(Pool $pool, Filter|array $filter, array $relays): array
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)
                                       ->baseUrl(Config::get('nostr.api_base'))
                                       ->post('event/list', [
-                                          'filter' => collect($filters)->toArray(),
+                                          'filter' => collect($filter)->toArray(),
                                           'relay' => $relay,
                                       ]))
             ->toArray();

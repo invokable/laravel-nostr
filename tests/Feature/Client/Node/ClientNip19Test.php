@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Client;
+namespace Tests\Feature\Client\Node;
 
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -22,7 +22,8 @@ class ClientNip19Test extends TestCase
             'data' => [],
         ]));
 
-        $res = Nostr::nip19()->decode(n: 'note1aaaa');
+        $res = Nostr::driver('node')
+            ->nip19()->decode(n: 'note1aaaa');
 
         $this->assertSame([
             'type' => 'note',
@@ -36,7 +37,8 @@ class ClientNip19Test extends TestCase
             'note' => 'note1aaa',
         ]));
 
-        $res = Nostr::nip19()->note(id: '1');
+        $res = Nostr::driver('node')
+            ->nip19()->note(id: '1');
 
         $this->assertSame([
             'note' => 'note1aaa',
@@ -51,10 +53,11 @@ class ClientNip19Test extends TestCase
             'nprofile' => 'nprofile1',
         ]));
 
-        $res = Nostr::nip19()->nprofile(profile: $p = ProfilePointer::make(
-            pubkey: '1',
-            relays: [],
-        ));
+        $res = Nostr::driver('node')
+            ->nip19()->nprofile(profile: $p = ProfilePointer::make(
+                pubkey: '1',
+                relays: [],
+            ));
 
         $this->assertSame([
             'nprofile' => 'nprofile1',
@@ -69,11 +72,12 @@ class ClientNip19Test extends TestCase
             'nevent' => 'nevent1',
         ]));
 
-        $res = Nostr::nip19()->nevent(event: $e = EventPointer::make(
-            id: '1',
-            relays: [],
-            author: 'pk',
-        ));
+        $res = Nostr::driver('node')
+            ->nip19()->nevent(event: $e = EventPointer::make(
+                id: '1',
+                relays: [],
+                author: 'pk',
+            ));
 
         $this->assertSame([
             'nevent' => 'nevent1',
@@ -88,12 +92,13 @@ class ClientNip19Test extends TestCase
             'naddr' => 'naddr1',
         ]));
 
-        $res = Nostr::nip19()->naddr(addr: $a = AddressPointer::make(
-            identifier: '1',
-            pubkey: '11',
-            kind: Kind::Metadata,
-            relays: [],
-        ));
+        $res = Nostr::driver('node')
+            ->nip19()->naddr(addr: $a = AddressPointer::make(
+                identifier: '1',
+                pubkey: '11',
+                kind: Kind::Metadata,
+                relays: [],
+            ));
 
         $this->assertSame([
             'naddr' => 'naddr1',
@@ -108,7 +113,8 @@ class ClientNip19Test extends TestCase
             'nrelay' => 'nrelay1',
         ]));
 
-        $res = Nostr::nip19()->nrelay(relay: $relay = 'wss://');
+        $res = Nostr::driver('node')
+            ->nip19()->nrelay(relay: $relay = 'wss://');
 
         $this->assertSame([
             'nrelay' => 'nrelay1',

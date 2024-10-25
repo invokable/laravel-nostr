@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Exceptions\EventNotFoundException;
+use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Facades\Social;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
@@ -16,7 +17,7 @@ use Revolution\Nostr\Social\SocialClient;
 use Revolution\Nostr\Tags\PersonTag;
 use Tests\TestCase;
 
-class SocilalTest extends TestCase
+class NodeSocilalTest extends TestCase
 {
     protected SocialClient $social;
 
@@ -155,7 +156,9 @@ class SocilalTest extends TestCase
 
     public function test_notes()
     {
-        Http::fake();
+        Nostr::fake();
+
+        Nostr::shouldReceive('driver->event->list')->once()->andReturn(collect([]));
 
         $notes = $this->social->notes(authors: ['1', '2'], kinds: [1], since: 0, until: 0, limit: 10);
 

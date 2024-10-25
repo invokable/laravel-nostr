@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Client;
+namespace Tests\Feature\Client\Node;
 
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Event;
@@ -19,8 +19,9 @@ class ClientPoolTest extends TestCase
 
         $event = new Event(kind: Kind::Text);
 
-        $responses = Nostr::pool()
-                          ->publish(event: $event, sk: '', relays: ['wss://1', 'wss://2']);
+        $responses = Nostr::driver('node')
+            ->pool()
+            ->publish(event: $event, sk: '', relays: ['wss://1', 'wss://2']);
 
         $this->assertTrue($responses['wss://1']->ok());
         $this->assertTrue($responses['wss://2']->ok());
@@ -31,15 +32,12 @@ class ClientPoolTest extends TestCase
     {
         Http::fake(fn () => Http::response(['events' => []]));
 
-        $filters = [
-            new Filter(authors: []),
-            new Filter(ids: []),
-            [],
-        ];
+        $filter = new Filter(authors: []);
 
-        $responses = Nostr::pool()
-                          ->withRelays(relays: ['wss://1', 'wss://2'])
-                          ->list(filters: $filters);
+        $responses = Nostr::driver('node')
+            ->pool()
+            ->withRelays(relays: ['wss://1', 'wss://2'])
+            ->list(filter: $filter);
 
         $this->assertTrue($responses['wss://1']->ok());
         $this->assertTrue($responses['wss://2']->ok());
@@ -52,9 +50,10 @@ class ClientPoolTest extends TestCase
 
         $filter = new Filter(authors: []);
 
-        $responses = Nostr::pool()
-                          ->withRelays(relays: ['wss://1', 'wss://2'])
-                          ->get(filter: $filter, relays: ['1', '2']);
+        $responses = Nostr::driver('node')
+            ->pool()
+            ->withRelays(relays: ['wss://1', 'wss://2'])
+            ->get(filter: $filter, relays: ['1', '2']);
 
         $this->assertTrue($responses['1']->ok());
         $this->assertTrue($responses['2']->ok());
