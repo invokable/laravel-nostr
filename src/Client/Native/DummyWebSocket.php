@@ -22,7 +22,7 @@ use swentel\nostr\Subscription\Subscription;
 /**
  * @todo
  */
-class DummyClient
+class DummyWebSocket
 {
     use HasHttp;
     use HasFilter;

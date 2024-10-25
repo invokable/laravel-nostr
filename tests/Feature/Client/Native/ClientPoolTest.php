@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
-use Revolution\Nostr\Client\Native\DummyClient;
+use Revolution\Nostr\Client\Native\DummyWebSocket;
 use Revolution\Nostr\Client\Native\NativePool;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
@@ -22,7 +22,7 @@ class ClientPoolTest extends TestCase
 {
     public function test_pool_event_publish()
     {
-        $this->mock(DummyClient::class, function (MockInterface $mock) {
+        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
             $mock->shouldReceive('publish')->once()->andReturn([
                 'wss://1' => new Response(Http::response([])->wait()),
                 'wss://2' => new Response(Http::response([])->wait()),
@@ -44,7 +44,7 @@ class ClientPoolTest extends TestCase
 
     public function test_pool_event_list()
     {
-        $this->mock(DummyClient::class, function (MockInterface $mock) {
+        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
             $mock->shouldReceive('request')->once()->andReturn([
                 'wss://1' => new Response(Http::response([])->wait()),
                 'wss://2' => new Response(Http::response([])->wait()),
@@ -79,7 +79,7 @@ class ClientPoolTest extends TestCase
 
     public function test_pool_event_get()
     {
-        $this->mock(DummyClient::class, function (MockInterface $mock) {
+        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
             $mock->shouldReceive('request')->once()->andReturn([
                 '1' => new Response(Http::response([])->wait()),
                 '2' => new Response(Http::response([])->wait()),

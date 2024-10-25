@@ -57,7 +57,7 @@ class NativePool implements ClientPool
         /**
          * @var array<array-key, RelayResponse> $response
          */
-        return app(DummyClient::class)->publish($n_event, $relays);
+        return app(DummyWebSocket::class)->publish($n_event, $relays);
     }
 
     /**
@@ -68,7 +68,7 @@ class NativePool implements ClientPool
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
-        $responses = app(DummyClient::class)->request($filter, $relays);
+        $responses = app(DummyWebSocket::class)->request($filter, $relays);
 
         return collect($responses)
             ->map(function ($events, $relay) {
@@ -88,7 +88,7 @@ class NativePool implements ClientPool
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
-        $responses = app(DummyClient::class)->request($filter, $relays);
+        $responses = app(DummyWebSocket::class)->request($filter, $relays);
 
         return collect($responses)
             ->map(function ($events, $relay) {

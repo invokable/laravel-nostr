@@ -50,7 +50,7 @@ class NativeEvent implements ClientEvent
 
         $n_event = $this->toSignedNativeEvent($event, $sk);
 
-        $responses = app(DummyClient::class)->publish($n_event, $relay);
+        $responses = app(DummyWebSocket::class)->publish($n_event, $relay);
 
         $res = head($responses);
 
@@ -72,7 +72,10 @@ class NativeEvent implements ClientEvent
     {
         $relay = $relay ?? $this->relay;
 
-        return app(DummyClient::class)->list($filter, $relay);
+        /** @var DummyWebSocket $ws */
+        $ws = app(DummyWebSocket::class);
+
+        return $ws->list($filter, $relay);
     }
 
     /**
@@ -82,10 +85,10 @@ class NativeEvent implements ClientEvent
     {
         $relay = $relay ?? $this->relay;
 
-        /** @var DummyClient $dummy */
-        $dummy = app(DummyClient::class);
+        /** @var DummyWebSocket $ws */
+        $ws = app(DummyWebSocket::class);
 
-        return $dummy->get($filter, $relay);
+        return $ws->get($filter, $relay);
     }
 
     public function hash(Event $event): Response

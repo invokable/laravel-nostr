@@ -48,6 +48,6 @@ class NativeClient implements NostrDriver
 
     public function fake(?callable $callback = null): void
     {
-        DummyClient::fake($callback);
+        DummyWebSocket::fake($callback);
     }
 }

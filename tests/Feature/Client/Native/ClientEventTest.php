@@ -7,7 +7,7 @@ namespace Tests\Feature\Client\Native;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
-use Revolution\Nostr\Client\Native\DummyClient;
+use Revolution\Nostr\Client\Native\DummyWebSocket;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
@@ -20,7 +20,7 @@ class ClientEventTest extends TestCase
 {
     public function test_event_publish()
     {
-        $this->mock(DummyClient::class, function (MockInterface $mock) {
+        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
             $mock->shouldReceive('publish')->once()->andReturn([RelayResponse::create(['OK', 'subscription_id', true, 'message'])]);
         });
 
@@ -42,7 +42,7 @@ class ClientEventTest extends TestCase
 
     public function test_event_list()
     {
-        $this->mock(DummyClient::class, function (MockInterface $mock) {
+        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
             $mock->shouldReceive('list')->once()->andReturn(
                 new Response(Http::response([
                     'events' => [['id' => 'id']],
@@ -72,7 +72,7 @@ class ClientEventTest extends TestCase
 
     public function test_event_get()
     {
-        $this->mock(DummyClient::class, function (MockInterface $mock) {
+        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
             $mock->shouldReceive('get')->once()->andReturn(
                 new Response(Http::response([
                     'event' => ['id' => 'id'],
