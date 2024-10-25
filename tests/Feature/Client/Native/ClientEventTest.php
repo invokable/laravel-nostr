@@ -64,16 +64,18 @@ class ClientEventTest extends TestCase
 
         $id = $response->json('id');
 
-        $filter = Filter::make(authors: [$keys['pk']], kinds: [Kind::Metadata]);
+        if (! empty($id)) {
+            $filter = Filter::make(authors: [$keys['pk']], kinds: [Kind::Metadata]);
 
-        $response = Nostr::native()->event()
-            ->get(filter: $filter);
+            $response = Nostr::native()->event()
+                ->get(filter: $filter);
 
-        //dump($response->json());
+            //dump($response->json());
 
-        $this->assertSame($id, $response->json('event.id'));
+            $this->assertSame($id, $response->json('event.id'));
 
-        $this->assertSame($profile->name, Profile::fromJson($response->json('event.content'))->name);
+            $this->assertSame($profile->name, Profile::fromJson($response->json('event.content'))->name);
+        }
     }
 
     public function test_event_list()

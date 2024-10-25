@@ -12,6 +12,9 @@ use function Illuminate\Support\enum_value;
 
 trait HasEvent
 {
+    /**
+     * @param  Event  $event  Unsigned or Signed Event
+     */
     protected function toNativeEvent(Event $event): NativeEvent
     {
         $n_event = (new NativeEvent())
@@ -38,6 +41,10 @@ trait HasEvent
         return $n_event;
     }
 
+    /**
+     * @param  Event  $event  Unsigned Event
+     * @return NativeEvent Signed Event
+     */
     protected function toSignedNativeEvent(Event $event, #[\SensitiveParameter] string $sk): NativeEvent
     {
         $n_event = $this->toNativeEvent($event);

@@ -41,23 +41,22 @@ class NativeEvent implements ClientEvent
         return $this;
     }
 
-    /**
-     * Publish new Event.
-     *
-     * @param  Event  $event  Unsigned Event
-     */
     public function publish(Event $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
-        $n_event = $this->toSignedNativeEvent($event, $sk);
+        $signed_event = $this->toSignedNativeEvent($event, $sk);
 
-        $responses = app(DummyWebSocket::class)->publish($n_event, $relay);
+        $responses = app(DummyWebSocket::class)->publish($signed_event, $relay);
 
         $res = head($responses);
 
         if ($res instanceof RelayResponseNotice) {
-            return $this->response(['message' => 'error', 'error' => $res->message()], 500);
+            return $this->response([
+                'message' => 'error',
+                'type' => $res->type,
+                'error' => $res->message(),
+            ], 500);
         }
 
         if ($res instanceof RelayResponseOk && $res->isSuccess()) {
@@ -70,9 +69,6 @@ class NativeEvent implements ClientEvent
         return $this->response(['message' => 'error', 'error' => 'error'], 500);
     }
 
-    /**
-     * Get event list.
-     */
     public function list(Filter $filter, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
@@ -83,9 +79,6 @@ class NativeEvent implements ClientEvent
         return $ws->list($filter, $relay);
     }
 
-    /**
-     * Get first event.
-     */
     public function get(Filter $filter, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
@@ -110,10 +103,10 @@ class NativeEvent implements ClientEvent
 
     public function sign(Event $event, #[\SensitiveParameter] string $sk): Response
     {
-        $n_event = $this->toSignedNativeEvent($event, $sk);
+        $signed_event = $this->toSignedNativeEvent($event, $sk);
 
         return $this->response([
-            'sign' => $n_event->getSignature(),
+            'sign' => $signed_event->getSignature(),
         ]);
     }
 

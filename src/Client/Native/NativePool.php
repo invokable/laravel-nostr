@@ -44,10 +44,6 @@ class NativePool implements ClientPool
         return $this;
     }
 
-    /**
-     * @param  array<string>  $relays
-     * @return array<array-key, Response>
-     */
     public function publish(Event|array $event, #[\SensitiveParameter] string $sk, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;

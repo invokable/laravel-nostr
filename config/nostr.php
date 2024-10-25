@@ -15,8 +15,9 @@ return [
      * The first relay is used as the primary relay.
      */
     'relays' => [
-        'wss://relay.damus.io',
+        'wss://relay.nostr.band',
 
+        'wss://relay.damus.io',
         'wss://nos.lol',
         'wss://nostr.mom',
         'wss://offchain.pub',
@@ -24,7 +25,6 @@ return [
         'wss://relay.nostr.bg',
         'wss://nostr.oxtr.dev',
         'wss://relay.nostr.net',
-        'wss://relay.nostr.band',
         'wss://relay.primal.net',
         'wss://relay.plebstr.com',
         'wss://nostr.fmt.wiz.biz',

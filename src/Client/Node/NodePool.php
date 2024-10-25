@@ -26,9 +26,6 @@ class NodePool implements ClientPool
         $this->relays = Config::get('nostr.relays', []);
     }
 
-    /**
-     * @param  array<string>  $relays
-     */
     public function withRelays(array $relays): static
     {
         $this->relays = $relays;
@@ -36,10 +33,6 @@ class NodePool implements ClientPool
         return $this;
     }
 
-    /**
-     * @param  array<string>  $relays
-     * @return array<array-key, Response>
-     */
     public function publish(Event $event, #[\SensitiveParameter] string $sk, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
@@ -49,8 +42,8 @@ class NodePool implements ClientPool
                 pool: $pool,
                 event: $event,
                 sk: $sk,
-                relays: $relays
-            )
+                relays: $relays,
+            ),
         );
     }
 
@@ -58,19 +51,15 @@ class NodePool implements ClientPool
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)
-                                      ->baseUrl(Config::get('nostr.api_base'))
-                                      ->post('event/publish', [
-                                          'event' => collect($event)->toArray(),
-                                          'sk' => $sk,
-                                          'relay' => $relay,
-                                      ]))
+                ->baseUrl(Config::get('nostr.api_base'))
+                ->post('event/publish', [
+                    'event' => collect($event)->toArray(),
+                    'sk' => $sk,
+                    'relay' => $relay,
+                ]))
             ->toArray();
     }
 
-    /**
-     * @param  array<string>  $relays
-     * @return array<array-key, Response>
-     */
     public function list(Filter $filter, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
@@ -79,8 +68,8 @@ class NodePool implements ClientPool
             fn (Pool $pool) => $this->listRequests(
                 pool: $pool,
                 filter: $filter,
-                relays: $relays
-            )
+                relays: $relays,
+            ),
         );
     }
 
@@ -88,18 +77,14 @@ class NodePool implements ClientPool
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)
-                                      ->baseUrl(Config::get('nostr.api_base'))
-                                      ->post('event/list', [
-                                          'filter' => collect($filter)->toArray(),
-                                          'relay' => $relay,
-                                      ]))
+                ->baseUrl(Config::get('nostr.api_base'))
+                ->post('event/list', [
+                    'filter' => collect($filter)->toArray(),
+                    'relay' => $relay,
+                ]))
             ->toArray();
     }
 
-    /**
-     * @param  array<string>  $relays
-     * @return array<array-key, Response>
-     */
     public function get(Filter $filter, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
@@ -108,8 +93,8 @@ class NodePool implements ClientPool
             fn (Pool $pool) => $this->getRequests(
                 pool: $pool,
                 filter: $filter,
-                relays: $relays
-            )
+                relays: $relays,
+            ),
         );
     }
 
@@ -117,11 +102,11 @@ class NodePool implements ClientPool
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)
-                                      ->baseUrl(Config::get('nostr.api_base'))
-                                      ->post('event/get', [
-                                          'filter' => collect($filter)->toArray(),
-                                          'relay' => $relay,
-                                      ]))
+                ->baseUrl(Config::get('nostr.api_base'))
+                ->post('event/get', [
+                    'filter' => collect($filter)->toArray(),
+                    'relay' => $relay,
+                ]))
             ->toArray();
     }
 }

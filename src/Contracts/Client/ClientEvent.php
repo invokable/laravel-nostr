@@ -14,6 +14,7 @@ interface ClientEvent
      * Publish new Event.
      *
      * @param  Event  $event  Unsigned Event
+     * @param  string  $sk  Secret key
      */
     public function publish(Event $event, string $sk, ?string $relay = null): Response;
 
@@ -27,9 +28,22 @@ interface ClientEvent
      */
     public function get(Filter $filter, ?string $relay = null): Response;
 
+    /**
+     * Get the event hash, used as event id.
+     *
+     * @param  Event  $event  Unsigned Event
+     */
     public function hash(Event $event): Response;
 
+    /**
+     * Get the event sig.
+     *
+     * @param  Event  $event  Unsigned Event
+     */
     public function sign(Event $event, string $sk): Response;
 
+    /**
+     * @param  Event  $event  Signed Event
+     */
     public function verify(Event $event): Response;
 }

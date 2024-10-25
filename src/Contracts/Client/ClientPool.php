@@ -11,9 +11,14 @@ use Revolution\Nostr\Filter;
  */
 interface ClientPool
 {
+    /**
+     * @param  array<string>  $relays
+     */
     public function withRelays(array $relays): static;
 
     /**
+     * @param  Event  $event  Unsigned Event
+     * @param  string  $sk  Secret key
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
