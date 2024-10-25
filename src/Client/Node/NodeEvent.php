@@ -57,6 +57,8 @@ class NodeEvent implements ClientEvent
 
     public function get(Filter|array $filter, ?string $relay = null): Response
     {
+        $relay = $relay ?? $this->relay;
+
         return $this->http()->post('event/get', [
             'filter' => collect($filter)->toArray(),
             'relay' => $relay,
