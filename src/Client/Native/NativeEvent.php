@@ -44,7 +44,7 @@ class NativeEvent implements ClientEvent
     /**
      * Publish new Event.
      */
-    public function publish(Event|array $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
+    public function publish(Event $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
@@ -68,33 +68,27 @@ class NativeEvent implements ClientEvent
     /**
      * Get event list.
      */
-    public function list(Filter|array $filter, ?string $relay = null): Response
+    public function list(Filter $filter, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
-        $n_filter = $this->toNativeFilter($filter);
-        $filters = [$n_filter];
-
-        return app(DummyClient::class)->list($filters, $relay);
+        return app(DummyClient::class)->list($filter, $relay);
     }
 
     /**
      * Get first event.
      */
-    public function get(Filter|array $filter, ?string $relay = null): Response
+    public function get(Filter $filter, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
-
-        $n_filter = $this->toNativeFilter($filter);
-        $filters = [$n_filter];
 
         /** @var DummyClient $dummy */
         $dummy = app(DummyClient::class);
 
-        return $dummy->get($filters, $relay);
+        return $dummy->get($filter, $relay);
     }
 
-    public function hash(Event|array $event): Response
+    public function hash(Event $event): Response
     {
         $n_event = $this->toNativeEvent($event);
 
@@ -106,7 +100,7 @@ class NativeEvent implements ClientEvent
         ]);
     }
 
-    public function sign(Event|array $event, #[\SensitiveParameter] string $sk): Response
+    public function sign(Event $event, #[\SensitiveParameter] string $sk): Response
     {
         $n_event = $this->toSignedNativeEvent($event, $sk);
 
@@ -115,7 +109,7 @@ class NativeEvent implements ClientEvent
         ]);
     }
 
-    public function verify(Event|array $event): Response
+    public function verify(Event $event): Response
     {
         $n_event = $this->toNativeEvent($event);
 

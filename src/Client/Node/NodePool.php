@@ -40,7 +40,7 @@ class NodePool implements ClientPool
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
-    public function publish(Event|array $event, #[\SensitiveParameter] string $sk, array $relays = []): array
+    public function publish(Event $event, #[\SensitiveParameter] string $sk, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
@@ -54,7 +54,7 @@ class NodePool implements ClientPool
         );
     }
 
-    private function publishRequests(Pool $pool, Event|array $event, #[\SensitiveParameter] string $sk, array $relays): array
+    private function publishRequests(Pool $pool, Event $event, #[\SensitiveParameter] string $sk, array $relays): array
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)
@@ -71,7 +71,7 @@ class NodePool implements ClientPool
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
-    public function list(Filter|array $filter, array $relays = []): array
+    public function list(Filter $filter, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
@@ -84,7 +84,7 @@ class NodePool implements ClientPool
         );
     }
 
-    private function listRequests(Pool $pool, Filter|array $filter, array $relays): array
+    private function listRequests(Pool $pool, Filter $filter, array $relays): array
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)
@@ -100,7 +100,7 @@ class NodePool implements ClientPool
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
-    public function get(Filter|array $filter, array $relays = []): array
+    public function get(Filter $filter, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
@@ -113,7 +113,7 @@ class NodePool implements ClientPool
         );
     }
 
-    private function getRequests(Pool $pool, Filter|array $filter, array $relays): array
+    private function getRequests(Pool $pool, Filter $filter, array $relays): array
     {
         return collect($relays)
             ->map(fn ($relay) => $pool->as($relay)

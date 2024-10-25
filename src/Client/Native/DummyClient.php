@@ -6,7 +6,9 @@ use Closure;
 use Exception;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
+use Revolution\Nostr\Client\Native\Concerns\HasFilter;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
+use Revolution\Nostr\Filter;
 use swentel\nostr\Event\Event;
 use swentel\nostr\Message\EventMessage;
 use swentel\nostr\Message\RequestMessage;
@@ -23,25 +25,26 @@ use swentel\nostr\Subscription\Subscription;
 class DummyClient
 {
     use HasHttp;
+    use HasFilter;
 
     protected static ?Closure $fake = null;
 
     /**
      * Send EVENT message.
      */
-    public function publish(Event $n_event, array|string $relay): array
+    public function publish(Event $event, array|string $relay): array
     {
         if (static::$fake) {
             return call_user_func(static::$fake);
         }
 
-        if (! $n_event->verify()) {
+        if (! $event->verify()) {
             throw new \InvalidArgumentException();
         }
 
         $relay_set = new RelaySet();
         $relay_set->createFromUrls(Arr::wrap($relay));
-        $eventMessage = new EventMessage($n_event);
+        $eventMessage = new EventMessage($event);
         $relay_set->setMessage($eventMessage);
 
         try {
@@ -60,7 +63,7 @@ class DummyClient
     /**
      * Send REQ message.
      */
-    public function request(array $filters, array|string $relay): array
+    public function request(Filter $filter, array|string $relay): array
     {
         if (static::$fake) {
             return call_user_func(static::$fake);
@@ -68,6 +71,8 @@ class DummyClient
 
         $subscription = new Subscription();
         $subscriptionId = $subscription->setId();
+
+        $filters = [$this->toNativeFilter($filter)];
 
         $requestMessage = new RequestMessage($subscriptionId, $filters);
 
@@ -78,14 +83,14 @@ class DummyClient
         return $request->send();
     }
 
-    public function list(array $filters, array|string $relay): Response
+    public function list(Filter $filter, array|string $relay): Response
     {
         if (static::$fake) {
             return call_user_func(static::$fake);
         }
 
         try {
-            $responses = $this->request($filters, $relay);
+            $responses = $this->request($filter, $relay);
         } catch (Exception $exception) {
             return $this->response(['message' => 'error', 'error' => $exception->getMessage()], 500);
         }
@@ -99,14 +104,14 @@ class DummyClient
         return $this->response(['events' => $events]);
     }
 
-    public function get(array $filters, array|string $relay): Response
+    public function get(Filter $filter, array|string $relay): Response
     {
         if (static::$fake) {
             return call_user_func(static::$fake);
         }
 
         try {
-            $responses = $this->request($filters, $relay);
+            $responses = $this->request($filter, $relay);
         } catch (Exception $exception) {
             return $this->response(['message' => 'error', 'error' => $exception->getMessage()], 500);
         }

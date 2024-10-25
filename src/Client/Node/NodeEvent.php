@@ -34,7 +34,7 @@ class NodeEvent implements ClientEvent
         return $this;
     }
 
-    public function publish(Event|array $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
+    public function publish(Event $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
@@ -45,7 +45,7 @@ class NodeEvent implements ClientEvent
         ]);
     }
 
-    public function list(Filter|array $filter, ?string $relay = null): Response
+    public function list(Filter $filter, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
@@ -55,7 +55,7 @@ class NodeEvent implements ClientEvent
         ]);
     }
 
-    public function get(Filter|array $filter, ?string $relay = null): Response
+    public function get(Filter $filter, ?string $relay = null): Response
     {
         $relay = $relay ?? $this->relay;
 
@@ -65,14 +65,14 @@ class NodeEvent implements ClientEvent
         ]);
     }
 
-    public function hash(Event|array $event): Response
+    public function hash(Event $event): Response
     {
         return $this->http()->post('event/hash', [
             'event' => collect($event)->toArray(),
         ]);
     }
 
-    public function sign(Event|array $event, #[\SensitiveParameter] string $sk): Response
+    public function sign(Event $event, #[\SensitiveParameter] string $sk): Response
     {
         return $this->http()->post('event/sign', [
             'event' => collect($event)->toArray(),
@@ -80,7 +80,7 @@ class NodeEvent implements ClientEvent
         ]);
     }
 
-    public function verify(Event|array $event): Response
+    public function verify(Event $event): Response
     {
         return $this->http()->post('event/verify', [
             'event' => collect($event)->toArray(),

@@ -13,21 +13,21 @@ interface ClientEvent
     /**
      * Publish new Event.
      */
-    public function publish(Event|array $event, string $sk, ?string $relay = null): Response;
+    public function publish(Event $event, string $sk, ?string $relay = null): Response;
 
     /**
      * Get event list.
      */
-    public function list(Filter|array $filter, ?string $relay = null): Response;
+    public function list(Filter $filter, ?string $relay = null): Response;
 
     /**
      * Get first event.
      */
-    public function get(Filter|array $filter, ?string $relay = null): Response;
+    public function get(Filter $filter, ?string $relay = null): Response;
 
-    public function hash(Event|array $event): Response;
+    public function hash(Event $event): Response;
 
-    public function sign(Event|array $event, string $sk): Response;
+    public function sign(Event $event, string $sk): Response;
 
-    public function verify(Event|array $event): Response;
+    public function verify(Event $event): Response;
 }

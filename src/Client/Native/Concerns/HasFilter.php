@@ -9,16 +9,8 @@ use swentel\nostr\Filter\Filter as NativeFilter;
 
 trait HasFilter
 {
-    /**
-     * @param  Filter|array  $filter
-     * @return NativeFilter
-     */
-    protected function toNativeFilter(Filter|array $filter): NativeFilter
+    protected function toNativeFilter(Filter $filter): NativeFilter
     {
-        if (is_array($filter)) {
-            $filter = Filter::fromArray($filter);
-        }
-
         $n_filter = new NativeFilter();
 
         if (! empty($filter->ids)) {

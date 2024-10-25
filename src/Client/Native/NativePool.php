@@ -64,14 +64,11 @@ class NativePool implements ClientPool
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
-    public function list(Filter|array $filter, array $relays = []): array
+    public function list(Filter $filter, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
-        $n_filter = $this->toNativeFilter($filter);
-        $filters = [$n_filter];
-
-        $responses = app(DummyClient::class)->request($filters, $relays);
+        $responses = app(DummyClient::class)->request($filter, $relays);
 
         return collect($responses)
             ->map(function ($events, $relay) {
@@ -87,14 +84,11 @@ class NativePool implements ClientPool
      * @param  array<string>  $relays
      * @return array<array-key, Response>
      */
-    public function get(Filter|array $filter, array $relays = []): array
+    public function get(Filter $filter, array $relays = []): array
     {
         $relays = blank($relays) ? $this->relays : $relays;
 
-        $n_filter = $this->toNativeFilter($filter);
-        $filters = [$n_filter];
-
-        $responses = app(DummyClient::class)->request($filters, $relays);
+        $responses = app(DummyClient::class)->request($filter, $relays);
 
         return collect($responses)
             ->map(function ($events, $relay) {

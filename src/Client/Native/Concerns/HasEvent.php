@@ -12,12 +12,8 @@ use function Illuminate\Support\enum_value;
 
 trait HasEvent
 {
-    protected function toNativeEvent(Event|array $event): NativeEvent
+    protected function toNativeEvent(Event $event): NativeEvent
     {
-        if (is_array($event)) {
-            $event = Event::fromArray($event);
-        }
-
         $n_event = (new NativeEvent())
             ->setKind(enum_value($event->kind))
             ->setContent($event->content)
@@ -42,7 +38,7 @@ trait HasEvent
         return $n_event;
     }
 
-    protected function toSignedNativeEvent(Event|array $event, #[\SensitiveParameter] string $sk): NativeEvent
+    protected function toSignedNativeEvent(Event $event, #[\SensitiveParameter] string $sk): NativeEvent
     {
         $n_event = $this->toNativeEvent($event);
 
