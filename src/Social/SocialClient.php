@@ -22,7 +22,6 @@ use Revolution\Nostr\Tags\EventTag;
 use Revolution\Nostr\Tags\HashTag;
 use Revolution\Nostr\Tags\PersonTag;
 use Revolution\Nostr\Tags\ReferenceTag;
-use TypeError;
 
 /**
  * Implementation for social networking.
