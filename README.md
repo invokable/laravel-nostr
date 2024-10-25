@@ -6,9 +6,6 @@ Laravel Nostr
 
 **Work in progress**
 
-Depends on this WebAPI.  
-https://github.com/kawax/nostr-vercel-api
-
 ## Requirements
 - PHP >= 8.2
 - Laravel >= 11.0

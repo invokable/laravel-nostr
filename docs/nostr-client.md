@@ -1,7 +1,50 @@
 NostrClient
 ====
 
-Basic client for using [nostr-api](https://github.com/kawax/nostr-vercel-api).
+Basic client.
+
+## Drivers
+
+### node
+Depends on an [external WebAPI](https://github.com/kawax/nostr-vercel-api) running on node.js.
+
+### native
+Native client that works only PHP. Using [nostr-php](https://github.com/nostrver-se/nostr-php).
+
+nip04 and nip19 are not supported.
+
+### Default driver can be set in `config/nostr.php` or `.env`
+```php
+// config/nostr.php
+
+'driver' => env('NOSTR_DRIVER', 'node'),
+```
+
+```
+// .env
+
+NOSTR_DRIVER=native
+```
+
+If you do not specify a driver, the default will be used.
+
+```php
+use Revolution\Nostr\Facades\Nostr;
+
+Nostr::event()->list();
+```
+
+You can also specify the driver explicitly.
+
+```php
+use Revolution\Nostr\Facades\Nostr;
+
+Nostr::driver('node')->event()->list();
+Nostr::node()->event()->list();
+
+Nostr::driver('native')->event()->list();
+Nostr::native()->event()->list();
+```
 
 ## Which relay servers are used?
 
