@@ -12,6 +12,7 @@ use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
+use Revolution\Nostr\Profile;
 use swentel\nostr\RelayResponse\RelayResponse;
 use swentel\nostr\Sign\Sign;
 use Tests\TestCase;
@@ -40,33 +41,40 @@ class ClientEventTest extends TestCase
         ], $response->json());
     }
 
-//    public function test_event_publish_real()
-//    {
-//        $keys = Nostr::native()->key()->generate()->json();
-//
-//        $event = Event::make(
-//            kind: Kind::Text,
-//            content: 'test',
-//        );
-//
-//        $response = Nostr::native()
-//            ->event()
-//            ->publish(event: $event, sk: $keys['sk']);
-//
-//        dump($response->json());
-//
-//        $this->assertIsArray($response->json());
-//
-//        $id = $response->json('id');
-//        $filter = Filter::make(ids: [$id]);
-//
-//        $response = Nostr::native()->event()
-//            ->get(filter: $filter);
-//
-//        dump($response->json());
-//
-//        $this->assertSame($id, $response->json('event.id'));
-//    }
+    public function test_event_publish_real()
+    {
+        $keys = Nostr::native()->key()->generate()->json();
+
+        $profile = Profile::fromArray([
+            'name' => 'test',
+        ]);
+
+        $event = Event::make(
+            kind: Kind::Metadata,
+            content: $profile->toJson(),
+        );
+
+        $response = Nostr::native()
+            ->event()
+            ->publish(event: $event, sk: $keys['sk']);
+
+        //dump($response->json());
+
+        $this->assertIsArray($response->json());
+
+        $id = $response->json('id');
+
+        $filter = Filter::make(authors: [$keys['pk']], kinds: [Kind::Metadata]);
+
+        $response = Nostr::native()->event()
+            ->get(filter: $filter);
+
+        //dump($response->json());
+
+        $this->assertSame($id, $response->json('event.id'));
+
+        $this->assertSame($profile->name, Profile::fromJson($response->json('event.content'))->name);
+    }
 
     public function test_event_list()
     {
