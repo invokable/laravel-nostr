@@ -55,9 +55,9 @@ class ClientNip19Test extends TestCase
 
         $res = Nostr::driver('node')
             ->nip19()->nprofile(profile: $p = ProfilePointer::make(
-            pubkey: '1',
-            relays: [],
-        ));
+                pubkey: '1',
+                relays: [],
+            ));
 
         $this->assertSame([
             'nprofile' => 'nprofile1',
@@ -74,10 +74,10 @@ class ClientNip19Test extends TestCase
 
         $res = Nostr::driver('node')
             ->nip19()->nevent(event: $e = EventPointer::make(
-            id: '1',
-            relays: [],
-            author: 'pk',
-        ));
+                id: '1',
+                relays: [],
+                author: 'pk',
+            ));
 
         $this->assertSame([
             'nevent' => 'nevent1',
@@ -94,11 +94,11 @@ class ClientNip19Test extends TestCase
 
         $res = Nostr::driver('node')
             ->nip19()->naddr(addr: $a = AddressPointer::make(
-            identifier: '1',
-            pubkey: '11',
-            kind: Kind::Metadata,
-            relays: [],
-        ));
+                identifier: '1',
+                pubkey: '11',
+                kind: Kind::Metadata,
+                relays: [],
+            ));
 
         $this->assertSame([
             'naddr' => 'naddr1',

@@ -90,6 +90,7 @@ class NativeEvent implements ClientEvent
 
         /** @var DummyClient $dummy */
         $dummy = app(DummyClient::class);
+
         return $dummy->get($filters, $relay);
     }
 

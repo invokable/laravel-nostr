@@ -2,7 +2,6 @@
 
 namespace Revolution\Nostr\Contracts\Client;
 
-
 use Illuminate\Http\Client\Response;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;

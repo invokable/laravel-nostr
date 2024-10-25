@@ -3,9 +3,9 @@
 namespace Revolution\Nostr;
 
 use Illuminate\Support\Manager;
+use Revolution\Nostr\Client\Native\NativeClient;
 use Revolution\Nostr\Client\Node\NodeClient;
 use Revolution\Nostr\Contracts\NostrDriver;
-use Revolution\Nostr\Client\Native\NativeClient;
 
 class NostrManager extends Manager
 {

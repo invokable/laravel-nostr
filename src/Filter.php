@@ -106,6 +106,7 @@ class Filter implements Jsonable, Arrayable, Stringable
                 if ($key === 'limit' && blank($value)) {
                     return self::LIMIT;
                 }
+
                 return $value;
             })
             ->reject(fn ($item) => is_null($item))
