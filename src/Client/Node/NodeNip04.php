@@ -8,7 +8,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 
-class PendingNip04
+class NodeNip04
 {
     use HasHttp;
     use Macroable;

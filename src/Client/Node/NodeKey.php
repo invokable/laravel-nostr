@@ -7,8 +7,9 @@ namespace Revolution\Nostr\Client\Node;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
+use Revolution\Nostr\Contracts\Client\ClientKey;
 
-class PendingKey
+class NodeKey implements ClientKey
 {
     use HasHttp;
     use Macroable;

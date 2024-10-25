@@ -51,8 +51,6 @@ class SocialClient
     {
         $this->driver = $driver;
 
-        Nostr::driver($this->driver);
-
         return $this;
     }
 
@@ -73,7 +71,7 @@ class SocialClient
 
     public function publishEvent(Event $event): Response
     {
-        return Nostr::event()->publish(event: $event, sk: $this->sk, relay: $this->relay);
+        return Nostr::driver($this->driver)->event()->publish(event: $event, sk: $this->sk, relay: $this->relay);
     }
 
     /**
@@ -81,7 +79,7 @@ class SocialClient
      */
     public function createNewUser(Profile $profile): array
     {
-        $keys = Nostr::key()->generate()->collect();
+        $keys = Nostr::driver($this->driver)->key()->generate()->collect();
 
         if (! $keys->has(['sk', 'pk'])) {
             throw new Exception('Failed create new user.');
@@ -119,7 +117,7 @@ class SocialClient
             kinds: [Kind::Metadata],
         );
 
-        return Nostr::event()
+        return Nostr::driver($this->driver)->event()
             ->get(filter: $filter, relay: $this->relay)
             ->json('event') ?? [];
     }
@@ -134,7 +132,7 @@ class SocialClient
             kinds: [Kind::Contacts],
         );
 
-        $response = Nostr::event()->get(filter: $filter, relay: $this->relay);
+        $response = Nostr::driver($this->driver)->event()->get(filter: $filter, relay: $this->relay);
 
         return $response->collect('event.tags')
             ->mapToGroups(fn ($tag) => [$tag[0] => $tag[1]])
@@ -164,7 +162,7 @@ class SocialClient
             kinds: [Kind::RelayList],
         );
 
-        return Nostr::event()
+        return Nostr::driver($this->driver)->event()
             ->get(filter: $filter, relay: $this->relay)
             ->json('event') ?? [];
     }
@@ -199,7 +197,7 @@ class SocialClient
             kinds: [Kind::Metadata],
         );
 
-        return Nostr::event()
+        return Nostr::driver($this->driver)->event()
             ->list(filter: $filter, relay: $this->relay)
             ->json('events') ?? [];
     }
@@ -217,7 +215,7 @@ class SocialClient
             limit: $limit,
         );
 
-        $response = Nostr::event()->list(filter: $filter, relay: $this->relay);
+        $response = Nostr::driver($this->driver)->event()->list(filter: $filter, relay: $this->relay);
 
         return $response->collect('events')
             ->sortByDesc('created_at')
@@ -367,12 +365,9 @@ class SocialClient
         return $this->publishEvent(event: $event);
     }
 
-    /**
-     * @throws RequestException|TypeError|EventNotFoundException
-     */
     public function getEventById(string $id): Event
     {
-        $res = Nostr::event()
+        $res = Nostr::driver($this->driver)->event()
             ->get(filter: Filter::make(ids: [$id]), relay: $this->relay)
             ->throw();
 

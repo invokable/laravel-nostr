@@ -11,7 +11,7 @@ use Revolution\Nostr\Nip19\AddressPointer;
 use Revolution\Nostr\Nip19\EventPointer;
 use Revolution\Nostr\Nip19\ProfilePointer;
 
-class PendingNip19
+class NodeNip19
 {
     use HasHttp;
     use Macroable;

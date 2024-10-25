@@ -58,6 +58,24 @@ class FilterTest extends TestCase
         ]), $f->toJson());
     }
 
+    public function test_filter_make_array()
+    {
+        $f = Filter::fromArray([
+            'ids' => ['a'],
+            'authors' => ['1'],
+            'kinds' => [0, 1],
+            'since' => 0,
+            'until' => 0,
+            'limit' => 0,
+            '#e' => ['e'],
+            '#p' => ['p'],
+        ]);
+
+        $this->assertSame(['a'], $f->ids);
+        $this->assertSame(['1'], $f->authors);
+        $this->assertSame(['e'], $f->toArray()['#e']);
+    }
+
     public function test_filters_to_array()
     {
         $filters = [
@@ -67,7 +85,7 @@ class FilterTest extends TestCase
 
         $f = collect($filters)->toArray();
 
-        $this->assertSame([['authors' => ['1'], 'kinds' => [0]], ['authors' => ['2']]], $f);
+        $this->assertSame([['authors' => ['1'], 'kinds' => [0], 'limit' => 100], ['authors' => ['2'], 'kinds' => [1], 'limit' => 100]], $f);
     }
 
     public function test_filter_array_shapes()

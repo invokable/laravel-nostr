@@ -9,8 +9,9 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
-    "illuminate/support": "^11.0",
-    "guzzlehttp/guzzle": "^7.8"
+    "illuminate/support": "^11.23",
+    "guzzlehttp/guzzle": "^7.8",
+    "swentel/nostr-php": "^1.4"
   },
   "require-dev": {
     "orchestra/testbench": "^9.0"

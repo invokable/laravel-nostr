@@ -6,7 +6,6 @@ namespace Revolution\Nostr\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Revolution\Nostr\Console\SocialTestCommand;
-use Revolution\Nostr\Contracts\NostrFactory;
 use Revolution\Nostr\NostrManager;
 use Revolution\Nostr\Social\SocialClient;
 
@@ -19,8 +18,7 @@ class NostrServiceProvider extends ServiceProvider
             'nostr',
         );
 
-        $this->app->scoped(NostrFactory::class, NostrManager::class);
-
+        $this->app->scoped(NostrManager::class, NostrManager::class);
         $this->app->scoped(SocialClient::class, SocialClient::class);
     }
 
