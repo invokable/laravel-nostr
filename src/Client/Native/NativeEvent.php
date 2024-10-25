@@ -43,6 +43,8 @@ class NativeEvent implements ClientEvent
 
     /**
      * Publish new Event.
+     *
+     * @param  Event  $event  Unsigned Event
      */
     public function publish(Event $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
     {
@@ -59,7 +61,10 @@ class NativeEvent implements ClientEvent
         }
 
         if ($res instanceof RelayResponseOk && $res->isSuccess()) {
-            return $this->response(['message' => 'ok', 'id' => $res->eventId]);
+            return $this->response([
+                'message' => 'ok',
+                'id' => $res->eventId,
+            ]);
         }
 
         return $this->response(['message' => 'error', 'error' => 'error'], 500);

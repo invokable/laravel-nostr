@@ -40,6 +40,34 @@ class ClientEventTest extends TestCase
         ], $response->json());
     }
 
+//    public function test_event_publish_real()
+//    {
+//        $keys = Nostr::native()->key()->generate()->json();
+//
+//        $event = Event::make(
+//            kind: Kind::Text,
+//            content: 'test',
+//        );
+//
+//        $response = Nostr::native()
+//            ->event()
+//            ->publish(event: $event, sk: $keys['sk']);
+//
+//        dump($response->json());
+//
+//        $this->assertIsArray($response->json());
+//
+//        $id = $response->json('id');
+//        $filter = Filter::make(ids: [$id]);
+//
+//        $response = Nostr::native()->event()
+//            ->get(filter: $filter);
+//
+//        dump($response->json());
+//
+//        $this->assertSame($id, $response->json('event.id'));
+//    }
+
     public function test_event_list()
     {
         $this->mock(DummyWebSocket::class, function (MockInterface $mock) {

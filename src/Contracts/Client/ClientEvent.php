@@ -12,6 +12,8 @@ interface ClientEvent
 
     /**
      * Publish new Event.
+     *
+     * @param  Event  $event  Unsigned Event
      */
     public function publish(Event $event, string $sk, ?string $relay = null): Response;
 

@@ -52,7 +52,7 @@ class DummyWebSocket
             $responses = $relay_set->send();
         } catch (Exception $exception) {
             $responses = ['error' => RelayResponseNotice::create([
-                'ERROR',
+                'NOTICE',
                 $exception->getMessage(),
             ])];
         }
