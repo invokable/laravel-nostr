@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Client\Native;
 
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
@@ -31,7 +30,7 @@ class NativeEvent implements ClientEvent
     public function __construct(
         protected string $relay = '',
     ) {
-        $this->relay = Arr::first(Config::get('nostr.relays', []));
+        $this->relay = Config::get('nostr.relays.0', '');
     }
 
     public function withRelay(string $relay): static
