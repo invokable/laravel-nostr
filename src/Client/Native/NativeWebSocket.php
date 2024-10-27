@@ -107,8 +107,6 @@ class NativeWebSocket
 
                 if ($event instanceof RelayResponseEvent) {
                     $events[] = (array) $event->event;
-                } else {
-                    dump($event);
                 }
             }
         } while (empty($response) || now()->addSeconds($this->timeout)->gt($start));
