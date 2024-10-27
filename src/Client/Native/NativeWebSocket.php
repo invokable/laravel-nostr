@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Client\Native;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
@@ -89,7 +90,11 @@ class NativeWebSocket
         $events = [];
 
         do {
-            $response = $this->ws->read();
+            try {
+                $response = $this->ws->read();
+            } catch (\Exception $e) {
+                $events[] = ['NOTICE', $e->getMessage()];
+            }
 
             if (! empty($response)) {
                 //dump($response);
@@ -102,6 +107,8 @@ class NativeWebSocket
 
                 if ($event instanceof RelayResponseEvent) {
                     $events[] = (array) $event->event;
+                } else {
+                    dump($event);
                 }
             }
         } while (empty($response) || now()->addSeconds($this->timeout)->gt($start));
