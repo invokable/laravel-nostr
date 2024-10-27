@@ -54,7 +54,7 @@ class NativeWebSocket
 
         $this->ws->write($publish->toJson());
 
-        $start = now();
+        $timeout = now()->addSeconds($this->timeout);
 
         do {
             $response = $this->ws->read();
@@ -72,7 +72,7 @@ class NativeWebSocket
                     break;
                 }
             }
-        } while (empty($response) || now()->addSeconds($this->timeout)->gt($start));
+        } while (now()->lte($timeout));
 
         return json_decode($response, true);
     }
@@ -88,7 +88,7 @@ class NativeWebSocket
 
         $this->ws->write($req->toJson());
 
-        $start = now();
+        $timeout = now()->addSeconds($this->timeout);
 
         $events = [];
 
@@ -112,7 +112,7 @@ class NativeWebSocket
                     $events[] = (array) $event->event;
                 }
             }
-        } while (empty($response) || now()->addSeconds($this->timeout)->gt($start));
+        } while (now()->lte($timeout));
 
         return $events;
     }
