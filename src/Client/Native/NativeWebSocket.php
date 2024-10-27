@@ -12,14 +12,14 @@ use Revolution\Nostr\Client\Native\Concerns\HasFilter;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
-use swentel\nostr\Message\EventMessage;
-use swentel\nostr\Message\RequestMessage;
+use Revolution\Nostr\Message\PublishEventMessage;
+use Revolution\Nostr\Message\RequestEventMessage;
 use swentel\nostr\RelayResponse\RelayResponse;
 use swentel\nostr\RelayResponse\RelayResponseEose;
 use swentel\nostr\RelayResponse\RelayResponseEvent;
 use swentel\nostr\RelayResponse\RelayResponseOk;
-use swentel\nostr\Subscription\Subscription;
 use Valtzu\WebSocketMiddleware\WebSocketStream;
+use InvalidArgumentException;
 
 class NativeWebSocket
 {
@@ -40,15 +40,19 @@ class NativeWebSocket
      */
     public function publish(Event $event, string $sk): array
     {
-        $n_event = $this->toNativeEvent($event->sign($sk));
-
-        if (! $n_event->verify()) {
-            throw new \InvalidArgumentException();
+        if ($event->isUnsigned()) {
+            $event->sign($sk);
         }
 
-        $eventMessage = new EventMessage($n_event);
+        if (! $event->validate() || ! $this->toNativeEvent($event)->verify()) {
+            throw new InvalidArgumentException('Invalid event.');
+        }
 
-        $this->ws->write($eventMessage->generate());
+        $publish = new PublishEventMessage($event);
+
+        //dump((string) $publish);
+
+        $this->ws->write($publish->toJson());
 
         $start = now();
 
@@ -58,13 +62,13 @@ class NativeWebSocket
             if (! empty($response)) {
                 //dump($response);
 
-                $event = rescue(fn () => RelayResponse::create(json_decode($response)));
+                $res = rescue(fn () => RelayResponse::create(json_decode($response)));
 
-                if ($event instanceof RelayResponseEose) {
+                if ($res instanceof RelayResponseEose) {
                     break;
                 }
 
-                if ($event instanceof RelayResponseOk) {
+                if ($res instanceof RelayResponseOk) {
                     break;
                 }
             }
@@ -78,12 +82,11 @@ class NativeWebSocket
      */
     public function request(Filter $filter): array
     {
-        $requestMessage = new RequestMessage(
-            (new Subscription())->setId(),
-            [$this->toNativeFilter($filter)],
-        );
+        $req = new RequestEventMessage($filter);
 
-        $this->ws->write($requestMessage->generate());
+        //dump($req->toJson());
+
+        $this->ws->write($req->toJson());
 
         $start = now();
 
@@ -105,7 +108,7 @@ class NativeWebSocket
                     break;
                 }
 
-                if ($event instanceof RelayResponseEvent) {
+                if ($event instanceof RelayResponseEvent && $event->subscriptionId === $req->id) {
                     $events[] = (array) $event->event;
                 }
             }

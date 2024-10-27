@@ -14,8 +14,6 @@ use Stringable;
 use swentel\nostr\Key\Key;
 use Throwable;
 
-use function Illuminate\Support\enum_value;
-
 class Event implements Jsonable, Arrayable, Stringable
 {
     use Tappable;
