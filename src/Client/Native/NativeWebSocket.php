@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Client\Native;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
@@ -122,7 +123,7 @@ class NativeWebSocket
     {
         $events = $this->request($filter);
 
-        return head($events);
+        return Arr::first($events);
     }
 
     public function timeout(int $timeout): self
