@@ -11,7 +11,7 @@ class NostrManager extends Manager
 {
     public function getDefaultDriver(): string
     {
-        return $this->config->get('nostr.driver', 'node');
+        return $this->config->get('nostr.driver', 'native');
     }
 
     protected function createNodeDriver(): NostrDriver
