@@ -156,8 +156,6 @@ class NodeSocilalTest extends TestCase
 
     public function test_notes()
     {
-        Nostr::fake();
-
         Nostr::shouldReceive('driver->event->list')->once()->andReturn(collect([]));
 
         $notes = $this->social->notes(authors: ['1', '2'], kinds: [1], since: 0, until: 0, limit: 10);

@@ -25,7 +25,6 @@ use Revolution\Nostr\NostrManager;
  * @method static NodeNip04 nip04()
  * @method static NativeNip05 nip05()
  * @method static NodeNip19 nip19()
- * @method static void fake(?callable $callback = null)
  *
  * @see NodeClient
  * @see NativeClient

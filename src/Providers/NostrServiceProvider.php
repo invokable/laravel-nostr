@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Providers;
 
+use Revolution\Nostr\Client\Native\WebSocketHttpMixin;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\ServiceProvider;
 use Revolution\Nostr\Console\SocialTestCommand;
 use Revolution\Nostr\NostrManager;
@@ -24,6 +26,8 @@ class NostrServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->websocket();
+
         $this->configurePublishing();
 
         if ($this->app->runningUnitTests() && class_exists(SocialTestCommand::class)) {
@@ -31,6 +35,11 @@ class NostrServiceProvider extends ServiceProvider
                 SocialTestCommand::class,
             ]);
         }
+    }
+
+    protected function websocket(): void
+    {
+        PendingRequest::mixin(new WebSocketHttpMixin());
     }
 
     /**

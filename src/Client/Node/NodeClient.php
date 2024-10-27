@@ -46,9 +46,4 @@ class NodeClient implements NostrDriver
     {
         return Container::getInstance()->make(NodeNip19::class);
     }
-
-    public function fake(?callable $callback = null): void
-    {
-        Http::fake($callback);
-    }
 }

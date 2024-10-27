@@ -45,9 +45,4 @@ class NativeClient implements NostrDriver
     {
         throw new RuntimeException('Native driver does not support nip19.');
     }
-
-    public function fake(?callable $callback = null): void
-    {
-        DummyWebSocket::fake($callback);
-    }
 }

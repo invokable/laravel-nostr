@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client\Native;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
-use Revolution\Nostr\Client\Native\DummyWebSocket;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
-use swentel\nostr\RelayResponse\RelayResponse;
 use swentel\nostr\Sign\Sign;
 use Tests\TestCase;
 
@@ -21,22 +18,19 @@ class ClientEventTest extends TestCase
 {
     public function test_event_publish()
     {
-        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
-            $mock->shouldReceive('publish')->once()->andReturn([RelayResponse::create(['OK', 'subscription_id', true, 'message'])]);
-        });
-
-        $this->mock(Sign::class, function (MockInterface $mock) {
-            $mock->shouldReceive('signEvent')->once();
-        });
+        Http::fakeSequence()
+            ->push(['OK', 'subscription_id', true, '']);
 
         $event = new Event(kind: Kind::Text);
 
         $response = Nostr::driver('native')->event()
             ->withRelay(relay: '')
-            ->publish(event: $event, sk: '');
+            ->publish(event: $event, sk: '', relay: 'wss://relay');
+
+        //dump($response->json());
 
         $this->assertSame([
-            'message' => 'ok',
+            'message' => 'OK',
             'id' => 'subscription_id',
         ], $response->json());
     }
@@ -80,13 +74,8 @@ class ClientEventTest extends TestCase
 
     public function test_event_list()
     {
-        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
-            $mock->shouldReceive('list')->once()->andReturn(
-                new Response(Http::response([
-                    'events' => [['id' => 'id']],
-                ])->wait()),
-            );
-        });
+        Http::fakeSequence()
+            ->push(['events' => [['id' => 'id']]]);
 
         $filter = new Filter(authors: []);
 
@@ -103,6 +92,7 @@ class ClientEventTest extends TestCase
 
         $response = Nostr::driver('native')->event()->list(filter: $filter, relay: 'wss://relay.nostr.band');
 
+        //dump($response->json('events'));
         $this->assertIsArray($response->json());
         $this->assertTrue($response->successful());
         $this->assertCount(2, $response->json('events'));
@@ -110,13 +100,10 @@ class ClientEventTest extends TestCase
 
     public function test_event_get()
     {
-        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
-            $mock->shouldReceive('get')->once()->andReturn(
-                new Response(Http::response([
-                    'event' => ['id' => 'id'],
-                ])->wait()),
-            );
-        });
+        Http::fakeSequence()
+            ->push([
+                'event' => ['id' => 'id'],
+            ]);
 
         $filter = new Filter(authors: []);
 
@@ -140,11 +127,7 @@ class ClientEventTest extends TestCase
 
     public function test_event_hash()
     {
-        $this->mock(Sign::class, function (MockInterface $mock) {
-            $mock->shouldReceive('serializeEvent')->once();
-        });
-
-        $event = new Event(kind: Kind::Text);
+        $event = Event::make(kind: Kind::Text)->withPublicKey('pk');
 
         $response = Nostr::driver('native')->event()->hash(event: $event);
 

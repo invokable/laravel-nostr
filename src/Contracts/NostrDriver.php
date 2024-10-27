@@ -19,6 +19,4 @@ interface NostrDriver
     public function nip05();
 
     public function nip19();
-
-    public function fake(?callable $callback = null): void;
 }

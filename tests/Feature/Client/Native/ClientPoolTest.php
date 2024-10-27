@@ -4,34 +4,22 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client\Native;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Mockery\MockInterface;
-use Revolution\Nostr\Client\Native\DummyWebSocket;
 use Revolution\Nostr\Client\Native\NativePool;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
-use swentel\nostr\Sign\Sign;
 use Tests\TestCase;
 
 class ClientPoolTest extends TestCase
 {
     public function test_pool_event_publish()
     {
-        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
-            $mock->shouldReceive('publish')->once()->andReturn([
-                'wss://1' => new Response(Http::response([])->wait()),
-                'wss://2' => new Response(Http::response([])->wait()),
-            ]);
-        });
-
-        $this->mock(Sign::class, function (MockInterface $mock) {
-            $mock->shouldReceive('signEvent')->once();
-        });
+        Http::fakeSequence()
+            ->whenEmpty(Http::response(['OK', 'subscription_id', true, '']));
 
         $event = new Event(kind: Kind::Text);
 
@@ -44,12 +32,8 @@ class ClientPoolTest extends TestCase
 
     public function test_pool_event_list()
     {
-        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
-            $mock->shouldReceive('request')->once()->andReturn([
-                'wss://1' => new Response(Http::response([])->wait()),
-                'wss://2' => new Response(Http::response([])->wait()),
-            ]);
-        });
+        Http::fakeSequence()
+            ->whenEmpty(Http::response([]));
 
         $filter = new Filter(authors: []);
 
@@ -79,12 +63,8 @@ class ClientPoolTest extends TestCase
 
     public function test_pool_event_get()
     {
-        $this->mock(DummyWebSocket::class, function (MockInterface $mock) {
-            $mock->shouldReceive('request')->once()->andReturn([
-                '1' => new Response(Http::response([])->wait()),
-                '2' => new Response(Http::response([])->wait()),
-            ]);
-        });
+        Http::fakeSequence()
+            ->whenEmpty(Http::response([]));
 
         $filter = new Filter(authors: []);
 
@@ -98,7 +78,7 @@ class ClientPoolTest extends TestCase
 
     public function test_pool_event_get_real()
     {
-        $filter = new Filter(limit: 1);
+        $filter = new Filter(kinds: [0], limit: 1);
 
         $responses = Nostr::driver('native')
             ->pool()
