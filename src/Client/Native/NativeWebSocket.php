@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Client\Native;
 
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
