@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
-use Revolution\Nostr\Kind;
 
 class NostrChannel
 {
