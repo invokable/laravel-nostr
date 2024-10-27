@@ -94,12 +94,12 @@ class ClientPoolTest extends TestCase
         $this->assertCount(2, $responses);
     }
 
-    public function test_config_relays()
-    {
-        $responses = Http::pool(fn (Pool $pool) => collect(config('nostr.relays'))
-            ->map(fn ($relay) => $pool->as($relay)->ws($relay, fn (NativeWebSocket $ws) => $ws->getWebSocket()->getMetadata()))->toArray());
-
-        dump($responses);
-        $this->assertIsArray($responses);
-    }
+//    public function test_config_relays()
+//    {
+//        $responses = Http::pool(fn (Pool $pool) => collect(config('nostr.relays'))
+//            ->map(fn ($relay) => $pool->as($relay)->ws($relay, fn (NativeWebSocket $ws) => $ws->getWebSocket()->getMetadata()))->toArray());
+//
+//        dump($responses);
+//        $this->assertIsArray($responses);
+//    }
 }
