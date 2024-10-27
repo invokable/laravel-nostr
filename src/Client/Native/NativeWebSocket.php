@@ -34,6 +34,9 @@ class NativeWebSocket
     ) {
     }
 
+    /**
+     * Send EVENT message.
+     */
     public function publish(Event $event, string $sk): array
     {
         $n_event = $this->toNativeEvent($event->sign($sk));
@@ -69,6 +72,9 @@ class NativeWebSocket
         return json_decode($response, true);
     }
 
+    /**
+     * Send REQ message.
+     */
     public function request(Filter $filter): array
     {
         $requestMessage = new RequestMessage(
