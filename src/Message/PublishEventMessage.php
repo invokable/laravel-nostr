@@ -3,9 +3,9 @@
 namespace Revolution\Nostr\Message;
 
 use Illuminate\Contracts\Support\Jsonable;
+use InvalidArgumentException;
 use Revolution\Nostr\Event;
 use Stringable;
-use InvalidArgumentException;
 
 class PublishEventMessage implements Stringable, Jsonable
 {

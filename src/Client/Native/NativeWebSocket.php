@@ -7,6 +7,7 @@ namespace Revolution\Nostr\Client\Native;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
+use InvalidArgumentException;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
 use Revolution\Nostr\Client\Native\Concerns\HasFilter;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
@@ -19,7 +20,6 @@ use swentel\nostr\RelayResponse\RelayResponseEose;
 use swentel\nostr\RelayResponse\RelayResponseEvent;
 use swentel\nostr\RelayResponse\RelayResponseOk;
 use Valtzu\WebSocketMiddleware\WebSocketStream;
-use InvalidArgumentException;
 
 class NativeWebSocket
 {
