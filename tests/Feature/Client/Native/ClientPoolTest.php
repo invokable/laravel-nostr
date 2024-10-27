@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client\Native;
 
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Client\Native\NativePool;
+use Revolution\Nostr\Client\Native\NativeWebSocket;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
@@ -90,5 +92,14 @@ class ClientPoolTest extends TestCase
         $this->assertIsArray(head($responses)?->json());
         $this->assertArrayHasKey('event', head($responses)?->json());
         $this->assertCount(2, $responses);
+    }
+
+    public function test_config_relays()
+    {
+        $responses = Http::pool(fn (Pool $pool) => collect(config('nostr.relays'))
+            ->map(fn ($relay) => $pool->as($relay)->ws($relay, fn (NativeWebSocket $ws) => $ws->getWebSocket()->getMetadata()))->toArray());
+
+        dump($responses);
+        $this->assertIsArray($responses);
     }
 }
