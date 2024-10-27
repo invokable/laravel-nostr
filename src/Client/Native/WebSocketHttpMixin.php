@@ -23,7 +23,7 @@ class WebSocketHttpMixin
         return function (string $url, callable $callback): mixed {
             /** @var PendingRequest $this */
             if (filled($this->stubCallbacks)) {
-                return $this->send('GET', $url);
+                return $this->get($url);
             }
 
             $pending = $this->withMiddleware(new WebSocketMiddleware)
