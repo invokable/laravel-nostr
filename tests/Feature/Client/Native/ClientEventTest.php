@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Tests\Feature\Client\Native;
 
 use Illuminate\Support\Facades\Http;
-use Mockery\MockInterface;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Profile;
-use swentel\nostr\Sign\Sign;
 use Tests\TestCase;
 
 class ClientEventTest extends TestCase
@@ -136,24 +134,25 @@ class ClientEventTest extends TestCase
 
     public function test_event_sign()
     {
-        $this->mock(Sign::class, function (MockInterface $mock) {
-            $mock->shouldReceive('signEvent')->once();
-        });
+        $sk = Nostr::native()->key()->generate()->json('sk');
+
         $event = new Event(kind: Kind::Text);
 
-        $response = Nostr::driver('native')->event()->sign(event: $event, sk: 'sk');
+        $response = Nostr::driver('native')->event()->sign(event: $event, sk: $sk);
 
         $this->assertArrayHasKey('sign', $response->json());
     }
 
     public function test_event_verify()
     {
-        $event = new Event(kind: Kind::Text);
+        $sk = Nostr::native()->key()->generate()->json('sk');
+
+        $event = Event::make(kind: Kind::Text)->sign($sk);
 
         $response = Nostr::driver('native')->event()->verify(event: $event);
 
         $this->assertSame([
-            'verify' => false,
+            'verify' => true,
         ], $response->json());
     }
 }

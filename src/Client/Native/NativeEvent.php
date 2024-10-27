@@ -90,10 +90,10 @@ class NativeEvent implements ClientEvent
 
     public function sign(Event $event, #[\SensitiveParameter] string $sk): Response
     {
-        $signed_event = $this->toSignedNativeEvent($event, $sk);
+        $signed_event = $event->sign($sk);
 
         return $this->response([
-            'sign' => $signed_event->getSignature(),
+            'sign' => $signed_event->sig,
         ]);
     }
 

@@ -6,7 +6,6 @@ namespace Revolution\Nostr\Client\Native\Concerns;
 
 use Revolution\Nostr\Event;
 use swentel\nostr\Event\Event as NativeEvent;
-use swentel\nostr\Sign\Sign;
 
 use function Illuminate\Support\enum_value;
 
@@ -37,20 +36,6 @@ trait HasEvent
         if (! empty($event->sig)) {
             $n_event->setSignature($event->sig);
         }
-
-        return $n_event;
-    }
-
-    /**
-     * @param  Event  $event  Unsigned Event
-     * @return NativeEvent Signed Event
-     */
-    protected function toSignedNativeEvent(Event $event, #[\SensitiveParameter] string $sk): NativeEvent
-    {
-        $n_event = $this->toNativeEvent($event);
-
-        $signer = app(Sign::class);
-        $signer->signEvent($n_event, $sk);
 
         return $n_event;
     }

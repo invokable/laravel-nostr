@@ -9,8 +9,12 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Tappable;
+use Mdanter\Ecc\Crypto\Signature\SchnorrSignature;
 use Stringable;
+use swentel\nostr\Key\Key;
 use Throwable;
+
+use function Illuminate\Support\enum_value;
 
 class Event implements Jsonable, Arrayable, Stringable
 {
@@ -23,9 +27,12 @@ class Event implements Jsonable, Arrayable, Stringable
     public function __construct(
         public readonly int|Kind $kind = Kind::Metadata,
         public readonly string $content = '',
-        public readonly int $created_at = 0,
+        public int $created_at = 0,
         public readonly array $tags = [],
     ) {
+        if ($this->created_at === 0) {
+            $this->created_at = now()->timestamp;
+        }
     }
 
     /**
@@ -112,6 +119,36 @@ class Event implements Jsonable, Arrayable, Stringable
         return $this;
     }
 
+    public function isUnsigned(): bool
+    {
+        return empty($this->sig);
+    }
+
+    public function isSigned(): bool
+    {
+        return ! $this->isUnsigned();
+    }
+
+    public function sign(string $sk): static
+    {
+        if ($this->isSigned()) {
+            return $this;
+        }
+
+        if (empty($this->pubkey)) {
+            $key = new Key();
+            $this->pubkey = $key->getPublicKey($sk);
+        }
+
+        if (empty($this->id)) {
+            $this->id = $this->hash();
+        }
+
+        $this->sig = data_get((new SchnorrSignature())->sign($sk, $this->id), 'signature', '');
+
+        return $this;
+    }
+
     /**
      * @return string Hash for event.id
      *
@@ -130,7 +167,7 @@ class Event implements Jsonable, Arrayable, Stringable
             $this->content,
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-        return bin2hex(hash(algo: 'sha256', data: $json, binary: true));
+        return hash(algo: 'sha256', data: $json);
     }
 
     public function rootId(): ?string

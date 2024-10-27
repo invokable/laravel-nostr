@@ -336,7 +336,7 @@ class NodeSocilalTest extends TestCase
             'event' => [
                 'kind' => 1,
                 'content' => '',
-                'created_at' => 0,
+                'created_at' => 1,
                 'tags' => [],
                 'pubkey' => $pk,
                 'id' => $id,
@@ -353,7 +353,7 @@ class NodeSocilalTest extends TestCase
             'sig' => $sig,
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
         ], $event->toArray());
     }

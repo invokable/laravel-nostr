@@ -336,7 +336,7 @@ class NativeSocilalTest extends TestCase
         Nostr::shouldReceive('driver->event->get->throw->json')->once()->andReturn([
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
             'pubkey' => $pk,
             'id' => $id,
@@ -352,7 +352,7 @@ class NativeSocilalTest extends TestCase
             'sig' => $sig,
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
         ], $event->toArray());
     }
@@ -373,7 +373,7 @@ class NativeSocilalTest extends TestCase
         Nostr::shouldReceive('driver->event->get->throw->json')->once()->andReturn([
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
             'pubkey' => '',
             'id' => '',

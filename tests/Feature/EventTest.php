@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use Illuminate\Support\Str;
 use Revolution\Nostr\Event;
+use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Kind;
 use Revolution\Nostr\Tags\HashTag;
 use Tests\TestCase;
@@ -17,13 +18,13 @@ class EventTest extends TestCase
         $e = new Event(
             kind: Kind::Text,
             content: 'test',
-            created_at: 0,
+            created_at: 1,
             tags: [['e', 'test']],
         );
 
         $e->withId(id: 'id')
-          ->withPublicKey(pubkey: 'pub')
-          ->withSign(sig: 'sig');
+            ->withPublicKey(pubkey: 'pub')
+            ->withSign(sig: 'sig');
 
         $this->assertSame(json_encode([
             'id' => 'id',
@@ -31,7 +32,7 @@ class EventTest extends TestCase
             'sig' => 'sig',
             'kind' => 1,
             'content' => 'test',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [['e', 'test']],
         ]), (string) $e);
     }
@@ -40,13 +41,14 @@ class EventTest extends TestCase
     {
         $e = new Event(
             kind: Kind::Text,
+            created_at: 1,
             tags: [HashTag::make(t: 'test')],
         );
 
         $this->assertSame([
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [['t', 'test']],
         ], $e->toArray());
     }
@@ -55,6 +57,7 @@ class EventTest extends TestCase
     {
         $e = Event::make(
             kind: Kind::Text,
+            created_at: 1,
             tags: [],
         )->withId('1');
 
@@ -62,7 +65,7 @@ class EventTest extends TestCase
             'id' => '1',
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
         ], $e->toArray());
     }
@@ -72,7 +75,7 @@ class EventTest extends TestCase
         $e = Event::makeSigned(
             kind: Kind::Text,
             content: '',
-            created_at: 0,
+            created_at: 1,
             tags: [],
             id: '1',
             pubkey: '1',
@@ -85,7 +88,7 @@ class EventTest extends TestCase
             'sig' => '1',
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
         ], $e->toArray());
     }
@@ -98,7 +101,7 @@ class EventTest extends TestCase
             'sig' => '1',
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
         ]);
 
@@ -108,7 +111,7 @@ class EventTest extends TestCase
             'sig' => '1',
             'kind' => 1,
             'content' => '',
-            'created_at' => 0,
+            'created_at' => 1,
             'tags' => [],
         ], $e->toArray());
     }
@@ -156,7 +159,7 @@ class EventTest extends TestCase
         $e = Event::make(
             kind: Kind::Text,
             content: 'test',
-            created_at: 0,
+            created_at: 1,
             tags: [],
         );
 
@@ -168,7 +171,7 @@ class EventTest extends TestCase
         $e = Event::makeSigned(
             kind: Kind::Text,
             content: 'test',
-            created_at: 0,
+            created_at: 1,
             tags: [],
             id: Str::random(64),
             pubkey: Str::random(64),
@@ -183,14 +186,14 @@ class EventTest extends TestCase
         $e = Event::make(
             kind: Kind::Text,
             content: 'い/ろ/は',
-            created_at: 0,
+            created_at: 1,
             tags: [],
         )->withPublicKey('pk');
 
         $hash = $e->hash();
 
         $this->assertNotEmpty($hash);
-        $this->assertSame('ded9530cc6aee3243d0ca46783d0c3c54c13ea2c67b0ae3166e683af5d64ee40', $hash);
+        $this->assertSame('7b74a14ae5f1466977acbcff074b53f63023c14f4aa272970375bfecd91b2692', $hash);
     }
 
     public function test_hash_fail()
@@ -200,10 +203,27 @@ class EventTest extends TestCase
         $e = Event::make(
             kind: Kind::Text,
             content: 'い/ろ/は',
-            created_at: 0,
+            created_at: 1,
             tags: [],
         );
 
         $hash = $e->hash();
+    }
+
+    public function test_isunsigned()
+    {
+        $e = Event::make();
+
+        $this->assertTrue($e->isUnsigned());
+    }
+
+    public function test_sign()
+    {
+        $sk = Nostr::driver('native')->key()->generate()->json('sk');
+
+        $e = Event::make()->sign($sk);
+
+        $this->assertTrue($e->isSigned());
+        $this->assertTrue($e->validate());
     }
 }

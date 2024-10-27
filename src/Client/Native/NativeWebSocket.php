@@ -36,7 +36,7 @@ class NativeWebSocket
 
     public function publish(Event $event, string $sk): array
     {
-        $n_event = $this->toSignedNativeEvent($event, $sk);
+        $n_event = $this->toNativeEvent($event->sign($sk));
 
         if (! $n_event->verify()) {
             throw new \InvalidArgumentException();
