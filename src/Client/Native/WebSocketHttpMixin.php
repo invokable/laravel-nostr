@@ -29,7 +29,7 @@ class WebSocketHttpMixin
             $pending = $this->withMiddleware(new WebSocketMiddleware)
                 ->sendRequest('GET', $url);
 
-            $websocket = function (MessageInterface|Psr7Response $response) use ($callback) {
+            $websocket = function (MessageInterface|Psr7Response $response) use ($callback, $url) {
                 if ($response->getStatusCode() === 101) {
                     /** @var WebSocketStream $ws */
                     $ws = $response->getBody();
@@ -39,14 +39,14 @@ class WebSocketHttpMixin
                     }
                 }
 
-                throw new RuntimeException('WebSocket connection failed.');
+                throw new RuntimeException('WebSocket connection failed. '.$url);
             };
 
             return match (true) {
                 $pending instanceof MessageInterface => $websocket($pending),
                 $pending instanceof PromiseInterface => $this->promise = $pending
                     ->then(fn (Psr7Response $response) => $websocket($response)),
-                default => throw new RuntimeException('WebSocket connection failed.'),
+                default => throw new RuntimeException('WebSocket connection failed. '.$url),
             };
         };
     }
