@@ -12,21 +12,21 @@ use Revolution\Nostr\Notifications\NostrMessage;
 use Revolution\Nostr\Notifications\NostrRoute;
 use Tests\TestCase;
 
-class NotificationTest extends TestCase
+class NativeNotificationTest extends TestCase
 {
     public function test_notification()
     {
+        config(['nostr.driver' => 'native']);
+
         Http::fake();
 
-        Notification::route('nostr', NostrRoute::to(sk: 'sk', relays: ['wss://']))
-                    ->notify(new TestNotification(content: 'test', tags: []));
+        Notification::route('nostr', NostrRoute::to(sk: 'sk', relays: ['wss://relay']))
+            ->notify(new NativeTestNotification(content: 'test', tags: []));
 
         Http::assertSentCount(1);
 
         Http::assertSent(function (Request $request) {
-            return $request['event']['content'] === 'test' &&
-                $request['sk'] === 'sk' &&
-                $request['relay'] === 'wss://';
+            return $request->url() === 'wss://relay';
         });
     }
 
@@ -35,19 +35,21 @@ class NotificationTest extends TestCase
         Http::fake();
 
         Notification::route('nostr', NostrRoute::to(sk: 'sk', relays: []))
-                    ->notify(new TestNotification(content: 'test'));
+            ->notify(new NativeTestNotification(content: 'test'));
 
         Http::assertSentCount(0);
     }
 
     public function test_notification_failed()
     {
+        config(['nostr.driver' => 'native']);
+
         Http::fake([
             '*' => Http::response('', 500),
         ]);
 
-        Notification::route('nostr', NostrRoute::to(sk: 'sk', relays: ['wss://']))
-                    ->notify(new TestNotification(content: 'test'));
+        Notification::route('nostr', NostrRoute::to(sk: 'sk', relays: ['wss://relay']))
+            ->notify(new NativeTestNotification(content: 'test'));
 
         Http::assertSentCount(1);
     }
@@ -57,9 +59,9 @@ class NotificationTest extends TestCase
         Notification::fake();
 
         Notification::route('nostr', NostrRoute::to(sk: 'sk'))
-                    ->notify(new TestNotification(content: 'test'));
+            ->notify(new NativeTestNotification(content: 'test'));
 
-        Notification::assertSentOnDemand(TestNotification::class);
+        Notification::assertSentOnDemand(NativeTestNotification::class);
     }
 
     public function test_message()
@@ -78,17 +80,19 @@ class NotificationTest extends TestCase
 
     public function test_user_notify()
     {
+        config(['nostr.driver' => 'native']);
+
         Http::fake();
 
-        $user = new TestUser();
+        $user = new NativeTestUser();
 
-        $user->notify(new TestNotification(content: 'test', tags: []));
+        $user->notify(new NativeTestNotification(content: 'test', tags: []));
 
         Http::assertSentCount(1);
     }
 }
 
-class TestNotification extends \Illuminate\Notifications\Notification
+class NativeTestNotification extends \Illuminate\Notifications\Notification
 {
     public function __construct(
         protected string $content,
@@ -107,12 +111,12 @@ class TestNotification extends \Illuminate\Notifications\Notification
     }
 }
 
-class TestUser extends Model
+class NativeTestUser extends Model
 {
     use Notifiable;
 
     public function routeNotificationForNostr($notification): NostrRoute
     {
-        return NostrRoute::to(sk: 'sk', relays: ['wss://']);
+        return NostrRoute::to(sk: 'sk', relays: ['wss://relay']);
     }
 }
