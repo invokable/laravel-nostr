@@ -26,7 +26,6 @@ class NodeNotificationTest extends TestCase
         Http::assertSentCount(1);
 
         Http::assertSent(function (Request $request) {
-            //dump($request);
             return $request['event']['content'] === 'test' &&
                 $request['sk'] === 'sk' &&
                 $request['relay'] === 'wss://';
