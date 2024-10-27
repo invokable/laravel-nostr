@@ -123,7 +123,7 @@ class NativeWebSocket
     {
         $events = $this->request($filter);
 
-        return Arr::first($events);
+        return Arr::first($events, default: []);
     }
 
     public function timeout(int $timeout): self
