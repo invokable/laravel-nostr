@@ -4,7 +4,7 @@ return [
     /**
      * Supported: "node", "native".
      */
-    'driver' => env('NOSTR_DRIVER', 'node'),
+    'driver' => env('NOSTR_DRIVER', 'native'),
 
     /**
      * @see https://github.com/kawax/nostr-vercel-api
@@ -20,15 +20,15 @@ return [
         'wss://relay.damus.io',
         'wss://nos.lol',
         'wss://nostr.mom',
-        'wss://offchain.pub',
-        'wss://relayable.org',
+        //'wss://offchain.pub',
+        //'wss://relayable.org',
         'wss://relay.nostr.bg',
         'wss://nostr.oxtr.dev',
         'wss://relay.nostr.net',
         'wss://relay.primal.net',
-        'wss://relay.plebstr.com',
+        //'wss://relay.plebstr.com',
         'wss://nostr.fmt.wiz.biz',
-        'wss://public.relaying.io',
+        //'wss://public.relaying.io',
         'wss://relay.mutinywallet.com',
         'wss://nostr.bitcoiner.social',
         'wss://nostr-pub.wellorder.net',
@@ -36,7 +36,7 @@ return [
 
         'wss://nostr.fediverse.jp',
         'wss://relay.nostr.wirednet.jp',
-        'wss://nostr-relay.nokotaro.com',
+        //'wss://nostr-relay.nokotaro.com',
         'wss://relay-jp.nostr.wirednet.jp',
     ],
 ];
