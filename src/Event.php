@@ -8,14 +8,18 @@ use BackedEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Traits\Conditionable;
+use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Traits\Tappable;
 use Mdanter\Ecc\Crypto\Signature\SchnorrSignature;
 use Stringable;
 use swentel\nostr\Key\Key;
 use Throwable;
 
-class Event implements Jsonable, Arrayable, Stringable
+final class Event implements Jsonable, Arrayable, Stringable
 {
+    use Macroable;
+    use Conditionable;
     use Tappable;
 
     public readonly string $id;
@@ -41,8 +45,8 @@ class Event implements Jsonable, Arrayable, Stringable
         string $content = '',
         int $created_at = 0,
         array $tags = [],
-    ): static {
-        return new static(...func_get_args());
+    ): self {
+        return new self(...func_get_args());
     }
 
     /**
@@ -56,8 +60,8 @@ class Event implements Jsonable, Arrayable, Stringable
         string $id,
         string $pubkey,
         string $sig,
-    ): static {
-        return static::make(
+    ): self {
+        return self::make(
             kind: $kind,
             content: $content,
             created_at: $created_at,
@@ -78,9 +82,9 @@ class Event implements Jsonable, Arrayable, Stringable
      *     sig: string
      * }  $event
      */
-    public static function fromArray(array $event): static
+    public static function fromArray(array $event): self
     {
-        return static::makeSigned(...$event);
+        return self::makeSigned(...$event);
     }
 
     public function validate(): bool
@@ -96,21 +100,21 @@ class Event implements Jsonable, Arrayable, Stringable
         ])->passes();
     }
 
-    public function withId(string $id): static
+    public function withId(string $id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    public function withPublicKey(string $pubkey): static
+    public function withPublicKey(string $pubkey): self
     {
         $this->pubkey = $pubkey;
 
         return $this;
     }
 
-    public function withSign(string $sig): static
+    public function withSign(string $sig): self
     {
         $this->sig = $sig;
 
@@ -119,32 +123,26 @@ class Event implements Jsonable, Arrayable, Stringable
 
     public function isUnsigned(): bool
     {
-        return empty($this->sig);
+        return ! $this->isSigned();
     }
 
     public function isSigned(): bool
     {
-        return ! $this->isUnsigned();
+        return isset($this->sig);
     }
 
-    public function sign(string $sk): static
+    public function sign(string $sk): self
     {
-        if ($this->isSigned()) {
-            return $this;
-        }
-
-        if (empty($this->pubkey)) {
-            $key = new Key();
-            $this->pubkey = $key->getPublicKey($sk);
-        }
-
-        if (empty($this->id)) {
-            $this->id = $this->hash();
-        }
-
-        $this->sig = data_get((new SchnorrSignature())->sign($sk, $this->id), 'signature', '');
-
-        return $this;
+        return $this->unless(
+            isset($this->pubkey),
+            fn () => $this->withPublicKey((new Key())->getPublicKey($sk)),
+        )->unless(
+            isset($this->id),
+            fn () => $this->withId($this->hash()),
+        )->unless(
+            isset($this->sig),
+            fn () => $this->withSign(data_get((new SchnorrSignature())->sign($sk, $this->id), 'signature', '')),
+        );
     }
 
     /**

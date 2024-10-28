@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 use Revolution\Nostr\Nip19\AddressPointer;
@@ -15,6 +16,7 @@ class NodeNip19
 {
     use HasHttp;
     use Macroable;
+    use Conditionable;
 
     /**
      * Decode NIP-19 string.

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 
@@ -12,6 +13,7 @@ class NodeNip04
 {
     use HasHttp;
     use Macroable;
+    use Conditionable;
 
     /**
      * @param  string  $sk  sender sk

@@ -6,6 +6,7 @@ namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 use Revolution\Nostr\Contracts\Client\ClientEvent;
@@ -19,6 +20,7 @@ class NodeEvent implements ClientEvent
 {
     use HasHttp;
     use Macroable;
+    use Conditionable;
 
     protected string $relay = '';
 

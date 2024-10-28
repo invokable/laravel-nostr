@@ -7,6 +7,7 @@ namespace Revolution\Nostr\Client\Native;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
 use Revolution\Nostr\Client\Native\Concerns\HasFilter;
@@ -27,6 +28,7 @@ class NativeEvent implements ClientEvent
     use HasEvent;
     use HasFilter;
     use Macroable;
+    use Conditionable;
 
     protected string $relay = '';
 

@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use Revolution\Nostr\Event;
 use Stringable;
 
-class PublishEventMessage implements Stringable, Jsonable
+final class PublishEventMessage implements Stringable, Jsonable
 {
     protected const TYPE = 'EVENT';
 

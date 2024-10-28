@@ -10,7 +10,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Stringable;
 
-class Filter implements Jsonable, Arrayable, Stringable
+final class Filter implements Jsonable, Arrayable, Stringable
 {
     protected const LIMIT = 100;
 
@@ -45,18 +45,18 @@ class Filter implements Jsonable, Arrayable, Stringable
         ?int $until = null,
         ?int $limit = self::LIMIT,
         ?string $search = null,
-    ): static {
-        return new static(...func_get_args());
+    ): self {
+        return new self(...func_get_args());
     }
 
-    public static function fromArray(array $filter): static
+    public static function fromArray(array $filter): self
     {
         $keys = collect(get_class_vars(self::class))
             ->except('parameters')
             ->keys()
             ->toArray();
 
-        $self = static::make(...Arr::only($filter, $keys));
+        $self = self::make(...Arr::only($filter, $keys));
 
         if (Arr::has($filter, '#e')) {
             $self->parameters['#e'] = $filter['#e'];
@@ -79,7 +79,7 @@ class Filter implements Jsonable, Arrayable, Stringable
      *
      * @param  array<string, array<string>>  $parameters
      */
-    public function with(array $parameters): static
+    public function with(array $parameters): self
     {
         $this->parameters = $parameters;
 

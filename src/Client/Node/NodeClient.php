@@ -6,6 +6,7 @@ namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\NativeNip05;
 use Revolution\Nostr\Contracts\NostrDriver;
@@ -16,6 +17,7 @@ use Revolution\Nostr\Contracts\NostrDriver;
 class NodeClient implements NostrDriver
 {
     use Macroable;
+    use Conditionable;
 
     public function key(): NodeKey
     {

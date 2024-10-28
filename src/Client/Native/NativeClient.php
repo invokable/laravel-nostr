@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Client\Native;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Contracts\NostrDriver;
 use RuntimeException;
@@ -15,6 +16,7 @@ use RuntimeException;
 class NativeClient implements NostrDriver
 {
     use Macroable;
+    use Conditionable;
 
     public function key(): NativeKey
     {

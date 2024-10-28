@@ -6,6 +6,7 @@ namespace Revolution\Nostr\Client\Native;
 
 use Illuminate\Container\Container;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
 use Revolution\Nostr\Contracts\Client\ClientKey;
@@ -15,6 +16,7 @@ class NativeKey implements ClientKey
 {
     use HasHttp;
     use Macroable;
+    use Conditionable;
 
     protected Key $key;
 

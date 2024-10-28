@@ -8,6 +8,7 @@ use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Contracts\Client\ClientPool;
 use Revolution\Nostr\Event;
@@ -19,6 +20,7 @@ use Revolution\Nostr\Filter;
 class NodePool implements ClientPool
 {
     use Macroable;
+    use Conditionable;
 
     protected array $relays = [];
 

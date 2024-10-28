@@ -119,6 +119,7 @@ class EventTest extends TestCase
     public function test_readonly()
     {
         $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Cannot modify readonly property');
 
         $e = new Event();
         $e->kind = 0;
@@ -221,7 +222,7 @@ class EventTest extends TestCase
     {
         $sk = Nostr::driver('native')->key()->generate()->json('sk');
 
-        $e = Event::make()->sign($sk);
+        $e = Event::make()->sign($sk)->sign($sk);
 
         $this->assertTrue($e->isSigned());
         $this->assertTrue($e->validate());

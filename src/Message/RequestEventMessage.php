@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Revolution\Nostr\Filter;
 use Stringable;
 
-class RequestEventMessage implements Stringable, Jsonable
+final class RequestEventMessage implements Stringable, Jsonable
 {
     protected const TYPE = 'REQ';
 

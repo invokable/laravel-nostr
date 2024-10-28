@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Revolution\Nostr\Client\Node;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 use Revolution\Nostr\Contracts\Client\ClientKey;
@@ -13,6 +14,7 @@ class NodeKey implements ClientKey
 {
     use HasHttp;
     use Macroable;
+    use Conditionable;
 
     public function generate(): Response
     {

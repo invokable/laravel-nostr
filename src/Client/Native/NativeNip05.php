@@ -7,12 +7,14 @@ namespace Revolution\Nostr\Client\Native;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use JetBrains\PhpStorm\ArrayShape;
 
 class NativeNip05
 {
     use Macroable;
+    use Conditionable;
 
     #[ArrayShape([
         'user' => 'string',
