@@ -11,8 +11,14 @@ class PublishEventMessage implements Stringable, Jsonable
 {
     protected const TYPE = 'EVENT';
 
-    public function __construct(protected readonly Event $event)
+    public function __construct(
+        protected readonly Event $event,
+    ) {
+    }
+
+    public static function make(Event $event): self
     {
+        return new self($event);
     }
 
     public function toJson($options = 0): string
