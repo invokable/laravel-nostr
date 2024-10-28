@@ -39,24 +39,18 @@ class NativeWebSocket
      */
     public function publish(Event $event, string $sk): array
     {
-        if ($event->isUnsigned()) {
-            $event->sign($sk);
-        }
+        $event->sign($sk);
 
         if (! $event->validate() || ! $this->toNativeEvent($event)->verify()) {
             throw new InvalidArgumentException('Invalid event.');
         }
 
+        $message = PublishEventMessage::make($event)->toJson();
+
         /** @var string $response */
-        $response = rescue(function () use ($event) {
-            $this->ws->write(PublishEventMessage::make($event)->toJson());
+        $response = rescue(fn () => tap($this->ws, fn (WebSocketStream $ws) => $ws->write($message))->read());
 
-            $response = $this->ws->read();
-
-            $this->ws->close();
-
-            return $response;
-        });
+        rescue(fn () => $this->ws->close());
 
         return json_decode($response, true);
     }
