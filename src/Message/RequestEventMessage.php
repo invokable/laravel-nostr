@@ -21,6 +21,11 @@ class RequestEventMessage implements Stringable, Jsonable
         $this->id = Str::random(64);
     }
 
+    public static function make(Filter $filter): self
+    {
+        return new self($filter);
+    }
+
     public function addFilter(Filter $filter): self
     {
         $this->filters[] = $filter->toArray();
