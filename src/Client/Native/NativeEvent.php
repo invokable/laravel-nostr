@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
-use Revolution\Nostr\Client\Native\Concerns\HasFilter;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
 use Revolution\Nostr\Contracts\Client\ClientEvent;
 use Revolution\Nostr\Event;
@@ -26,7 +25,6 @@ class NativeEvent implements ClientEvent
 {
     use HasHttp;
     use HasEvent;
-    use HasFilter;
     use Macroable;
     use Conditionable;
 
