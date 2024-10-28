@@ -18,7 +18,6 @@ use Revolution\Nostr\Message\RequestEventMessage;
 use swentel\nostr\RelayResponse\RelayResponse;
 use swentel\nostr\RelayResponse\RelayResponseEose;
 use swentel\nostr\RelayResponse\RelayResponseEvent;
-use swentel\nostr\RelayResponse\RelayResponseOk;
 use Valtzu\WebSocketMiddleware\WebSocketStream;
 
 class NativeWebSocket
@@ -76,6 +75,7 @@ class NativeWebSocket
         $events = [];
 
         do {
+            /** @var string $response */
             $response = rescue(fn () => $this->ws->read());
 
             if (! empty($response)) {
