@@ -48,31 +48,16 @@ class NativeWebSocket
             throw new InvalidArgumentException('Invalid event.');
         }
 
-        $publish = new PublishEventMessage($event);
+        /** @var string $response */
+        $response = rescue(function () use ($event) {
+            $this->ws->write(PublishEventMessage::make($event)->toJson());
 
-        //dump((string) $publish);
-
-        $this->ws->write($publish->toJson());
-
-        $timeout = now()->addSeconds($this->timeout);
-
-        do {
             $response = $this->ws->read();
 
-            if (! empty($response)) {
-                //dump($response);
+            $this->ws->close();
 
-                $res = rescue(fn () => RelayResponse::create(json_decode($response)));
-
-                if ($res instanceof RelayResponseEose) {
-                    break;
-                }
-
-                if ($res instanceof RelayResponseOk) {
-                    break;
-                }
-            }
-        } while (now()->lte($timeout));
+            return $response;
+        });
 
         return json_decode($response, true);
     }
@@ -82,9 +67,7 @@ class NativeWebSocket
      */
     public function request(Filter $filter): array
     {
-        $req = new RequestEventMessage($filter);
-
-        //dump($req->toJson());
+        $req = RequestEventMessage::make($filter);
 
         $this->ws->write($req->toJson());
 
@@ -93,15 +76,9 @@ class NativeWebSocket
         $events = [];
 
         do {
-            try {
-                $response = $this->ws->read();
-            } catch (\Exception $e) {
-                $events[] = ['NOTICE', $e->getMessage()];
-            }
+            $response = rescue(fn () => $this->ws->read());
 
             if (! empty($response)) {
-                //dump($response);
-
                 $event = rescue(fn () => RelayResponse::create(json_decode($response)));
 
                 if ($event instanceof RelayResponseEose) {
@@ -113,6 +90,8 @@ class NativeWebSocket
                 }
             }
         } while (now()->lte($timeout));
+
+        rescue(fn () => $this->ws->close());
 
         return $events;
     }
