@@ -35,6 +35,8 @@ class ClientPoolTest extends TestCase
     {
         $keys = Nostr::native()->key()->generate()->json();
 
+        $relays = Arr::take(Config::get('nostr.relays'), limit: 2);
+
         $profile = Profile::fromArray([
             'name' => 'test',
         ]);
@@ -49,7 +51,7 @@ class ClientPoolTest extends TestCase
             ->publish(
                 event: $event,
                 sk: $keys['sk'],
-                relays: Arr::take(Config::get('nostr.relays'), limit: 2),
+                relays: $relays,
             );
 
         $response = head($responses);
@@ -62,8 +64,9 @@ class ClientPoolTest extends TestCase
         if (! empty($id)) {
             $filter = Filter::make(authors: [$keys['pk']], kinds: [Kind::Metadata]);
 
-            $responses = Nostr::native()->pool()
-                ->get(filter: $filter);
+            $responses = Nostr::native()
+                ->pool()
+                ->get(filter: $filter, relays: $relays);
 
             $response = head($responses);
 
