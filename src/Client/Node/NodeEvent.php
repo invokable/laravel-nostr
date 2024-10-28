@@ -20,9 +20,10 @@ class NodeEvent implements ClientEvent
     use HasHttp;
     use Macroable;
 
-    public function __construct(
-        protected string $relay = '',
-    ) {
+    protected string $relay = '';
+
+    public function __construct()
+    {
         $this->relay = Config::get('nostr.relays.0', '');
     }
 

@@ -20,9 +20,10 @@ class NodePool implements ClientPool
 {
     use Macroable;
 
-    public function __construct(
-        protected array $relays = [],
-    ) {
+    protected array $relays = [];
+
+    public function __construct()
+    {
         $this->relays = Config::get('nostr.relays', []);
     }
 

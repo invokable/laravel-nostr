@@ -28,9 +28,10 @@ class NativeEvent implements ClientEvent
     use HasFilter;
     use Macroable;
 
-    public function __construct(
-        protected string $relay = '',
-    ) {
+    protected string $relay = '';
+
+    public function __construct()
+    {
         $this->relay = Config::get('nostr.relays.0', '');
     }
 
