@@ -9,7 +9,6 @@ use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 use Revolution\Nostr\Client\Native\Concerns\HasEvent;
-use Revolution\Nostr\Client\Native\Concerns\HasFilter;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
@@ -23,7 +22,6 @@ use Valtzu\WebSocketMiddleware\WebSocketStream;
 class NativeWebSocket
 {
     use HasEvent;
-    use HasFilter;
     use HasHttp;
     use Macroable;
     use Conditionable;
@@ -47,12 +45,26 @@ class NativeWebSocket
 
         $message = PublishEventMessage::make($event)->toJson();
 
-        /** @var string $response */
-        $response = rescue(fn () => tap($this->ws, fn (WebSocketStream $ws) => $ws->write($message))->read());
+        $timeout = now()->addSeconds($this->timeout);
+
+        $this->ws->write($message);
+
+        do {
+            /** @var string $response */
+            $response = rescue(fn () => $this->ws->read());
+
+            if (filled($response)) {
+                $event = rescue(fn () => RelayResponse::create(json_decode($response)));
+
+                if ($event instanceof RelayResponse) {
+                    break;
+                }
+            }
+        } while (now()->lte($timeout));
 
         rescue(fn () => $this->ws->close());
 
-        return json_decode($response, true);
+        return json_decode($response ?? '[]', true);
     }
 
     /**
@@ -72,7 +84,7 @@ class NativeWebSocket
             /** @var string $response */
             $response = rescue(fn () => $this->ws->read());
 
-            if (! empty($response)) {
+            if (filled($response)) {
                 $event = rescue(fn () => RelayResponse::create(json_decode($response)));
 
                 if ($event instanceof RelayResponseEose) {
