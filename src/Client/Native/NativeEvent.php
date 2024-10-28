@@ -14,9 +14,6 @@ use Revolution\Nostr\Client\Native\Concerns\HasHttp;
 use Revolution\Nostr\Contracts\Client\ClientEvent;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Filter;
-use swentel\nostr\RelayResponse\RelayResponse;
-use swentel\nostr\RelayResponse\RelayResponseNotice;
-use swentel\nostr\RelayResponse\RelayResponseOk;
 
 /**
  * Working with single relay.
@@ -48,24 +45,7 @@ class NativeEvent implements ClientEvent
 
         $response = Http::ws($relay, fn (NativeWebSocket $ws) => $this->response($ws->publish($event, $sk)));
 
-        $res = RelayResponse::create($response->json());
-
-        if ($res instanceof RelayResponseNotice) {
-            return $this->response([
-                'message' => 'error',
-                'type' => $res->type,
-                'error' => $res->message(),
-            ], 500);
-        }
-
-        if ($res instanceof RelayResponseOk && $res->isSuccess()) {
-            return $this->response([
-                'message' => $res->type,
-                'id' => $res->eventId,
-            ]);
-        }
-
-        return $this->response(['message' => 'error', 'error' => 'error'], 500);
+        return $this->publishResponse($response);
     }
 
     public function list(Filter $filter, ?string $relay = null): Response
