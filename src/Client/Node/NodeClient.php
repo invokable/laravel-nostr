@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\NativeNip05;
+use Revolution\Nostr\Client\Native\NativeRelay;
 use Revolution\Nostr\Contracts\NostrDriver;
 
 /**
@@ -32,6 +33,11 @@ class NodeClient implements NostrDriver
     public function pool(): NodePool
     {
         return Container::getInstance()->make(NodePool::class);
+    }
+
+    public function relay(): NativeRelay
+    {
+        return Container::getInstance()->make(NativeRelay::class);
     }
 
     public function nip04(): NodeNip04

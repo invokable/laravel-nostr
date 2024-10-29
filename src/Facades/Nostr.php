@@ -5,6 +5,7 @@ namespace Revolution\Nostr\Facades;
 use Illuminate\Support\Facades\Facade;
 use Revolution\Nostr\Client\Native\NativeClient;
 use Revolution\Nostr\Client\Native\NativeNip05;
+use Revolution\Nostr\Client\Native\NativeRelay;
 use Revolution\Nostr\Client\Node\NodeClient;
 use Revolution\Nostr\Client\Node\NodeNip04;
 use Revolution\Nostr\Client\Node\NodeNip19;
@@ -22,6 +23,7 @@ use Revolution\Nostr\NostrManager;
  * @method static ClientKey key()
  * @method static ClientEvent event()
  * @method static ClientPool pool()
+ * @method static NativeRelay relay()
  * @method static NodeNip04 nip04()
  * @method static NativeNip05 nip05()
  * @method static NodeNip19 nip19()

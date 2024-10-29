@@ -2,6 +2,7 @@
 
 namespace Revolution\Nostr\Contracts;
 
+use Revolution\Nostr\Client\Native\NativeRelay;
 use Revolution\Nostr\Contracts\Client\ClientEvent;
 use Revolution\Nostr\Contracts\Client\ClientKey;
 use Revolution\Nostr\Contracts\Client\ClientPool;
@@ -13,6 +14,8 @@ interface NostrDriver
     public function event(): ClientEvent;
 
     public function pool(): ClientPool;
+
+    public function relay();
 
     public function nip04();
 

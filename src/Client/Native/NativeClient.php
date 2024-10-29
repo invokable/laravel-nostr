@@ -33,6 +33,11 @@ class NativeClient implements NostrDriver
         return Container::getInstance()->make(NativePool::class);
     }
 
+    public function relay(): NativeRelay
+    {
+        return Container::getInstance()->make(NativeRelay::class);
+    }
+
     public function nip04()
     {
         throw new RuntimeException('Native driver does not support nip04.');

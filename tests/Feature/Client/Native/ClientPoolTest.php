@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client\Native;
 
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Client\Native\NativePool;
+use Revolution\Nostr\Client\Native\NativeWebSocket;
 use Revolution\Nostr\Event;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
