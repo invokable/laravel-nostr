@@ -36,8 +36,10 @@ class NativeRelay
         return collect($responses)->map(function (mixed $response) {
             if ($response instanceof Response && $response->successful()) {
                 return $response->json();
-            } else if ($response instanceof \Exception) {
+            } elseif ($response instanceof \Exception) {
                 return ['error' => $response->getMessage()];
+            } else {
+                return ['error' => 'error'];
             }
         })->toArray();
     }
