@@ -66,6 +66,10 @@ final class Filter implements Jsonable, Arrayable, Stringable
             $self->parameters['#p'] = $filter['#p'];
         }
 
+        if (Arr::has($filter, '#a')) {
+            $self->parameters['#a'] = $filter['#a'];
+        }
+
         return $self;
     }
 
