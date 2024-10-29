@@ -13,7 +13,10 @@ class ClientRelayTest extends TestCase
     {
         $response = Nostr::relay()->info(relays: config('nostr.relays'));
 
-        dump(collect($response)->whereNull('name')->toArray());
+        $errors = collect($response)->whereNull('name')->toArray();
+        if (filled($errors)) {
+            dump($errors);
+        }
 
         $this->assertIsArray($response);
     }
