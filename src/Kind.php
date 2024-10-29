@@ -22,6 +22,8 @@ enum Kind: int
     case Blank = 255;
     case FileMetadata = 1063;
     case Report = 1984;
+    case Label = 1985;
+    case CommunityPostApproval = 4550;
     case ZapRequest = 9734;
     case Zap = 9735;
     case RelayList = 10002;
@@ -31,4 +33,16 @@ enum Kind: int
     case ProfileBadge = 30008;
     case BadgeDefinition = 30009;
     case Article = 30023;
+    case DraftLong = 30024;
+    case Emojisets = 30030;
+    case Application = 30078;
+    case LiveEvent = 30311;
+    case UserStatuses = 30315;
+    case Date = 31922;
+    case Time = 31923;
+    case Calendar = 31924;
+    case CalendarEventRSVP = 31925;
+    case HandlerRecommendation = 31989;
+    case HandlerInformation = 31990;
+    case CommunityDefinition = 34550;
 }
