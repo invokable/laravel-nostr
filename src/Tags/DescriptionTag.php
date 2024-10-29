@@ -6,16 +6,16 @@ namespace Revolution\Nostr\Tags;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class ReferenceTag implements Arrayable
+class DescriptionTag implements Arrayable
 {
     public function __construct(
-        protected readonly string $r,
+        protected readonly string $description,
     ) {
     }
 
-    public static function make(string $r): static
+    public static function make(string $description): static
     {
-        return new static(r: $r);
+        return new static(description: $description);
     }
 
     /**
@@ -23,6 +23,6 @@ class ReferenceTag implements Arrayable
      */
     public function toArray(): array
     {
-        return ['r', $this->r];
+        return ['description', $this->description];
     }
 }

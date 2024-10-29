@@ -6,16 +6,19 @@ namespace Revolution\Nostr\Tags;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class ReferenceTag implements Arrayable
+/**
+ * NIP-34, 58, 72.
+ */
+class NameTag implements Arrayable
 {
     public function __construct(
-        protected readonly string $r,
+        protected readonly string $name,
     ) {
     }
 
-    public static function make(string $r): static
+    public static function make(string $name): static
     {
-        return new static(r: $r);
+        return new static(name: $name);
     }
 
     /**
@@ -23,6 +26,6 @@ class ReferenceTag implements Arrayable
      */
     public function toArray(): array
     {
-        return ['r', $this->r];
+        return ['name', $this->name];
     }
 }

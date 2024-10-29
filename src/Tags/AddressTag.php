@@ -7,9 +7,8 @@ namespace Revolution\Nostr\Tags;
 use Illuminate\Contracts\Support\Arrayable;
 use Revolution\Nostr\Kind;
 
-/**
- * NIP-23,33.
- */
+use function Illuminate\Support\enum_value;
+
 class AddressTag implements Arrayable
 {
     public function __construct(
@@ -34,13 +33,11 @@ class AddressTag implements Arrayable
      */
     public function toArray(): array
     {
-        $kind = $this->kind instanceof Kind ? $this->kind->value : $this->kind;
-
         $addr = collect([
-            $kind,
+            enum_value($this->kind),
             $this->pubkey,
             $this->identifier,
-        ])->join('|');
+        ])->join(':');
 
         return ['a', $addr, $this->relay];
     }
