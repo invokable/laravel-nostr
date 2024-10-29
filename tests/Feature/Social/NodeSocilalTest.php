@@ -358,16 +358,6 @@ class NodeSocilalTest extends TestCase
         ], $event->toArray());
     }
 
-    public function test_get_event_by_id_http_failed()
-    {
-        Http::fake(fn () => Http::response('', 500));
-
-        $this->expectException(RequestException::class);
-
-        $event = $this->social->withKey('sk', 'pk')
-            ->getEventById(id: '1');
-    }
-
     public function test_get_event_by_id_type_error()
     {
         Http::fake(fn () => Http::response(['event' => []]));

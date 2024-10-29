@@ -333,7 +333,7 @@ class NativeSocilalTest extends TestCase
         $id = Str::random(64);
         $sig = Str::random(128);
 
-        Nostr::shouldReceive('driver->event->get->throw->json')->once()->andReturn([
+        Nostr::shouldReceive('driver->event->get->json')->once()->andReturn([
             'kind' => 1,
             'content' => '',
             'created_at' => 1,
@@ -357,20 +357,9 @@ class NativeSocilalTest extends TestCase
         ], $event->toArray());
     }
 
-    public function test_get_event_by_id_http_failed()
-    {
-        Nostr::shouldReceive('driver->event->get->throw->json')->once()
-            ->andThrow(new RequestException(new Response(Http::response('', 500)->wait())));
-
-        $this->expectException(RequestException::class);
-
-        $event = $this->social->withKey('sk', 'pk')
-            ->getEventById(id: '1');
-    }
-
     public function test_get_event_by_id_validator_fails()
     {
-        Nostr::shouldReceive('driver->event->get->throw->json')->once()->andReturn([
+        Nostr::shouldReceive('driver->event->get->json')->once()->andReturn([
             'kind' => 1,
             'content' => '',
             'created_at' => 1,

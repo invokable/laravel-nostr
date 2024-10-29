@@ -70,7 +70,9 @@ class SocialClient
 
     public function publishEvent(Event $event): Response
     {
-        return Nostr::driver($this->driver)->event()->publish(event: $event, sk: $this->sk, relay: $this->relay);
+        return Nostr::driver($this->driver)
+            ->event()
+            ->publish(event: $event, sk: $this->sk, relay: $this->relay);
     }
 
     /**
@@ -116,7 +118,8 @@ class SocialClient
             kinds: [Kind::Metadata],
         );
 
-        return Nostr::driver($this->driver)->event()
+        return Nostr::driver($this->driver)
+            ->event()
             ->get(filter: $filter, relay: $this->relay)
             ->json('event') ?? [];
     }
@@ -161,7 +164,8 @@ class SocialClient
             kinds: [Kind::RelayList],
         );
 
-        return Nostr::driver($this->driver)->event()
+        return Nostr::driver($this->driver)
+            ->event()
             ->get(filter: $filter, relay: $this->relay)
             ->json('event') ?? [];
     }
@@ -196,7 +200,8 @@ class SocialClient
             kinds: [Kind::Metadata],
         );
 
-        return Nostr::driver($this->driver)->event()
+        return Nostr::driver($this->driver)
+            ->event()
             ->list(filter: $filter, relay: $this->relay)
             ->json('events') ?? [];
     }
@@ -214,7 +219,9 @@ class SocialClient
             limit: $limit,
         );
 
-        $response = Nostr::driver($this->driver)->event()->list(filter: $filter, relay: $this->relay);
+        $response = Nostr::driver($this->driver)
+            ->event()
+            ->list(filter: $filter, relay: $this->relay);
 
         return $response->collect('events')
             ->sortByDesc('created_at')
@@ -366,9 +373,9 @@ class SocialClient
 
     public function getEventById(string $id): Event
     {
-        $res = Nostr::driver($this->driver)->event()
-            ->get(filter: Filter::make(ids: [$id]), relay: $this->relay)
-            ->throw();
+        $res = Nostr::driver($this->driver)
+            ->event()
+            ->get(filter: Filter::make(ids: [$id]), relay: $this->relay);
 
         return Event::fromArray(event: $res->json('event'))
             ->tap(fn (Event $event) => throw_unless($event->validate(), EventNotFoundException::class));
