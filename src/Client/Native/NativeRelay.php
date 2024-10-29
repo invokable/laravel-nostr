@@ -29,7 +29,7 @@ class NativeRelay
         $responses = Http::pool(
             fn (Pool $pool) => $relays->map(
                 fn (string $relay, string $ws) => $pool->as($ws)
-                    ->withHeader('Accept', 'application/nostr+json')
+                    ->accept('application/nostr+json')
                     ->get($relay),
             ));
 
@@ -37,9 +37,9 @@ class NativeRelay
             if ($response instanceof Response && $response->successful()) {
                 return $response->json();
             } elseif ($response instanceof \Exception) {
-                return ['error' => $response->getMessage()];
+                return ['error' => $response->getMessage(), 'response' => $response];
             } else {
-                return ['error' => 'error'];
+                return ['error' => 'error', 'response' => $response];
             }
         })->toArray();
     }
