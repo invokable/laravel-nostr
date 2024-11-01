@@ -29,7 +29,7 @@ class NativeEvent implements ClientEvent
 
     public function __construct()
     {
-        $this->relay = Config::get('nostr.relays.0', '');
+        $this->relay = Config::get('nostr.relays.0') ?? '';
     }
 
     public function withRelay(string $relay): static

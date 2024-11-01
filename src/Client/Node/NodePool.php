@@ -26,7 +26,7 @@ class NodePool implements ClientPool
 
     public function __construct()
     {
-        $this->relays = Config::get('nostr.relays', []);
+        $this->relays = Config::get('nostr.relays') ?? [];
     }
 
     public function withRelays(array $relays): static

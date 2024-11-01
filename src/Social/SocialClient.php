@@ -41,9 +41,9 @@ class SocialClient
 
     public function __construct()
     {
-        $this->driver(Config::get('nostr.driver', 'native'));
+        $this->driver(Config::get('nostr.driver') ?? 'native');
 
-        $this->relay = Config::get('nostr.relays.0', '');
+        $this->relay = Config::get('nostr.relays.0') ?? '';
     }
 
     public function driver(string $driver): self
