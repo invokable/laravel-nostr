@@ -2,7 +2,6 @@
 
 namespace Revolution\Nostr\Contracts;
 
-use Revolution\Nostr\Client\Native\NativeRelay;
 use Revolution\Nostr\Contracts\Client\ClientEvent;
 use Revolution\Nostr\Contracts\Client\ClientKey;
 use Revolution\Nostr\Contracts\Client\ClientPool;
