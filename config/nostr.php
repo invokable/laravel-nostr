@@ -7,6 +7,8 @@ return [
     'driver' => env('NOSTR_DRIVER', 'native'),
 
     /**
+     * For node driver.
+     *
      * @see https://github.com/kawax/nostr-vercel-api
      */
     'api_base' => env('NOSTR_API_BASE', 'https://nostr-api.vercel.app/api/'),
