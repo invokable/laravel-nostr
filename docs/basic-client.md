@@ -1,7 +1,5 @@
-NostrClient
+Basic client
 ====
-
-Basic client.
 
 ## Drivers
 
