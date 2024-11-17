@@ -64,7 +64,7 @@ class NativeWebSocket
 
         rescue(fn () => $this->ws->close());
 
-        return json_decode($response ?? '[]', true);
+        return json_decode($response ?? '[]', true) ?? [];
     }
 
     /**
