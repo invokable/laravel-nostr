@@ -15,32 +15,32 @@ class NostrChannel
     /**
      * @throws RequestException
      */
-    public function send(mixed $notifiable, Notification $notification): void
+    public function send(mixed $notifiable, Notification $notification): ?array
     {
         /** @var NostrMessage $message */
         $message = $notification->toNostr($notifiable);
 
         if (! $message instanceof NostrMessage) {
-            return; // @codeCoverageIgnore
+            return null; // @codeCoverageIgnore
         }
 
         /** @var NostrRoute $route */
         $route = $notifiable->routeNotificationFor('nostr', $notification);
 
         if (! $route instanceof NostrRoute) {
-            return; // @codeCoverageIgnore
+            return null; // @codeCoverageIgnore
         }
 
         $route->relays = $route->relays ?? Config::get('nostr.relays');
 
         if (blank($route->relays)) {
-            return;
+            return null;
         }
 
-        $this->publish($message, $route);
+        return $this->publish($message, $route);
     }
 
-    protected function publish(NostrMessage $message, NostrRoute $route): void
+    protected function publish(NostrMessage $message, NostrRoute $route): array
     {
         $event = Event::make(
             kind: $message->kind,
@@ -49,11 +49,11 @@ class NostrChannel
             tags: collect($message->tags)->toArray(),
         );
 
-        Nostr::pool()
-             ->withRelays($route->relays)
-             ->publish(
-                 event: $event,
-                 sk: $route->sk,
-             );
+        return Nostr::pool()
+            ->withRelays($route->relays)
+            ->publish(
+                event: $event,
+                sk: $route->sk,
+            );
     }
 }
