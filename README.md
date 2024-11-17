@@ -26,7 +26,7 @@ composer remove revolution/laravel-nostr
 - Delete `config/nostr.php`
 
 ## Usage
-- [NostrClient](./docs/nostr-client.md)
+- [Basic Client](./docs/basic-client.md)
 - [Laravel Notifications](./docs/notification.md)
 
 ## LICENCE
