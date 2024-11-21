@@ -23,7 +23,7 @@ jobs:
           extensions: mbstring, bcmath
           coverage: xdebug
       - name: Install Composer dependencies
-        run: composer install -q
+        run: composer install
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v9
         env:
