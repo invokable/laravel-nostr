@@ -12,9 +12,8 @@
     "ext-gmp": "*",
     "illuminate/support": "^11.28",
     "guzzlehttp/guzzle": "^7.8",
-    "swentel/nostr-php": "^1.4",
-    "valtzu/guzzle-websocket-middleware": "^0.2.0",
-    "uma/phpecc": "^0.1.3"
+    "swentel/nostr-php": "^1.5.2",
+    "valtzu/guzzle-websocket-middleware": "^0.2.0"
   },
   "require-dev": {
     "orchestra/testbench": "^9.0"
