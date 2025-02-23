@@ -10,7 +10,7 @@
   "require": {
     "php": "^8.2",
     "ext-gmp": "*",
-    "illuminate/support": "^11.28",
+    "illuminate/support": "^11.28||^12.0",
     "guzzlehttp/guzzle": "^7.8",
     "swentel/nostr-php": "^1.5.2",
     "valtzu/guzzle-websocket-middleware": "^0.2.0"
