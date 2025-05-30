@@ -1,8 +1,8 @@
 Laravel Nostr
 ====
-[![test](https://github.com/kawax/laravel-nostr/actions/workflows/test.yml/badge.svg)](https://github.com/kawax/laravel-nostr/actions/workflows/test.yml)
-
-**Work in progress**
+[![test](https://github.com/kawax/laravel-nostr/actions/workflows/test.yml/badge.svg)](https://github.com/invokable/laravel-nostr/actions/workflows/test.yml)
+[![Maintainability](https://qlty.sh/badges/1b16feb1-672b-4289-8011-3d0c007381b9/maintainability.svg)](https://qlty.sh/gh/invokable/projects/laravel-nostr)
+[![Code Coverage](https://qlty.sh/badges/1b16feb1-672b-4289-8011-3d0c007381b9/test_coverage.svg)](https://qlty.sh/gh/invokable/projects/laravel-nostr)
 
 ## Requirements
 - PHP >= 8.2
