@@ -7,7 +7,7 @@ Laravel Nostr
 ## Work in progress
 
 ## Requirements
-- PHP >= 8.2
+- PHP(+GMP) >= 8.2
 - Laravel >= 11.0
 
 ## Installation
