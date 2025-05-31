@@ -4,6 +4,8 @@ Laravel Nostr
 [![Maintainability](https://qlty.sh/badges/1b16feb1-672b-4289-8011-3d0c007381b9/maintainability.svg)](https://qlty.sh/gh/invokable/projects/laravel-nostr)
 [![Code Coverage](https://qlty.sh/badges/1b16feb1-672b-4289-8011-3d0c007381b9/test_coverage.svg)](https://qlty.sh/gh/invokable/projects/laravel-nostr)
 
+## Work in progress
+
 ## Requirements
 - PHP >= 8.2
 - Laravel >= 11.0
