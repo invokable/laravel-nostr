@@ -16,7 +16,8 @@
     "valtzu/guzzle-websocket-middleware": "^0.2.0"
   },
   "require-dev": {
-    "orchestra/testbench": "^9.0||^10.0"
+    "orchestra/testbench": "^9.0||^10.0",
+    "laravel/pint": "^1.22"
   },
   "autoload": {
     "psr-4": {
