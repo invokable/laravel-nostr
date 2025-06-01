@@ -10,8 +10,7 @@ class ReferenceTag implements Arrayable
 {
     public function __construct(
         protected readonly string $r,
-    ) {
-    }
+    ) {}
 
     public static function make(string $r): static
     {

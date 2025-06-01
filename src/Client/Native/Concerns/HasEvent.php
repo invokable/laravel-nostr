@@ -16,7 +16,7 @@ trait HasEvent
      */
     protected function toNativeEvent(Event $event): NativeEvent
     {
-        $n_event = (new NativeEvent())
+        $n_event = (new NativeEvent)
             ->setKind(enum_value($event->kind))
             ->setContent($event->content)
             ->setTags($event->tags);

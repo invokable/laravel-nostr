@@ -15,8 +15,8 @@ use RuntimeException;
  */
 class NativeClient implements NostrDriver
 {
-    use Macroable;
     use Conditionable;
+    use Macroable;
 
     public function key(): NativeKey
     {

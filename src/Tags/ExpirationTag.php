@@ -13,8 +13,7 @@ class ExpirationTag implements Arrayable
 {
     public function __construct(
         protected readonly int $expiration,
-    ) {
-    }
+    ) {}
 
     public static function make(int $expiration): static
     {

@@ -12,9 +12,9 @@ use Revolution\Nostr\Contracts\Client\ClientKey;
 
 class NodeKey implements ClientKey
 {
+    use Conditionable;
     use HasHttp;
     use Macroable;
-    use Conditionable;
 
     public function generate(): Response
     {

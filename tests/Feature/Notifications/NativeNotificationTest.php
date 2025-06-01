@@ -84,7 +84,7 @@ class NativeNotificationTest extends TestCase
 
         Http::fake();
 
-        $user = new NativeTestUser();
+        $user = new NativeTestUser;
 
         $user->notify(new NativeTestNotification(content: 'test', tags: []));
 
@@ -97,8 +97,7 @@ class NativeTestNotification extends \Illuminate\Notifications\Notification
     public function __construct(
         protected string $content,
         protected array $tags = [],
-    ) {
-    }
+    ) {}
 
     public function via(object $notifiable): array
     {

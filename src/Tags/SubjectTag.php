@@ -13,8 +13,7 @@ class SubjectTag implements Arrayable
 {
     public function __construct(
         protected readonly string $subject,
-    ) {
-    }
+    ) {}
 
     public static function make(string $subject): static
     {

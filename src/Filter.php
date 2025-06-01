@@ -10,7 +10,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Stringable;
 
-final class Filter implements Jsonable, Arrayable, Stringable
+final class Filter implements Arrayable, Jsonable, Stringable
 {
     protected const LIMIT = 100;
 
@@ -29,8 +29,7 @@ final class Filter implements Jsonable, Arrayable, Stringable
         public readonly ?int $until = null,
         public readonly ?int $limit = self::LIMIT,
         public readonly ?string $search = null,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array<string>|null  $ids

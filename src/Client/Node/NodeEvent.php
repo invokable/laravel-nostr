@@ -18,9 +18,9 @@ use Revolution\Nostr\Filter;
  */
 class NodeEvent implements ClientEvent
 {
+    use Conditionable;
     use HasHttp;
     use Macroable;
-    use Conditionable;
 
     protected string $relay = '';
 

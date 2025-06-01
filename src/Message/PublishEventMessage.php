@@ -7,14 +7,13 @@ use InvalidArgumentException;
 use Revolution\Nostr\Event;
 use Stringable;
 
-final class PublishEventMessage implements Stringable, Jsonable
+final class PublishEventMessage implements Jsonable, Stringable
 {
     protected const TYPE = 'EVENT';
 
     public function __construct(
         protected readonly Event $event,
-    ) {
-    }
+    ) {}
 
     public static function make(Event $event): self
     {

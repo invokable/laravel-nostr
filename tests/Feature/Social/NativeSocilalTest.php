@@ -24,13 +24,13 @@ class NativeSocilalTest extends TestCase
 
     protected array $keys;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->keys = Nostr::native()->key()->generate()->json();
 
-        $this->social = new SocialClient();
+        $this->social = new SocialClient;
         $this->social->driver('native')->withRelay('wss://relay');
     }
 

@@ -12,8 +12,7 @@ class EventPointer implements Arrayable
         protected readonly string $id,
         protected readonly array $relays = [],
         protected readonly string $author = '',
-    ) {
-    }
+    ) {}
 
     public static function make(
         string $id,

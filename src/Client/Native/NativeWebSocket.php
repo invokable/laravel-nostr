@@ -21,16 +21,15 @@ use Valtzu\WebSocketMiddleware\WebSocketStream;
 
 class NativeWebSocket
 {
+    use Conditionable;
     use HasEvent;
     use HasHttp;
     use Macroable;
-    use Conditionable;
 
     public function __construct(
         protected ?WebSocketStream $ws = null,
         protected int $timeout = 60,
-    ) {
-    }
+    ) {}
 
     /**
      * Send EVENT message.

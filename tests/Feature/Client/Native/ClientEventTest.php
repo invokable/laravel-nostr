@@ -25,7 +25,7 @@ class ClientEventTest extends TestCase
             ->withRelay(relay: '')
             ->publish(event: $event, sk: '', relay: 'wss://relay');
 
-        //dump($response->json());
+        // dump($response->json());
 
         $this->assertSame([
             'message' => 'OK',
@@ -50,7 +50,7 @@ class ClientEventTest extends TestCase
             ->event()
             ->publish(event: $event, sk: $keys['sk']);
 
-        //dump($response->json());
+        // dump($response->json());
 
         $this->assertIsArray($response->json());
 
@@ -62,7 +62,7 @@ class ClientEventTest extends TestCase
             $response = Nostr::native()->event()
                 ->get(filter: $filter);
 
-            //dump($response->json());
+            // dump($response->json());
 
             $this->assertSame($id, $response->json('event.id'));
 
@@ -90,7 +90,7 @@ class ClientEventTest extends TestCase
 
         $response = Nostr::driver('native')->event()->list(filter: $filter, relay: 'wss://relay.nostr.band');
 
-        //dump($response->json('events'));
+        // dump($response->json('events'));
         $this->assertIsArray($response->json());
         $this->assertTrue($response->successful());
         $this->assertCount(2, $response->json('events'));

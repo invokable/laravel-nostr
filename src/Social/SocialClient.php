@@ -28,8 +28,8 @@ use Revolution\Nostr\Tags\ReferenceTag;
  */
 class SocialClient
 {
-    use Macroable;
     use Conditionable;
+    use Macroable;
 
     protected string $driver;
 

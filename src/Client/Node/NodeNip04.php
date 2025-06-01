@@ -11,9 +11,9 @@ use Revolution\Nostr\Client\Node\Concerns\HasHttp;
 
 class NodeNip04
 {
+    use Conditionable;
     use HasHttp;
     use Macroable;
-    use Conditionable;
 
     /**
      * @param  string  $sk  sender sk
@@ -22,7 +22,7 @@ class NodeNip04
     public function encrypt(#[\SensitiveParameter] string $sk, string $pk, string $content): Response
     {
         return $this->http()
-                    ->post('nip04/encrypt', compact(['sk', 'pk', 'content']));
+            ->post('nip04/encrypt', compact(['sk', 'pk', 'content']));
     }
 
     /**
@@ -32,6 +32,6 @@ class NodeNip04
     public function decrypt(#[\SensitiveParameter] string $sk, string $pk, string $content): Response
     {
         return $this->http()
-                    ->post('nip04/decrypt', compact(['sk', 'pk', 'content']));
+            ->post('nip04/decrypt', compact(['sk', 'pk', 'content']));
     }
 }

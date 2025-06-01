@@ -11,8 +11,7 @@ class EmojiTag implements Arrayable
     public function __construct(
         protected readonly string $shortcode,
         protected readonly string $url,
-    ) {
-    }
+    ) {}
 
     public static function make(string $shortcode, string $url): static
     {

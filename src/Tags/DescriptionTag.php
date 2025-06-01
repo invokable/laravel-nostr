@@ -10,8 +10,7 @@ class DescriptionTag implements Arrayable
 {
     public function __construct(
         protected readonly string $description,
-    ) {
-    }
+    ) {}
 
     public static function make(string $description): static
     {

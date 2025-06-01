@@ -13,8 +13,7 @@ class TitleTag implements Arrayable
 {
     public function __construct(
         protected readonly string $title,
-    ) {
-    }
+    ) {}
 
     public static function make(string $title): static
     {

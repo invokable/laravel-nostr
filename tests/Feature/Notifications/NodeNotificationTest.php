@@ -76,7 +76,7 @@ class NodeNotificationTest extends TestCase
 
         Http::fake();
 
-        $user = new NodeTestUser();
+        $user = new NodeTestUser;
 
         $user->notify(new NodeTestNotification(content: 'test', tags: []));
 
@@ -89,8 +89,7 @@ class NodeTestNotification extends \Illuminate\Notifications\Notification
     public function __construct(
         protected string $content,
         protected array $tags = [],
-    ) {
-    }
+    ) {}
 
     public function via(object $notifiable): array
     {

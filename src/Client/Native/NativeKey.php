@@ -14,9 +14,9 @@ use swentel\nostr\Key\Key;
 
 class NativeKey implements ClientKey
 {
+    use Conditionable;
     use HasHttp;
     use Macroable;
-    use Conditionable;
 
     protected Key $key;
 

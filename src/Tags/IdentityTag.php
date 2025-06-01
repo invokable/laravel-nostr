@@ -16,8 +16,7 @@ class IdentityTag implements Arrayable
     public function __construct(
         protected readonly string $username,
         protected readonly string $proof,
-    ) {
-    }
+    ) {}
 
     public static function make(string $username, string $proof): static
     {

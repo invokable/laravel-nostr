@@ -18,8 +18,7 @@ class PersonTag implements Arrayable
         protected readonly string $p,
         protected readonly string $relay = '',
         protected readonly string $petname = '',
-    ) {
-    }
+    ) {}
 
     /**
      * @param  string  $p  pubkey

@@ -16,14 +16,16 @@ use Stringable;
 use swentel\nostr\Key\Key;
 use Throwable;
 
-final class Event implements Jsonable, Arrayable, Stringable
+final class Event implements Arrayable, Jsonable, Stringable
 {
-    use Macroable;
     use Conditionable;
+    use Macroable;
     use Tappable;
 
     public readonly string $id;
+
     public readonly string $pubkey;
+
     public readonly string $sig;
 
     public function __construct(
@@ -135,13 +137,13 @@ final class Event implements Jsonable, Arrayable, Stringable
     {
         return $this->unless(
             isset($this->pubkey),
-            fn () => $this->withPublicKey((new Key())->getPublicKey($sk)),
+            fn () => $this->withPublicKey((new Key)->getPublicKey($sk)),
         )->unless(
             isset($this->id),
             fn () => $this->withId($this->hash()),
         )->unless(
             isset($this->sig),
-            fn () => $this->withSign(data_get((new SchnorrSignature())->sign($sk, $this->id), 'signature', '')),
+            fn () => $this->withSign(data_get((new SchnorrSignature)->sign($sk, $this->id), 'signature', '')),
         );
     }
 

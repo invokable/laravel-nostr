@@ -16,8 +16,7 @@ class IdentifierTag implements Arrayable
      */
     public function __construct(
         protected readonly string $d,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  string  $d  identifier
