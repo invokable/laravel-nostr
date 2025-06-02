@@ -10,8 +10,7 @@ class PublishedAtTag implements Arrayable
 {
     public function __construct(
         protected readonly int|string $published_at,
-    ) {
-    }
+    ) {}
 
     public static function make(int|string $published_at): static
     {

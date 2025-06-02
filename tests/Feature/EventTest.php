@@ -121,7 +121,7 @@ class EventTest extends TestCase
         $this->expectException(\Error::class);
         $this->expectExceptionMessage('Cannot modify readonly property');
 
-        $e = new Event();
+        $e = new Event;
         $e->kind = 0;
     }
 

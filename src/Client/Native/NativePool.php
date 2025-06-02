@@ -21,10 +21,10 @@ use Revolution\Nostr\Filter;
  */
 class NativePool implements ClientPool
 {
-    use HasHttp;
-    use HasEvent;
-    use Macroable;
     use Conditionable;
+    use HasEvent;
+    use HasHttp;
+    use Macroable;
 
     protected array $relays = [];
 

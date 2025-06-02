@@ -11,8 +11,7 @@ class ProfilePointer implements Arrayable
     public function __construct(
         protected readonly string $pubkey,
         protected readonly array $relays = [],
-    ) {
-    }
+    ) {}
 
     public static function make(
         string $pubkey,

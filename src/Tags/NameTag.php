@@ -13,8 +13,7 @@ class NameTag implements Arrayable
 {
     public function __construct(
         protected readonly string $name,
-    ) {
-    }
+    ) {}
 
     public static function make(string $name): static
     {

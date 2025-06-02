@@ -32,7 +32,7 @@ class NostrServiceProvider extends ServiceProvider
 
     protected function websocket(): void
     {
-        PendingRequest::mixin(new WebSocketHttpMixin());
+        PendingRequest::mixin(new WebSocketHttpMixin);
     }
 
     /**

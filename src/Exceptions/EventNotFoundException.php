@@ -6,6 +6,4 @@ namespace Revolution\Nostr\Exceptions;
 
 use RuntimeException;
 
-class EventNotFoundException extends RuntimeException
-{
-}
+class EventNotFoundException extends RuntimeException {}

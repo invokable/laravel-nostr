@@ -12,8 +12,7 @@ class ImageTag implements Arrayable
         protected readonly string $url,
         protected readonly int|string|null $width = null,
         protected readonly int|string|null $height = null,
-    ) {
-    }
+    ) {}
 
     public static function make(string $url, int|string|null $width = null, int|string|null $height = null): static
     {

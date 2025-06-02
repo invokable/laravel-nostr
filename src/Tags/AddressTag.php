@@ -16,8 +16,7 @@ class AddressTag implements Arrayable
         protected readonly string $pubkey,
         protected readonly string $identifier,
         protected readonly string $relay = '',
-    ) {
-    }
+    ) {}
 
     public static function make(
         int|Kind $kind,

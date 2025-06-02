@@ -26,7 +26,7 @@ class ClientPoolTest extends TestCase
 
         $event = new Event(kind: Kind::Text);
 
-        $responses = (new NativePool())
+        $responses = (new NativePool)
             ->publish(event: $event, sk: '', relays: ['wss://1', 'wss://2']);
 
         $this->assertTrue($responses['wss://1']->ok());
@@ -57,7 +57,7 @@ class ClientPoolTest extends TestCase
             );
 
         $response = head($responses);
-        //dump($response->json());
+        // dump($response->json());
 
         $this->assertIsArray($response->json());
 
@@ -72,7 +72,7 @@ class ClientPoolTest extends TestCase
 
             $response = head($responses);
 
-            //dump($response->json());
+            // dump($response->json());
 
             $this->assertSame($id, $response->json('event.id'));
 
@@ -87,7 +87,7 @@ class ClientPoolTest extends TestCase
 
         $filter = new Filter(authors: []);
 
-        $responses = (new NativePool())
+        $responses = (new NativePool)
             ->withRelays(relays: ['wss://1', 'wss://2'])
             ->list(filter: $filter);
 
@@ -118,7 +118,7 @@ class ClientPoolTest extends TestCase
 
         $filter = new Filter(authors: []);
 
-        $responses = (new NativePool())
+        $responses = (new NativePool)
             ->withRelays(relays: ['wss://1', 'wss://2'])
             ->get(filter: $filter, relays: ['1', '2']);
 
@@ -142,12 +142,12 @@ class ClientPoolTest extends TestCase
         $this->assertCount(2, $responses);
     }
 
-//    public function test_config_relays()
-//    {
-//        $responses = Http::pool(fn (Pool $pool) => collect(config('nostr.relays'))
-//            ->map(fn ($relay) => $pool->as($relay)->ws($relay, fn (NativeWebSocket $ws) => $ws->getWebSocket()->getMetadata()))->toArray());
-//
-//        dump($responses);
-//        $this->assertIsArray($responses);
-//    }
+    //    public function test_config_relays()
+    //    {
+    //        $responses = Http::pool(fn (Pool $pool) => collect(config('nostr.relays'))
+    //            ->map(fn ($relay) => $pool->as($relay)->ws($relay, fn (NativeWebSocket $ws) => $ws->getWebSocket()->getMetadata()))->toArray());
+    //
+    //        dump($responses);
+    //        $this->assertIsArray($responses);
+    //    }
 }

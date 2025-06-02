@@ -19,8 +19,8 @@ use Revolution\Nostr\Filter;
  */
 class NodePool implements ClientPool
 {
-    use Macroable;
     use Conditionable;
+    use Macroable;
 
     protected array $relays = [];
 

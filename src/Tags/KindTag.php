@@ -13,8 +13,7 @@ class KindTag implements Arrayable
 {
     public function __construct(
         protected readonly int|Kind $kind,
-    ) {
-    }
+    ) {}
 
     public static function make(int|Kind $kind): static
     {

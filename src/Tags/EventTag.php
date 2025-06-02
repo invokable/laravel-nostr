@@ -12,8 +12,7 @@ class EventTag implements Arrayable
         protected readonly string $id,
         protected readonly string $relay = '',
         protected readonly string $marker = '',
-    ) {
-    }
+    ) {}
 
     public static function make(
         string $id,

@@ -11,8 +11,7 @@ class RelayTag implements Arrayable
     public function __construct(
         protected readonly string $relay,
         protected readonly string $maker = '',
-    ) {
-    }
+    ) {}
 
     public static function make(string $relay, string $maker = ''): static
     {

@@ -15,8 +15,7 @@ class AddressPointer implements Arrayable
         protected readonly string $pubkey,
         protected readonly int|Kind $kind,
         protected readonly array $relays = [],
-    ) {
-    }
+    ) {}
 
     public static function make(
         string $identifier,

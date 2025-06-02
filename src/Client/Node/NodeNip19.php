@@ -14,9 +14,9 @@ use Revolution\Nostr\Nip19\ProfilePointer;
 
 class NodeNip19
 {
+    use Conditionable;
     use HasHttp;
     use Macroable;
-    use Conditionable;
 
     /**
      * Decode NIP-19 string.

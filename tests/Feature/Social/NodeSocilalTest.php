@@ -21,13 +21,13 @@ class NodeSocilalTest extends TestCase
 {
     protected SocialClient $social;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         Http::preventStrayRequests();
 
-        $this->social = new SocialClient();
+        $this->social = new SocialClient;
         $this->social->driver('node');
     }
 

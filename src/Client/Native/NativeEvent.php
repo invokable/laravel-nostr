@@ -20,10 +20,10 @@ use Revolution\Nostr\Filter;
  */
 class NativeEvent implements ClientEvent
 {
-    use HasHttp;
-    use HasEvent;
-    use Macroable;
     use Conditionable;
+    use HasEvent;
+    use HasHttp;
+    use Macroable;
 
     protected string $relay = '';
 

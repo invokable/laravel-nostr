@@ -9,7 +9,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use JetBrains\PhpStorm\ArrayShape;
 use Stringable;
 
-class Profile implements Jsonable, Arrayable, Stringable
+class Profile implements Arrayable, Jsonable, Stringable
 {
     public function __construct(
         public string $name = '',
@@ -21,8 +21,7 @@ class Profile implements Jsonable, Arrayable, Stringable
         public string $nip05 = '',
         public string $lud06 = '',
         public string $lud16 = '',
-    ) {
-    }
+    ) {}
 
     /**
      * @param  array{

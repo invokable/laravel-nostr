@@ -16,8 +16,7 @@ class HashTag implements Arrayable
      */
     public function __construct(
         protected readonly string $t,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  string  $t  hashtag

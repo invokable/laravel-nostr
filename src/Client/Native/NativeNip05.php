@@ -13,8 +13,8 @@ use JetBrains\PhpStorm\ArrayShape;
 
 class NativeNip05
 {
-    use Macroable;
     use Conditionable;
+    use Macroable;
 
     #[ArrayShape([
         'user' => 'string',

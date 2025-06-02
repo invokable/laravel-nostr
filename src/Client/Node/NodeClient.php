@@ -17,8 +17,8 @@ use Revolution\Nostr\Contracts\NostrDriver;
  */
 class NodeClient implements NostrDriver
 {
-    use Macroable;
     use Conditionable;
+    use Macroable;
 
     public function key(): NodeKey
     {
