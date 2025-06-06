@@ -64,12 +64,5 @@ class ClientNip19Test extends TestCase
         $this->assertTrue($response->successful());
     }
 
-    public function test_nrelay()
-    {
-        $client = new NativeNip19();
-        $response = $client->nrelay('wss://relay.example.com');
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertTrue($response->successful());
-    }
 }

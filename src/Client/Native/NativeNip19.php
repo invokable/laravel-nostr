@@ -101,15 +101,5 @@ class NativeNip19
         return $this->response($nip19->encodeAddr($eventObj, $addrData['identifier'], $kind, $addrData['pubkey'], $addrData['relays'] ?? []));
     }
 
-    /**
-     * encode relay url.
-     *
-     * @throws Bech32Exception|BindingResolutionException
-     */
-    public function nrelay(string $relay): Response
-    {
-        $encoded = 'nrelay1' . base64_encode($relay);
-        
-        return $this->response($encoded);
-    }
+
 }
