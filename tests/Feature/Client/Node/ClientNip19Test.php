@@ -106,20 +106,4 @@ class ClientNip19Test extends TestCase
 
         Http::assertSent(fn (Request $request) => $request['addr'] === $a->toArray());
     }
-
-    public function test_nip19_encode_relay()
-    {
-        Http::fake(fn () => Http::response([
-            'nrelay' => 'nrelay1',
-        ]));
-
-        $res = Nostr::driver('node')
-            ->nip19()->nrelay(relay: $relay = 'wss://');
-
-        $this->assertSame([
-            'nrelay' => 'nrelay1',
-        ], $res->json());
-
-        Http::assertSent(fn (Request $request) => $request['relay'] === $relay);
-    }
 }
