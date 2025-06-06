@@ -28,6 +28,8 @@ class NativeSocilalTest extends TestCase
     {
         parent::setUp();
 
+        Http::preventStrayRequests();
+
         $this->keys = Nostr::native()->key()->generate()->json();
 
         $this->social = new SocialClient;
