@@ -40,8 +40,6 @@ class ClientEventTest extends TestCase
         ], $response->json());
     }
 
-
-
     public function test_event_list()
     {
         Http::fakeSequence()
