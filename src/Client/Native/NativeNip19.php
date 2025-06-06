@@ -7,6 +7,7 @@ namespace Revolution\Nostr\Client\Native;
 use BitWasp\Bech32\Exception\Bech32Exception;
 use Exception;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
@@ -36,7 +37,7 @@ class NativeNip19
     /**
      * encode note id.
      *
-     * @throws Bech32Exception
+     * @throws Bech32Exception|BindingResolutionException
      */
     public function note(string $id): Response
     {
