@@ -6,6 +6,7 @@ namespace Revolution\Nostr\Client\Native;
 
 use BitWasp\Bech32\Exception\Bech32Exception;
 use Exception;
+use Illuminate\Container\Container;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
@@ -27,7 +28,7 @@ class NativeNip19
      */
     public function decode(string $n): Response
     {
-        $nip19 = new Nip19Helper;
+        $nip19 = Container::getInstance()->make(Nip19Helper::class);
 
         return $this->response($nip19->decode($n));
     }
@@ -39,7 +40,7 @@ class NativeNip19
      */
     public function note(string $id): Response
     {
-        $nip19 = new Nip19Helper;
+        $nip19 = Container::getInstance()->make(Nip19Helper::class);
 
         return $this->response($nip19->encodeNote($id));
     }
