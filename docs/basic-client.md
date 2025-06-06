@@ -9,7 +9,7 @@ Depends on an [external WebAPI](https://github.com/kawax/nostr-vercel-api) runni
 ### native
 Native client that works only PHP. Using [nostr-php](https://github.com/nostrver-se/nostr-php).
 
-nip04 and nip19 are not supported.
+nip04 is not supported.
 
 ### Default driver can be set in `config/nostr.php` or `.env`
 ```php
