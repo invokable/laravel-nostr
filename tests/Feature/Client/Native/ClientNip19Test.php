@@ -15,7 +15,7 @@ class ClientNip19Test extends TestCase
 {
     public function test_decode()
     {
-        $client = new NativeNip19();
+        $client = new NativeNip19;
         $response = $client->decode('npub1qe3e5wrvnsgpggtkytxteaqfprz0rgxr8c3l34kk3a9t7e2l3acslezefe');
 
         $this->assertInstanceOf(Response::class, $response);
@@ -24,7 +24,7 @@ class ClientNip19Test extends TestCase
 
     public function test_note()
     {
-        $client = new NativeNip19();
+        $client = new NativeNip19;
         $response = $client->note('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4');
 
         $this->assertInstanceOf(Response::class, $response);
@@ -34,8 +34,8 @@ class ClientNip19Test extends TestCase
     public function test_nprofile()
     {
         $profile = ProfilePointer::make('06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', ['wss://relay.example.com']);
-        
-        $client = new NativeNip19();
+
+        $client = new NativeNip19;
         $response = $client->nprofile($profile);
 
         $this->assertInstanceOf(Response::class, $response);
@@ -45,8 +45,8 @@ class ClientNip19Test extends TestCase
     public function test_nevent()
     {
         $event = EventPointer::make('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4', ['wss://relay.example.com'], '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71');
-        
-        $client = new NativeNip19();
+
+        $client = new NativeNip19;
         $response = $client->nevent($event);
 
         $this->assertInstanceOf(Response::class, $response);
@@ -56,13 +56,11 @@ class ClientNip19Test extends TestCase
     public function test_naddr()
     {
         $addr = AddressPointer::make('test_identifier', '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', 30023, ['wss://relay.example.com']);
-        
-        $client = new NativeNip19();
+
+        $client = new NativeNip19;
         $response = $client->naddr($addr);
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
     }
-
-
 }
