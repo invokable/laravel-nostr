@@ -15,6 +15,8 @@ use Revolution\Nostr\Client\Native\Concerns\HasHttp;
 use Revolution\Nostr\Nip19\AddressPointer;
 use Revolution\Nostr\Nip19\EventPointer;
 use Revolution\Nostr\Nip19\ProfilePointer;
+use swentel\nostr\Event\Event;
+use swentel\nostr\Event\Profile\Profile;
 use swentel\nostr\Nip19\Nip19Helper;
 
 class NativeNip19
@@ -52,13 +54,14 @@ class NativeNip19
     /**
      * encode profile.
      *
-     * @throws Bech32Exception|BindingResolutionException
+     * @throws BindingResolutionException
+     * @throws Exception
      */
     public function nprofile(ProfilePointer $profile): Response
     {
         $nip19 = Container::getInstance()->make(Nip19Helper::class);
 
-        $profileObj = new \swentel\nostr\Event\Profile\Profile;
+        $profileObj = new Profile;
         $profileObj->setPublicKey($profile->toArray()['pubkey']);
 
         return $this->response($nip19->encodeProfile($profileObj, $profile->toArray()['relays'] ?? []));
@@ -67,13 +70,14 @@ class NativeNip19
     /**
      * encode event.
      *
-     * @throws Bech32Exception|BindingResolutionException
+     * @throws BindingResolutionException
+     * @throws Exception
      */
     public function nevent(EventPointer $event): Response
     {
         $nip19 = Container::getInstance()->make(Nip19Helper::class);
 
-        $eventObj = new \swentel\nostr\Event\Event;
+        $eventObj = new Event;
         $eventData = $event->toArray();
         $eventObj->setId($eventData['id']);
         if (! empty($eventData['author'])) {
@@ -86,13 +90,14 @@ class NativeNip19
     /**
      * encode addr.
      *
-     * @throws Bech32Exception|BindingResolutionException
+     * @throws BindingResolutionException
+     * @throws Exception
      */
     public function naddr(AddressPointer $addr): Response
     {
         $nip19 = Container::getInstance()->make(Nip19Helper::class);
 
-        $eventObj = new \swentel\nostr\Event\Event;
+        $eventObj = new Event;
         $addrData = $addr->toArray();
         $eventObj->setPublicKey($addrData['pubkey']);
         $kind = is_object($addrData['kind']) ? $addrData['kind']->value : $addrData['kind'];
