@@ -50,6 +50,6 @@ class NativeClient implements NostrDriver
 
     public function nip19()
     {
-        throw new RuntimeException('Native driver does not support nip19.');
+        return Container::getInstance()->make(NativeNip19::class);
     }
 }
