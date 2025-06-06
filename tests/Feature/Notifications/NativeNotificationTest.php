@@ -14,6 +14,13 @@ use Tests\TestCase;
 
 class NativeNotificationTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+    }
+
     public function test_notification()
     {
         config(['nostr.driver' => 'native']);

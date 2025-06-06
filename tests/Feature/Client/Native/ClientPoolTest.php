@@ -19,6 +19,13 @@ use Tests\TestCase;
 
 class ClientPoolTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+    }
+
     public function test_pool_event_publish()
     {
         Http::fakeSequence()
@@ -31,53 +38,6 @@ class ClientPoolTest extends TestCase
 
         $this->assertTrue($responses['wss://1']->ok());
         $this->assertTrue($responses['wss://2']->ok());
-    }
-
-    public function test_pool_publish_real()
-    {
-        $keys = Nostr::native()->key()->generate()->json();
-
-        $relays = Arr::take(Config::get('nostr.relays'), limit: 2);
-
-        $profile = Profile::fromArray([
-            'name' => 'test',
-        ]);
-
-        $event = Event::make(
-            kind: Kind::Metadata,
-            content: $profile->toJson(),
-        );
-
-        $responses = Nostr::native()
-            ->pool()
-            ->publish(
-                event: $event,
-                sk: $keys['sk'],
-                relays: $relays,
-            );
-
-        $response = head($responses);
-        // dump($response->json());
-
-        $this->assertIsArray($response->json());
-
-        $id = $response->json('id');
-
-        if (! empty($id)) {
-            $filter = Filter::make(authors: [$keys['pk']], kinds: [Kind::Metadata]);
-
-            $responses = Nostr::native()
-                ->pool()
-                ->get(filter: $filter, relays: $relays);
-
-            $response = head($responses);
-
-            // dump($response->json());
-
-            $this->assertSame($id, $response->json('event.id'));
-
-            $this->assertSame($profile->name, Profile::fromJson($response->json('event.content'))->name);
-        }
     }
 
     public function test_pool_event_list()
@@ -95,22 +55,6 @@ class ClientPoolTest extends TestCase
         $this->assertTrue($responses['wss://2']->ok());
     }
 
-    public function test_pool_event_list_real()
-    {
-        $filter = new Filter(limit: 2);
-
-        $responses = Nostr::driver('native')
-            ->pool()
-            ->list(
-                filter: $filter,
-                relays: Arr::take(Config::get('nostr.relays'), limit: 2),
-            );
-
-        $this->assertIsArray(head($responses)?->json());
-        $this->assertCount(2, head($responses)?->json('events'));
-        $this->assertCount(2, $responses);
-    }
-
     public function test_pool_event_get()
     {
         Http::fakeSequence()
@@ -124,22 +68,6 @@ class ClientPoolTest extends TestCase
 
         $this->assertTrue($responses['1']->ok());
         $this->assertTrue($responses['2']->ok());
-    }
-
-    public function test_pool_event_get_real()
-    {
-        $filter = new Filter(kinds: [0], limit: 1);
-
-        $responses = Nostr::driver('native')
-            ->pool()
-            ->get(
-                filter: $filter,
-                relays: Arr::take(Config::get('nostr.relays'), limit: 2),
-            );
-
-        $this->assertIsArray(head($responses)?->json());
-        $this->assertArrayHasKey('event', head($responses)?->json());
-        $this->assertCount(2, $responses);
     }
 
     //    public function test_config_relays()
