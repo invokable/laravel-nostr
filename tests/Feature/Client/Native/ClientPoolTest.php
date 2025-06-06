@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client\Native;
 
-use Illuminate\Http\Client\Pool;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Client\Native\NativePool;
-use Revolution\Nostr\Client\Native\NativeWebSocket;
 use Revolution\Nostr\Event;
-use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
-use Revolution\Nostr\Profile;
 use Tests\TestCase;
 
 class ClientPoolTest extends TestCase
@@ -69,13 +63,4 @@ class ClientPoolTest extends TestCase
         $this->assertTrue($responses['1']->ok());
         $this->assertTrue($responses['2']->ok());
     }
-
-    //    public function test_config_relays()
-    //    {
-    //        $responses = Http::pool(fn (Pool $pool) => collect(config('nostr.relays'))
-    //            ->map(fn ($relay) => $pool->as($relay)->ws($relay, fn (NativeWebSocket $ws) => $ws->getWebSocket()->getMetadata()))->toArray());
-    //
-    //        dump($responses);
-    //        $this->assertIsArray($responses);
-    //    }
 }
