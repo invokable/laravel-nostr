@@ -32,8 +32,6 @@ class ClientEventTest extends TestCase
             ->withRelay(relay: '')
             ->publish(event: $event, sk: '', relay: 'wss://relay');
 
-        // dump($response->json());
-
         $this->assertSame([
             'message' => 'OK',
             'id' => 'subscription_id',
