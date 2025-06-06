@@ -17,7 +17,6 @@ class ClientNip19Test extends TestCase
     {
         $response = Nostr::native()->nip19()->decode('npub1qe3e5wrvnsgpggtkytxteaqfprz0rgxr8c3l34kk3a9t7e2l3acslezefe');
 
-        $response->dump();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
     }
