@@ -28,8 +28,18 @@ class NativeNip19
     /**
      * Decode NIP-19 string.
      *
+     * ```
+     * use Revolution\Nostr\Facades\Nostr;
+     *
+     * $response = Nostr::nip19()->decode('npub1...');
+     * $response->json();
+     * [
+     *     'type' => 'npub',
+     *     'data' => 'hex_string',
+     * ]
+     * ```
+     *
      * @param  string  $n  nsec, npub, note, nprofile, nevent, naddr
-     * @return Response{type: string, data: mixed}
      *
      * @throws Exception
      * @throws BindingResolutionException
