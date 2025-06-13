@@ -25,6 +25,26 @@ class NativeKey implements ClientKey
         $this->key = Container::getInstance()->make(Key::class);
     }
 
+    /**
+     * Generate new cryptographic keys.
+     *
+     * Usage example:
+     * ```
+     * use Revolution\Nostr\Facades\Nostr;
+     *
+     * $response = Nostr::native()->key()->generate();
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'sk' => 'hex_secret_key...',
+     * //     'pk' => 'hex_public_key...',
+     * //     'nsec' => 'nsec1...',
+     * //     'npub' => 'npub1...',
+     * // ]
+     * ```
+     *
+     * @return \Illuminate\Http\Client\Response JSON: {sk: string, pk: string, nsec: string, npub: string}
+     */
     public function generate(): Response
     {
         $sk = $this->key->generatePrivateKey();
@@ -35,6 +55,27 @@ class NativeKey implements ClientKey
         return $this->response(compact('sk', 'pk', 'nsec', 'npub'));
     }
 
+    /**
+     * Convert secret key to all key formats.
+     *
+     * Usage example:
+     * ```
+     * use Revolution\Nostr\Facades\Nostr;
+     *
+     * $response = Nostr::native()->key()->fromSecretKey('hex_secret_key...');
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'sk' => 'hex_secret_key...',
+     * //     'pk' => 'hex_public_key...',
+     * //     'nsec' => 'nsec1...',
+     * //     'npub' => 'npub1...',
+     * // ]
+     * ```
+     *
+     * @param  string  $sk  Secret key in hex format
+     * @return \Illuminate\Http\Client\Response JSON: {sk: string, pk: string, nsec: string, npub: string}
+     */
     public function fromSecretKey(#[\SensitiveParameter] string $sk): Response
     {
         $pk = $this->key->getPublicKey($sk);
@@ -44,6 +85,27 @@ class NativeKey implements ClientKey
         return $this->response(compact('sk', 'pk', 'nsec', 'npub'));
     }
 
+    /**
+     * Convert nsec (bech32 secret key) to all key formats.
+     *
+     * Usage example:
+     * ```
+     * use Revolution\Nostr\Facades\Nostr;
+     *
+     * $response = Nostr::native()->key()->fromNsec('nsec1...');
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'sk' => 'hex_secret_key...',
+     * //     'pk' => 'hex_public_key...',
+     * //     'nsec' => 'nsec1...',
+     * //     'npub' => 'npub1...',
+     * // ]
+     * ```
+     *
+     * @param  string  $nsec  Secret key in bech32 format (nsec1...)
+     * @return \Illuminate\Http\Client\Response JSON: {sk: string, pk: string, nsec: string, npub: string}
+     */
     public function fromNsec(#[\SensitiveParameter] string $nsec): Response
     {
         $sk = $this->key->convertToHex($nsec);
@@ -53,6 +115,25 @@ class NativeKey implements ClientKey
         return $this->response(compact('sk', 'pk', 'nsec', 'npub'));
     }
 
+    /**
+     * Convert public key to bech32 format.
+     *
+     * Usage example:
+     * ```
+     * use Revolution\Nostr\Facades\Nostr;
+     *
+     * $response = Nostr::native()->key()->fromPublicKey('hex_public_key...');
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'pk' => 'hex_public_key...',
+     * //     'npub' => 'npub1...',
+     * // ]
+     * ```
+     *
+     * @param  string  $pk  Public key in hex format
+     * @return \Illuminate\Http\Client\Response JSON: {pk: string, npub: string}
+     */
     public function fromPublicKey(string $pk): Response
     {
         $npub = $this->key->convertPublicKeyToBech32($pk);
@@ -60,6 +141,25 @@ class NativeKey implements ClientKey
         return $this->response(compact('pk', 'npub'));
     }
 
+    /**
+     * Convert npub (bech32 public key) to hex format.
+     *
+     * Usage example:
+     * ```
+     * use Revolution\Nostr\Facades\Nostr;
+     *
+     * $response = Nostr::native()->key()->fromNpub('npub1...');
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'pk' => 'hex_public_key...',
+     * //     'npub' => 'npub1...',
+     * // ]
+     * ```
+     *
+     * @param  string  $npub  Public key in bech32 format (npub1...)
+     * @return \Illuminate\Http\Client\Response JSON: {pk: string, npub: string}
+     */
     public function fromNpub(string $npub): Response
     {
         $pk = $this->key->convertToHex($npub);
