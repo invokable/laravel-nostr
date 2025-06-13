@@ -97,23 +97,38 @@ docs/               # Documentation files
 
 **For Social Features**:
 ```php
-// Via facade
-Social::createNote('Hello Nostr!');
-Social::timeline();
+// Via Social facade (requires manual registration)
+Social::driver('native')->createNote('Hello Nostr!');
+Social::driver('native')->timeline();
 
-// Via service injection
+// Via service injection (recommended)
 app(SocialClient::class)->updateProfile($profile);
+app(SocialClient::class)->createNote('Hello Nostr!');
 ```
 
 **For Laravel Notifications**:
 ```php
 $user->notify(new NostrNotification('Message content'));
+
+// On-demand notifications
+Notification::route('nostr', NostrRoute::to(sk: 'secret_key'))
+    ->notify(new NostrNotification('Message'));
 ```
 
 **For Low-Level Protocol Access**:
 ```php
+// Event operations
+Nostr::event()->list();
 Nostr::driver('native')->event()->publish($event, $secretKey);
-Nostr::native()->nip19()->decode($nprofile);
+Nostr::native()->event()->get($eventId);
+
+// Key operations
+Nostr::key()->generate();
+Nostr::native()->key()->fromNsec($nsec);
+
+// NIP implementations
+Nostr::nip05()->profile('user@domain.com');
+Nostr::nip19()->decode($nprofile);
 ```
 
 ### Configuration
