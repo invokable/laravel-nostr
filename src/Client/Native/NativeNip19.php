@@ -28,18 +28,21 @@ class NativeNip19
     /**
      * Decode NIP-19 string.
      *
-     * ```
+     * Usage example:
+     * ```php
      * use Revolution\Nostr\Facades\Nostr;
      *
      * $response = Nostr::nip19()->decode('npub1...');
-     * $response->json();
-     * [
-     *     'type' => 'npub',
-     *     'data' => 'mixed: string or array',
-     * ]
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'type' => 'npub',
+     * //     'data' => 'hex-encoded-string-or-structured-array',
+     * // ]
      * ```
      *
      * @param  string  $n  nsec, npub, note, nprofile, nevent, naddr
+     * @return \Illuminate\Http\Client\Response JSON: {type: string, data: mixed}
      *
      * @throws Exception
      * @throws BindingResolutionException
@@ -125,7 +128,22 @@ class NativeNip19
     }
 
     /**
-     * encode note id.
+     * Encode note id to NIP-19 note string.
+     *
+     * Usage example:
+     * ```php
+     * use Revolution\Nostr\Facades\Nostr;
+     *
+     * $response = Nostr::nip19()->note('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4');
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'note' => 'note1g0lxye59xnj7mhkc0mjnx9uuay6n0fls0fz6ecyjm6y32xv0dn2qgzxdxu',
+     * // ]
+     * ```
+     *
+     * @param  string  $id  Event ID in hex format
+     * @return \Illuminate\Http\Client\Response JSON: {note: string}
      *
      * @throws Bech32Exception|BindingResolutionException
      */
@@ -137,7 +155,24 @@ class NativeNip19
     }
 
     /**
-     * encode profile.
+     * Encode profile to NIP-19 nprofile string.
+     *
+     * Usage example:
+     * ```php
+     * use Revolution\Nostr\Facades\Nostr;
+     * use Revolution\Nostr\Nip19\ProfilePointer;
+     *
+     * $profile = ProfilePointer::make('06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', ['wss://relay.example.com']);
+     * $response = Nostr::nip19()->nprofile($profile);
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'nprofile' => 'nprofile1qqsxv3e5wpvxqgxyzrhv4nx6yfrpy7zqvvx8jh7x4k6fl2t6at2lqqqxqpremhxue69uhkummnw3ez6ur4vgh8wetvd3hhyer9wghxuet5qgs0dp',
+     * // ]
+     * ```
+     *
+     * @param  ProfilePointer  $profile  Profile pointer containing pubkey and optional relays
+     * @return \Illuminate\Http\Client\Response JSON: {nprofile: string}
      *
      * @throws BindingResolutionException
      * @throws Exception
@@ -153,7 +188,24 @@ class NativeNip19
     }
 
     /**
-     * encode event.
+     * Encode event to NIP-19 nevent string.
+     *
+     * Usage example:
+     * ```php
+     * use Revolution\Nostr\Facades\Nostr;
+     * use Revolution\Nostr\Nip19\EventPointer;
+     *
+     * $event = EventPointer::make('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4', ['wss://relay.example.com'], '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71');
+     * $response = Nostr::nip19()->nevent($event);
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'nevent' => 'nevent1qqsgl0qyyjtlr87mdhxv2kxrcde6h2e8d5pej6us72j33xjelnvaekg0qxpremhxue69uhkummnw3ez6ur4vgh8wetvd3hhyer9wghxuet5qgs0dp',
+     * // ]
+     * ```
+     *
+     * @param  EventPointer  $event  Event pointer containing event ID, optional relays and author
+     * @return \Illuminate\Http\Client\Response JSON: {nevent: string}
      *
      * @throws BindingResolutionException
      * @throws Exception
@@ -173,7 +225,24 @@ class NativeNip19
     }
 
     /**
-     * encode addr.
+     * Encode address to NIP-19 naddr string.
+     *
+     * Usage example:
+     * ```php
+     * use Revolution\Nostr\Facades\Nostr;
+     * use Revolution\Nostr\Nip19\AddressPointer;
+     *
+     * $addr = AddressPointer::make('test_identifier', '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', 30023, ['wss://relay.example.com']);
+     * $response = Nostr::nip19()->naddr($addr);
+     * $json = $response->json();
+     * // Example return value:
+     * // [
+     * //     'naddr' => 'naddr1qq3xjmmnw3ek2urpd96xyarqvs9xvmmwvf6xcmrdqyghv4eh0c4nmhwlxz5mnhpqynx8jvdcyaz3vtw4qqvsemhlwz6h0',
+     * // ]
+     * ```
+     *
+     * @param  AddressPointer  $addr  Address pointer containing identifier, pubkey, kind and optional relays
+     * @return \Illuminate\Http\Client\Response JSON: {naddr: string}
      *
      * @throws BindingResolutionException
      * @throws Exception
