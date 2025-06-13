@@ -29,6 +29,7 @@ class NativeNip19
      * Decode NIP-19 string.
      *
      * @param  string  $n  nsec, npub, note, nprofile, nevent, naddr
+     * @return Response{type: string, data: mixed}
      *
      * @throws Exception
      * @throws BindingResolutionException
