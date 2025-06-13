@@ -29,7 +29,7 @@ class NativeNip19
      * Decode NIP-19 string.
      *
      * Usage example:
-     * ```php
+     * ```
      * use Revolution\Nostr\Facades\Nostr;
      *
      * $response = Nostr::nip19()->decode('npub1...');
@@ -131,7 +131,7 @@ class NativeNip19
      * Encode note id to NIP-19 note string.
      *
      * Usage example:
-     * ```php
+     * ```
      * use Revolution\Nostr\Facades\Nostr;
      *
      * $response = Nostr::nip19()->note('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4');
@@ -158,7 +158,7 @@ class NativeNip19
      * Encode profile to NIP-19 nprofile string.
      *
      * Usage example:
-     * ```php
+     * ```
      * use Revolution\Nostr\Facades\Nostr;
      * use Revolution\Nostr\Nip19\ProfilePointer;
      *
@@ -191,7 +191,7 @@ class NativeNip19
      * Encode event to NIP-19 nevent string.
      *
      * Usage example:
-     * ```php
+     * ```
      * use Revolution\Nostr\Facades\Nostr;
      * use Revolution\Nostr\Nip19\EventPointer;
      *
@@ -228,7 +228,7 @@ class NativeNip19
      * Encode address to NIP-19 naddr string.
      *
      * Usage example:
-     * ```php
+     * ```
      * use Revolution\Nostr\Facades\Nostr;
      * use Revolution\Nostr\Nip19\AddressPointer;
      *
