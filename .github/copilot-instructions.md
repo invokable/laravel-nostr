@@ -205,6 +205,11 @@ Nostr::nip19()->decode($nprofile);
 
 **NIP-19** - Bech32 encoding for Nostr entities (nsec, npub, note, nprofile, nevent, naddr)
 
+**NativeNip19 Response Formats** - The NativeNip19 implementation uses different response formats for decode vs encode operations:
+- **Decode methods** (`decode()`, `decode_note()`): Return `{type: string, data: mixed}` format to match NodeNip19 specification
+- **Encode methods** (`note()`, `nprofile()`, `nevent()`, `naddr()`): Return legacy format `{[entityType]: string}` where entityType is the specific type (e.g., `{note: 'note1...'}`, `{nprofile: 'nprofile1...'}`)
+- **Key consideration**: Package uses `Illuminate\Http\Client\Response` but actual JSON structure varies by operation type
+
 **EventTag** - `src/Tags/EventTag.php` - Reference to another event with format ['e', id, relay, marker]
 
 **PersonTag** - `src/Tags/PersonTag.php` - Reference to a user's public key, used in follows and mentions

@@ -51,7 +51,7 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
-        
+
         $json = $response->json();
         $this->assertIsArray($json);
         $this->assertArrayHasKey('note', $json);
@@ -66,7 +66,7 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
-        
+
         $json = $response->json();
         $this->assertIsArray($json);
         $this->assertArrayHasKey('nprofile', $json);
@@ -81,7 +81,7 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
-        
+
         $json = $response->json();
         $this->assertIsArray($json);
         $this->assertArrayHasKey('nevent', $json);
@@ -96,7 +96,7 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
-        
+
         $json = $response->json();
         $this->assertIsArray($json);
         $this->assertArrayHasKey('naddr', $json);
