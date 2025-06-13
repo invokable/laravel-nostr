@@ -134,11 +134,11 @@ class NativeNip19
      * ```
      * use Revolution\Nostr\Facades\Nostr;
      *
-     * $response = Nostr::native()->nip19()->note('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4');
+     * $response = Nostr::native()->nip19()->note('...hex-string...');
      * $json = $response->json();
      * // Example return value:
      * // [
-     * //     'note' => 'note1g0lxye59xnj7mhkc0mjnx9uuay6n0fls0fz6ecyjm6y32xv0dn2qgzxdxu',
+     * //     'note' => 'note1...',
      * // ]
      * ```
      *
@@ -162,12 +162,12 @@ class NativeNip19
      * use Revolution\Nostr\Facades\Nostr;
      * use Revolution\Nostr\Nip19\ProfilePointer;
      *
-     * $profile = ProfilePointer::make('06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', ['wss://relay.example.com']);
+     * $profile = ProfilePointer::make('...hex-string...', ['wss://relay.example.com']);
      * $response = Nostr::native()->nip19()->nprofile($profile);
      * $json = $response->json();
      * // Example return value:
      * // [
-     * //     'nprofile' => 'nprofile1qqsxv3e5wpvxqgxyzrhv4nx6yfrpy7zqvvx8jh7x4k6fl2t6at2lqqqxqpremhxue69uhkummnw3ez6ur4vgh8wetvd3hhyer9wghxuet5qgs0dp',
+     * //     'nprofile' => 'nprofile1...',
      * // ]
      * ```
      *
@@ -195,12 +195,12 @@ class NativeNip19
      * use Revolution\Nostr\Facades\Nostr;
      * use Revolution\Nostr\Nip19\EventPointer;
      *
-     * $event = EventPointer::make('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4', ['wss://relay.example.com'], '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71');
+     * $event = EventPointer::make('...hex-string...', ['wss://relay.example.com'], '...hex-string...');
      * $response = Nostr::native()->nip19()->nevent($event);
      * $json = $response->json();
      * // Example return value:
      * // [
-     * //     'nevent' => 'nevent1qqsgl0qyyjtlr87mdhxv2kxrcde6h2e8d5pej6us72j33xjelnvaekg0qxpremhxue69uhkummnw3ez6ur4vgh8wetvd3hhyer9wghxuet5qgs0dp',
+     * //     'nevent' => 'nevent1...',
      * // ]
      * ```
      *
@@ -232,12 +232,12 @@ class NativeNip19
      * use Revolution\Nostr\Facades\Nostr;
      * use Revolution\Nostr\Nip19\AddressPointer;
      *
-     * $addr = AddressPointer::make('test_identifier', '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', 30023, ['wss://relay.example.com']);
+     * $addr = AddressPointer::make('test_identifier', '...hex-string...', 30023, ['wss://relay.example.com']);
      * $response = Nostr::native()->nip19()->naddr($addr);
      * $json = $response->json();
      * // Example return value:
      * // [
-     * //     'naddr' => 'naddr1qq3xjmmnw3ek2urpd96xyarqvs9xvmmwvf6xcmrdqyghv4eh0c4nmhwlxz5mnhpqynx8jvdcyaz3vtw4qqvsemhlwz6h0',
+     * //     'naddr' => 'naddr1...',
      * // ]
      * ```
      *
