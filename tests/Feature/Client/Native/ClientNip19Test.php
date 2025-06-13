@@ -19,7 +19,30 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
-        $this->assertEquals('npub', $response->json(0));
+
+        // Assert new {type, data} format to match NodeNip19 specification
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('type', $json);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertEquals('npub', $json['type']);
+        $this->assertIsString($json['data']); // Should be hex string
+    }
+
+    public function test_decode_note()
+    {
+        $response = Nostr::native()->nip19()->decode('note1g0lxye59xnj7mhkc0mjnx9uuay6n0fls0fz6ecyjm6y32xv0dn2qgzxdxu');
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertTrue($response->successful());
+
+        // Assert new {type, data} format to match NodeNip19 specification
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('type', $json);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertEquals('note', $json['type']);
+        $this->assertIsString($json['data']); // Should be event_id hex string
     }
 
     public function test_note()
