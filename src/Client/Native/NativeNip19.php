@@ -36,8 +36,81 @@ class NativeNip19
     public function decode(string $n): Response
     {
         $nip19 = Container::getInstance()->make(Nip19Helper::class);
+        $decoded = $nip19->decode($n);
 
-        return $this->response($nip19->decode($n));
+        // Transform the Nip19Helper output to match NodeNip19 (Vercel API) format
+        // NodeNip19 returns {type: string, data: mixed} format
+        $transformed = $this->transformDecodeResult($decoded);
+
+        return $this->response($transformed);
+    }
+
+    /**
+     * Transform Nip19Helper decode result to NodeNip19-compatible format.
+     *
+     * @param  array  $decoded  Raw output from Nip19Helper::decode()
+     * @return array Transformed result in {type: string, data: mixed} format
+     */
+    private function transformDecodeResult(array $decoded): array
+    {
+        // Handle indexed array format (npub, nsec)
+        if (isset($decoded[0]) && is_string($decoded[0])) {
+            $type = $decoded[0]; // 'npub', 'nsec', etc.
+            $data = $decoded[1] ?? null; // byte array or other data
+
+            // Convert byte array to hex string for consistency
+            if (is_array($data)) {
+                $hexData = '';
+                foreach ($data as $byte) {
+                    $hexData .= str_pad(dechex($byte), 2, '0', STR_PAD_LEFT);
+                }
+                $data = $hexData;
+            }
+
+            return [
+                'type' => $type,
+                'data' => $data,
+            ];
+        }
+
+        // Handle associative array format (note, nprofile, nevent, naddr)
+        if (isset($decoded['event_id'])) {
+            return [
+                'type' => 'note',
+                'data' => $decoded['event_id'],
+            ];
+        }
+
+        // Handle other TLV-parsed formats (nprofile, nevent, naddr)
+        // For now, we'll try to detect the type based on available keys
+        // This is a simplified approach - in a real implementation,
+        // we might need to track the original prefix from the decode process
+        if (isset($decoded['pubkey'])) {
+            return [
+                'type' => 'nprofile',
+                'data' => $decoded,
+            ];
+        }
+
+        if (isset($decoded['id']) && isset($decoded['relays'])) {
+            return [
+                'type' => 'nevent',
+                'data' => $decoded,
+            ];
+        }
+
+        if (isset($decoded['identifier'])) {
+            return [
+                'type' => 'naddr',
+                'data' => $decoded,
+            ];
+        }
+
+        // Fallback for unknown formats
+        return [
+            'type' => 'unknown',
+            'data' => $decoded,
+        ];
     }
 
     /**
