@@ -32,7 +32,7 @@ class NativeNip19
      * ```
      * use Revolution\Nostr\Facades\Nostr;
      *
-     * $response = Nostr::nip19()->decode('npub1...');
+     * $response = Nostr::native()->nip19()->decode('npub1...');
      * $json = $response->json();
      * // Example return value:
      * // [
@@ -134,7 +134,7 @@ class NativeNip19
      * ```
      * use Revolution\Nostr\Facades\Nostr;
      *
-     * $response = Nostr::nip19()->note('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4');
+     * $response = Nostr::native()->nip19()->note('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4');
      * $json = $response->json();
      * // Example return value:
      * // [
@@ -163,7 +163,7 @@ class NativeNip19
      * use Revolution\Nostr\Nip19\ProfilePointer;
      *
      * $profile = ProfilePointer::make('06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', ['wss://relay.example.com']);
-     * $response = Nostr::nip19()->nprofile($profile);
+     * $response = Nostr::native()->nip19()->nprofile($profile);
      * $json = $response->json();
      * // Example return value:
      * // [
@@ -196,7 +196,7 @@ class NativeNip19
      * use Revolution\Nostr\Nip19\EventPointer;
      *
      * $event = EventPointer::make('43fb0422457c1fadec68c5ad18378abb2c626d6b787790973e888d0998f6ced4', ['wss://relay.example.com'], '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71');
-     * $response = Nostr::nip19()->nevent($event);
+     * $response = Nostr::native()->nip19()->nevent($event);
      * $json = $response->json();
      * // Example return value:
      * // [
@@ -233,7 +233,7 @@ class NativeNip19
      * use Revolution\Nostr\Nip19\AddressPointer;
      *
      * $addr = AddressPointer::make('test_identifier', '06639a386c9c1014217622ccbcf40908c4f1a0c33e23f8d6d68f4abf655f8f71', 30023, ['wss://relay.example.com']);
-     * $response = Nostr::nip19()->naddr($addr);
+     * $response = Nostr::native()->nip19()->naddr($addr);
      * $json = $response->json();
      * // Example return value:
      * // [
