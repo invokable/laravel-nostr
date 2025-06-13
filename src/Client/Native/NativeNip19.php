@@ -31,6 +31,7 @@ class NativeNip19
      * @param  string  $n  nsec, npub, note, nprofile, nevent, naddr
      *
      * @throws Exception
+     * @throws BindingResolutionException
      */
     public function decode(string $n): Response
     {
@@ -48,7 +49,7 @@ class NativeNip19
     {
         $nip19 = Container::getInstance()->make(Nip19Helper::class);
 
-        return $this->response($nip19->encodeNote($id));
+        return $this->response(['note' => $nip19->encodeNote($id)]);
     }
 
     /**
