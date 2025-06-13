@@ -35,7 +35,7 @@ class NativeNip19
      * $response->json();
      * [
      *     'type' => 'npub',
-     *     'data' => 'hex_string',
+     *     'data' => 'mixed: string or array',
      * ]
      * ```
      *
