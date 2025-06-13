@@ -51,6 +51,14 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        // Assert new {type, data} format to match NodeNip19 specification
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('type', $json);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertEquals('note', $json['type']);
+        $this->assertIsString($json['data']); // Should be encoded note string
     }
 
     public function test_nprofile()
@@ -61,6 +69,14 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        // Assert new {type, data} format to match NodeNip19 specification
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('type', $json);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertEquals('nprofile', $json['type']);
+        $this->assertIsString($json['data']); // Should be encoded nprofile string
     }
 
     public function test_nevent()
@@ -71,6 +87,14 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        // Assert new {type, data} format to match NodeNip19 specification
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('type', $json);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertEquals('nevent', $json['type']);
+        $this->assertIsString($json['data']); // Should be encoded nevent string
     }
 
     public function test_naddr()
@@ -81,5 +105,13 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        // Assert new {type, data} format to match NodeNip19 specification
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('type', $json);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertEquals('naddr', $json['type']);
+        $this->assertIsString($json['data']); // Should be encoded naddr string
     }
 }
