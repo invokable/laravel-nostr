@@ -51,6 +51,11 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('note', $json);
+        $this->assertIsString($json['note']);
     }
 
     public function test_nprofile()
@@ -61,6 +66,11 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('nprofile', $json);
+        $this->assertIsString($json['nprofile']);
     }
 
     public function test_nevent()
@@ -71,6 +81,11 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('nevent', $json);
+        $this->assertIsString($json['nevent']);
     }
 
     public function test_naddr()
@@ -81,5 +96,10 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+
+        $json = $response->json();
+        $this->assertIsArray($json);
+        $this->assertArrayHasKey('naddr', $json);
+        $this->assertIsString($json['naddr']);
     }
 }
