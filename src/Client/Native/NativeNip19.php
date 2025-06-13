@@ -138,7 +138,7 @@ class NativeNip19
         $profileObj = new Profile;
         $profileObj->setPublicKey($profile->toArray()['pubkey']);
 
-        return $this->response($nip19->encodeProfile($profileObj, $profile->toArray()['relays'] ?? []));
+        return $this->response(['nprofile' => $nip19->encodeProfile($profileObj, $profile->toArray()['relays'] ?? [])]);
     }
 
     /**
@@ -158,7 +158,7 @@ class NativeNip19
             $eventObj->setPublicKey($eventData['author']);
         }
 
-        return $this->response($nip19->encodeEvent($eventObj, $eventData['relays'] ?? [], $eventData['author'] ?? ''));
+        return $this->response(['nevent' => $nip19->encodeEvent($eventObj, $eventData['relays'] ?? [], $eventData['author'] ?? '')]);
     }
 
     /**
@@ -177,6 +177,6 @@ class NativeNip19
         $kind = is_object($addrData['kind']) ? $addrData['kind']->value : $addrData['kind'];
         $eventObj->setKind($kind);
 
-        return $this->response($nip19->encodeAddr($eventObj, $addrData['identifier'], $kind, $addrData['pubkey'], $addrData['relays'] ?? []));
+        return $this->response(['naddr' => $nip19->encodeAddr($eventObj, $addrData['identifier'], $kind, $addrData['pubkey'], $addrData['relays'] ?? [])]);
     }
 }
