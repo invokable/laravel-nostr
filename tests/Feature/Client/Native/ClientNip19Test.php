@@ -19,6 +19,7 @@ class ClientNip19Test extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertTrue($response->successful());
+        $this->assertEquals('npub', $response->json(0));
     }
 
     public function test_note()
