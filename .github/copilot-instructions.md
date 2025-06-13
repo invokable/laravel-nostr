@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a PHP Laravel package that integrates Nostr protocol functionality into Laravel applications. Nostr is a decentralized protocol for censorship-resistant social networking that operates over relays instead of centralized servers.
+This is a PHP Laravel package (`revolution/laravel-nostr`) from the `invokable/laravel-nostr` repository that integrates Nostr protocol functionality into Laravel applications. Nostr is a decentralized protocol for censorship-resistant social networking that operates over relays instead of centralized servers.
 
 **Purpose**: Enable Laravel applications to interact with the Nostr ecosystem, providing both high-level social networking features and low-level protocol access.
 
@@ -17,6 +17,11 @@ This is a PHP Laravel package that integrates Nostr protocol functionality into 
 - **Protocol Flexibility**: Choose between native PHP implementation or external Node.js service
 - **WebSocket Communication**: Real-time interaction with Nostr relays
 - **Cryptographic Operations**: Key generation, event signing, verification
+
+**Requirements**:
+- PHP 8.2+ with GMP extension
+- Laravel 11.28+ or 12.0+
+- Dependencies: `swentel/nostr-php`, `valtzu/guzzle-websocket-middleware`
 
 ## Project Organization
 
@@ -57,21 +62,35 @@ src/
 │   └── SocialClient.php
 ├── Client/           # Protocol client implementations
 │   ├── Native/       # Pure PHP implementation
+│   │   └── Concerns/ # Shared traits and mixins
 │   └── Node/         # External service implementation
+│       └── Concerns/ # Shared traits and mixins
 ├── Notifications/    # Laravel notification integration
-├── Facades/          # Laravel facades
-├── Providers/        # Service providers
+├── Facades/          # Laravel facades (Nostr, Social)
+├── Providers/        # Service providers (NostrServiceProvider)
 ├── Contracts/        # Interfaces and contracts
-├── Tags/            # Event metadata system
+│   └── Client/       # Client-specific contracts
+├── Tags/            # Event metadata system (17+ tag types)
 ├── Nip19/           # NIP-19 pointer structures
+├── Message/         # WebSocket message structures
+├── Exceptions/      # Package-specific exceptions
 ├── Event.php        # Core event data structure
 ├── Filter.php       # Event query criteria
 ├── Profile.php      # User profile data
-└── Kind.php         # Event type enumeration
+├── Kind.php         # Event type enumeration
+└── NostrManager.php # Main manager class
 
-tests/               # Test suite
+tests/               # Test suite (140+ tests)
+├── Feature/         # Feature tests with HTTP mocking
+│   ├── Client/      # Client implementation tests
+│   ├── Social/      # Social API tests
+│   ├── Notifications/ # Notification channel tests
+│   └── Tag/         # Tag system tests
+└── TestCase.php     # Base test case
+
 config/             # Package configuration
-.github/workflows/  # CI/CD automation
+docs/               # Documentation files
+.github/workflows/  # CI/CD automation (test, lint)
 ```
 
 ### Key Entry Points
@@ -100,25 +119,36 @@ Nostr::native()->nip19()->decode($nprofile);
 ### Configuration
 
 **Driver Selection** (`config/nostr.php`):
-- `native`: Pure PHP implementation
+- `native`: Pure PHP implementation (default)
 - `node`: External Node.js service
 
+**API Configuration**:
+- `api_base`: Node.js service endpoint (default: https://nostr-api.vercel.app/api/)
+
 **Relay Configuration**:
-- Default relay list for event publishing/retrieval
+- Default relay list for event publishing/retrieval (18+ relays including Japanese relays)
 - Per-operation relay override capability
+- Primary relay is first in the list (`wss://relay.nostr.band`)
 
 ### Development Practices
 
-**Testing**: Comprehensive feature tests with HTTP mocking for external services
+**Testing**: Comprehensive feature tests with HTTP mocking for external services (140+ tests, PHPUnit)
 
 **Code Quality**:
-- Laravel Pint for code formatting (`.github/workflows/lint.yml`)
-- PHPUnit testing pipeline
+- Laravel Pint for code formatting
+- PHP 8.4 support in CI/CD pipeline
 - Automated quality analysis
 
 **CI/CD**: GitHub Actions for testing across PHP versions and code quality checks
 
+**Package Structure**:
+- PSR-4 autoloading (`Revolution\Nostr\` namespace)
+- Laravel service provider auto-discovery
+- MIT license
+
 ## Glossary of Codebase-Specific Terms
+
+**NostrManager** - `src/NostrManager.php` - Laravel Manager class extending Illuminate\Support\Manager, handles driver selection and instantiation
 
 **SocialClient** - `src/Social/SocialClient.php` - Main high-level API for social operations like createNote(), updateProfile(), timeline()
 
@@ -126,7 +156,7 @@ Nostr::native()->nip19()->decode($nprofile);
 
 **Event** - `src/Event.php` - Core Nostr data structure with id, pubkey, sig, kind, content, tags, created_at
 
-**Kind** - `src/Kind.php` - Enum defining event types (Text=1, Metadata=0, Contacts=3, Reaction=7, etc.)
+**Kind** - `src/Kind.php` - Enum defining event types (Text=1, Metadata=0, Contacts=3, EncryptedDirectMessage=4, Reaction=7, etc.)
 
 **Filter** - `src/Filter.php` - Query criteria object with ids, authors, kinds, since, until, limit parameters
 
@@ -144,6 +174,14 @@ Nostr::native()->nip19()->decode($nprofile);
 
 **NativeWebSocket** - `src/Client/Native/NativeWebSocket.php` - WebSocket client for direct relay communication
 
+**WebSocketHttpMixin** - `src/Client/Native/WebSocketHttpMixin.php` - Laravel HTTP client extension for WebSocket support
+
+**ClientEvent** - `src/Contracts/Client/ClientEvent.php` - Contract for event operations (list, publish, get)
+
+**ClientKey** - `src/Contracts/Client/ClientKey.php` - Contract for key operations (generate, convert)
+
+**ClientPool** - `src/Contracts/Client/ClientPool.php` - Contract for connection pooling operations
+
 **Relay** - Nostr server (wss://relay.url) that stores and distributes events across the network
 
 **NIP-04** - `src/Client/Node/NodeNip04.php` - Encrypted direct message specification implementation
@@ -154,9 +192,19 @@ Nostr::native()->nip19()->decode($nprofile);
 
 **EventTag** - `src/Tags/EventTag.php` - Reference to another event with format ['e', id, relay, marker]
 
-**PersonTag** - Reference to a user's public key, used in follows and mentions
+**PersonTag** - `src/Tags/PersonTag.php` - Reference to a user's public key, used in follows and mentions
 
-**HashTag** - Content categorization tag for events (similar to Twitter hashtags)
+**HashTag** - `src/Tags/HashTag.php` - Content categorization tag for events (#hashtag format)
+
+**AddressTag** - `src/Tags/AddressTag.php` - Reference to replaceable events by coordinate
+
+**IdentityTag** - `src/Tags/IdentityTag.php` - NIP-05 identity verification tag
+
+**RelayTag** - `src/Tags/RelayTag.php` - Relay recommendation tag
+
+**SubjectTag** - `src/Tags/SubjectTag.php` - Message subject/title tag
+
+**ImageTag** - `src/Tags/ImageTag.php` - Image attachment tag
 
 **Timeline** - Chronological feed of events from followed users, created by SocialClient::timeline()
 
@@ -174,6 +222,14 @@ Nostr::native()->nip19()->decode($nprofile);
 
 **NSEC/NPUB** - NIP-19 encoded forms of secret/public keys for human-readable sharing
 
-**WebSocketHttpMixin** - `src/Client/Native/WebSocketHttpMixin.php` - Laravel HTTP client extension for WebSocket support
+**ProfilePointer** - `src/Nip19/ProfilePointer.php` - NIP-19 profile pointer structure (nprofile)
 
-**HasHttp** - Trait providing HTTP client functionality for Node implementations
+**EventPointer** - `src/Nip19/EventPointer.php` - NIP-19 event pointer structure (nevent)
+
+**AddressPointer** - `src/Nip19/AddressPointer.php` - NIP-19 address pointer structure (naddr)
+
+**PublishEventMessage** - `src/Message/PublishEventMessage.php` - WebSocket message for publishing events
+
+**RequestEventMessage** - `src/Message/RequestEventMessage.php` - WebSocket message for requesting events
+
+**EventNotFoundException** - `src/Exceptions/EventNotFoundException.php` - Exception for missing events
