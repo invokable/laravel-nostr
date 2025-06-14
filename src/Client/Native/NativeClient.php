@@ -48,6 +48,11 @@ class NativeClient implements NostrDriver
         return Container::getInstance()->make(NativeNip05::class);
     }
 
+    public function nip17(): NativeNip17
+    {
+        return Container::getInstance()->make(NativeNip17::class);
+    }
+
     public function nip19(): NativeNip19
     {
         return Container::getInstance()->make(NativeNip19::class);

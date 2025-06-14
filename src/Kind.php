@@ -13,6 +13,9 @@ enum Kind: int
     case EncryptedDirectMessage = 4;
     case EventDeletion = 5;
     case Reaction = 7;
+    case Seal = 13;
+    case PrivateDirectMessage = 14;
+    case FileMessage = 15;
     case BadgeAward = 8;
     case ChannelCreation = 40;
     case ChannelMetadata = 41;
@@ -20,6 +23,7 @@ enum Kind: int
     case ChannelHideMessage = 43;
     case ChannelMuteUser = 44;
     case Blank = 255;
+    case GiftWrap = 1059;
     case FileMetadata = 1063;
     case Report = 1984;
     case Label = 1985;

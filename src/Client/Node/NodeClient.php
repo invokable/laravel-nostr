@@ -10,7 +10,9 @@ use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\NativeNip05;
 use Revolution\Nostr\Client\Native\NativeRelay;
+use Revolution\Nostr\Contracts\Client\ClientNip17;
 use Revolution\Nostr\Contracts\NostrDriver;
+use RuntimeException;
 
 /**
  * Basic Nostr client. Works with WebAPI.
@@ -48,6 +50,11 @@ class NodeClient implements NostrDriver
     public function nip05(): NativeNip05
     {
         return Container::getInstance()->make(NativeNip05::class);
+    }
+
+    public function nip17(): ClientNip17
+    {
+        throw new RuntimeException('Node driver does not support nip17.');
     }
 
     public function nip19(): NodeNip19

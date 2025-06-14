@@ -253,3 +253,40 @@ $profile = Nostr::nip05()->profile('user@localhost');
 //    'relays' => [],
 //]
 ```
+
+## NIP-17 Private Direct Messages
+
+Send a private direct message:
+
+```php
+use Revolution\Nostr\Facades\Nostr;
+
+$response = Nostr::driver('native')
+    ->nip17()
+    ->sendDirectMessage(
+        sk: 'sender-secret-key',
+        pk: 'receiver-public-key', 
+        message: 'Hello, this is a private message!'
+    );
+
+$data = $response->json();
+// Returns seal, receiver gift wrap, and sender gift wrap
+```
+
+Decrypt a received private direct message:
+
+```php
+use Revolution\Nostr\Facades\Nostr;
+
+$response = Nostr::driver('native')
+    ->nip17()
+    ->decryptDirectMessage(
+        giftWrap: $receivedGiftWrap,
+        sk: 'receiver-secret-key'
+    );
+
+$decryptedMessage = $response->json();
+// Returns the original message content and metadata
+```
+
+**Note**: NIP-17 is only supported in the `native` driver.
