@@ -8,9 +8,9 @@ use Revolution\Nostr\Client\Native\NativeNip05;
 use Revolution\Nostr\Client\Native\NativeRelay;
 use Revolution\Nostr\Client\Node\NodeClient;
 use Revolution\Nostr\Client\Node\NodeNip04;
-use Revolution\Nostr\Client\Node\NodeNip19;
 use Revolution\Nostr\Contracts\Client\ClientEvent;
 use Revolution\Nostr\Contracts\Client\ClientKey;
+use Revolution\Nostr\Contracts\Client\ClientNip19;
 use Revolution\Nostr\Contracts\Client\ClientPool;
 use Revolution\Nostr\NostrManager;
 
@@ -26,7 +26,7 @@ use Revolution\Nostr\NostrManager;
  * @method static NativeRelay relay()
  * @method static NodeNip04 nip04()
  * @method static NativeNip05 nip05()
- * @method static NodeNip19 nip19()
+ * @method static ClientNip19 nip19()
  *
  * @see NodeClient
  * @see NativeClient
