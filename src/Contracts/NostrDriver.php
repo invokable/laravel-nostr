@@ -4,6 +4,7 @@ namespace Revolution\Nostr\Contracts;
 
 use Revolution\Nostr\Contracts\Client\ClientEvent;
 use Revolution\Nostr\Contracts\Client\ClientKey;
+use Revolution\Nostr\Contracts\Client\ClientNip19;
 use Revolution\Nostr\Contracts\Client\ClientPool;
 
 interface NostrDriver
@@ -20,5 +21,5 @@ interface NostrDriver
 
     public function nip05();
 
-    public function nip19();
+    public function nip19(): ClientNip19;
 }

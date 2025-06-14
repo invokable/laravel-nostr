@@ -12,6 +12,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
+use Revolution\Nostr\Contracts\Client\ClientNip19;
 use Revolution\Nostr\Nip19\AddressPointer;
 use Revolution\Nostr\Nip19\EventPointer;
 use Revolution\Nostr\Nip19\ProfilePointer;
@@ -19,7 +20,7 @@ use swentel\nostr\Event\Event;
 use swentel\nostr\Event\Profile\Profile;
 use swentel\nostr\Nip19\Nip19Helper;
 
-class NativeNip19
+class NativeNip19 implements ClientNip19
 {
     use Conditionable;
     use HasHttp;
