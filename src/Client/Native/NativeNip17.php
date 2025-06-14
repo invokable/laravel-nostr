@@ -72,29 +72,26 @@ class NativeNip17 implements ClientNip17
     /**
      * Decrypt a private direct message from a gift wrap.
      *
-     * @param  array|object  $giftWrap  the gift wrapped event to decrypt
+     * @param  array  $giftWrap  the gift wrapped event to decrypt
      * @param  string  $sk  receiver's secret key
      * @param  bool  $verifyRecipient  whether to verify that the gift wrap is addressed to the receiver
      */
     public function decryptDirectMessage(
-        array|object $giftWrap,
+        array $giftWrap,
         #[\SensitiveParameter] string $sk,
         bool $verifyRecipient = true,
     ): Response {
         try {
-            // Convert to array if needed
-            $giftWrapData = is_array($giftWrap) ? $giftWrap : (array) $giftWrap;
-
             // Verify this is a gift wrap event
-            if (($giftWrapData['kind'] ?? null) !== Kind::GiftWrap->value) {
+            if (($giftWrap['kind'] ?? null) !== Kind::GiftWrap->value) {
                 throw new Exception('Invalid gift wrap: expected kind 1059');
             }
 
             // Step 1: Decrypt the gift wrap to get the seal
             $sealJson = Nip44::decrypt(
-                $giftWrapData['content'],
+                $giftWrap['content'],
                 $sk,
-                $giftWrapData['pubkey']
+                $giftWrap['pubkey']
             );
             $sealData = json_decode($sealJson, true);
 
@@ -145,7 +142,7 @@ class NativeNip17 implements ClientNip17
                 'tags' => $rumorData['tags'] ?? [],
                 'rumor' => $rumorData,
                 'seal' => $sealData,
-                'gift_wrap' => $giftWrapData,
+                'gift_wrap' => $giftWrap,
             ]);
         } catch (Exception $e) {
             return $this->response([
