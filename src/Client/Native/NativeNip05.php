@@ -4,23 +4,22 @@ declare(strict_types=1);
 
 namespace Revolution\Nostr\Client\Native;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
-use JetBrains\PhpStorm\ArrayShape;
 
 class NativeNip05
 {
     use Conditionable;
     use Macroable;
 
-    #[ArrayShape([
-        'user' => 'string',
-        'pubkey' => 'string',
-        'relays' => 'array',
-    ])]
+    /**
+     * @return array{user: string, pubkey: string, relays: array}
+     * @throws ConnectionException
+     */
     public function profile(string $user): array
     {
         [$name, $domain] = Str::of($user)
