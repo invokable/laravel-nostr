@@ -47,8 +47,8 @@ class NativeKey implements ClientKey
      */
     public function generate(): Response
     {
-        $sk = $this->key->generatePrivateKey();
-        $pk = $this->key->getPublicKey($sk);
+        $sk = str_pad($this->key->generatePrivateKey(), 64, '0', STR_PAD_LEFT);
+        $pk = str_pad($this->key->getPublicKey($sk), 64, '0', STR_PAD_LEFT);
         $nsec = $this->key->convertPrivateKeyToBech32($sk);
         $npub = $this->key->convertPublicKeyToBech32($pk);
 
@@ -78,7 +78,8 @@ class NativeKey implements ClientKey
      */
     public function fromSecretKey(#[\SensitiveParameter] string $sk): Response
     {
-        $pk = $this->key->getPublicKey($sk);
+        $sk = str_pad($sk, 64, '0', STR_PAD_LEFT);
+        $pk = str_pad($this->key->getPublicKey($sk), 64, '0', STR_PAD_LEFT);
         $nsec = $this->key->convertPrivateKeyToBech32($sk);
         $npub = $this->key->convertPublicKeyToBech32($pk);
 
@@ -108,8 +109,8 @@ class NativeKey implements ClientKey
      */
     public function fromNsec(#[\SensitiveParameter] string $nsec): Response
     {
-        $sk = $this->key->convertToHex($nsec);
-        $pk = $this->key->getPublicKey($sk);
+        $sk = str_pad($this->key->convertToHex($nsec), 64, '0', STR_PAD_LEFT);
+        $pk = str_pad($this->key->getPublicKey($sk), 64, '0', STR_PAD_LEFT);
         $npub = $this->key->convertPublicKeyToBech32($pk);
 
         return $this->response(compact('sk', 'pk', 'nsec', 'npub'));
@@ -136,6 +137,7 @@ class NativeKey implements ClientKey
      */
     public function fromPublicKey(string $pk): Response
     {
+        $pk = str_pad($pk, 64, '0', STR_PAD_LEFT);
         $npub = $this->key->convertPublicKeyToBech32($pk);
 
         return $this->response(compact('pk', 'npub'));
@@ -162,7 +164,7 @@ class NativeKey implements ClientKey
      */
     public function fromNpub(string $npub): Response
     {
-        $pk = $this->key->convertToHex($npub);
+        $pk = str_pad($this->key->convertToHex($npub), 64, '0', STR_PAD_LEFT);
 
         return $this->response(compact('pk', 'npub'));
     }

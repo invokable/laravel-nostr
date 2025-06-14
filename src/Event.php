@@ -137,13 +137,30 @@ final class Event implements Arrayable, Jsonable, Stringable
     {
         return $this->unless(
             isset($this->pubkey),
-            fn () => $this->withPublicKey((new Key)->getPublicKey($sk)),
+            fn () => $this->withPublicKey(str_pad((new Key)->getPublicKey($sk), 64, '0', STR_PAD_LEFT)),
         )->unless(
             isset($this->id),
             fn () => $this->withId($this->hash()),
         )->unless(
             isset($this->sig),
-            fn () => $this->withSign(data_get((new SchnorrSignature)->sign($sk, $this->id), 'signature', '')),
+            function () use ($sk) {
+                $signatureData = (new SchnorrSignature)->sign($sk, $this->id);
+                $rawSignature = data_get($signatureData, 'signature', '');
+                
+                // Ensure signature is exactly 128 characters by padding each 64-character component
+                if (strlen($rawSignature) < 128) {
+                    // Split into two 32-byte components and pad each to 64 characters
+                    $rComponent = substr($rawSignature, 0, 64);
+                    $sComponent = substr($rawSignature, 64);
+                    
+                    $rPadded = str_pad($rComponent, 64, '0', STR_PAD_LEFT);
+                    $sPadded = str_pad($sComponent, 64, '0', STR_PAD_LEFT);
+                    
+                    $rawSignature = $rPadded . $sPadded;
+                }
+                
+                return $this->withSign($rawSignature);
+            },
         );
     }
 

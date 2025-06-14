@@ -230,9 +230,10 @@ class NativeEvent implements ClientEvent
     public function verify(Event $event): Response
     {
         $n_event = $this->toNativeEvent($event);
+        $verifyResult = $n_event->verify();
 
         return $this->response([
-            'verify' => $n_event->verify(),
+            'verify' => $verifyResult,
         ]);
     }
 }
