@@ -27,7 +27,7 @@ class NipAvailabilityTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Native driver does not support nip04.');
-        
+
         Nostr::driver('native')->nip04();
     }
 
@@ -35,7 +35,7 @@ class NipAvailabilityTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Node driver does not support nip17.');
-        
+
         Nostr::driver('node')->nip17();
     }
 }
