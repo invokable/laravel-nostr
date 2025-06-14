@@ -44,8 +44,8 @@ class NativeNip17 implements ClientNip17
     ): Response {
         $key = Container::getInstance()->make(Key::class);
         $sign = Container::getInstance()->make(Sign::class);
-        $giftWrapService = new GiftWrapService($key, $sign);
-        $directMessage = new DirectMessage($giftWrapService, $key);
+        $giftWrapService = Container::getInstance()->makeWith(GiftWrapService::class, [$key, $sign]);
+        $directMessage = Container::getInstance()->makeWith(DirectMessage::class, [$giftWrapService, $key]);
 
         $result = $directMessage->sendDirectMessage(
             $sk,
