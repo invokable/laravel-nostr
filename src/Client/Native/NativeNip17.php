@@ -10,6 +10,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
+use Revolution\Nostr\Client\Native\Concerns\DirectMessageWrapper;
 use Revolution\Nostr\Client\Native\Concerns\HasHttp;
 use Revolution\Nostr\Contracts\Client\ClientNip17;
 use swentel\nostr\Key\Key;
@@ -45,7 +46,7 @@ class NativeNip17 implements ClientNip17
         $key = Container::getInstance()->make(Key::class);
         $sign = Container::getInstance()->make(Sign::class);
         $giftWrapService = Container::getInstance()->makeWith(GiftWrapService::class, ['key' => $key, 'sign' => $sign]);
-        $directMessage = Container::getInstance()->makeWith(DirectMessage::class, ['giftWrapService' => $giftWrapService, 'key' => $key]);
+        $directMessage = Container::getInstance()->makeWith(DirectMessageWrapper::class, ['giftWrapService' => $giftWrapService, 'keyService' => $key]);
 
         $result = $directMessage->sendDirectMessage(
             $sk,

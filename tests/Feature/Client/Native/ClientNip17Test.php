@@ -7,7 +7,9 @@ namespace Tests\Feature\Client\Native;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
+use Revolution\Nostr\Client\Native\Concerns\DirectMessageWrapper;
 use Revolution\Nostr\Facades\Nostr;
+use swentel\nostr\Event\Event;
 use swentel\nostr\Nip17\DirectMessage;
 use swentel\nostr\Nip59\GiftWrapService;
 use Tests\TestCase;
@@ -30,24 +32,21 @@ class ClientNip17Test extends TestCase
 
     public function test_nip17_send_direct_message()
     {
-        // Simple integration test - test that the method exists and has proper structure
-        $nip17 = Nostr::driver('native')->nip17();
-        $this->assertInstanceOf(\Revolution\Nostr\Client\Native\NativeNip17::class, $nip17);
+        // Test that the method can be called without external requests
+        // The Http::preventStrayRequests() should prevent any external calls
 
-        // Test that the method can be called and returns Response object
-        // We expect this to likely fail due to invalid test data, but should not throw exception
-        try {
-            $response = $nip17->sendDirectMessage(
-                sk: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-                pk: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-                message: 'Hello Bob, this is a test message!'
-            );
+        $response = Nostr::driver('native')->nip17()->sendDirectMessage(
+            sk: str_pad('1', 64, '0', STR_PAD_LEFT), // Valid 64-char hex string
+            pk: str_pad('2', 64, '0', STR_PAD_LEFT), // Valid 64-char hex string
+            message: 'Hello Bob, this is a test message!'
+        );
 
-            $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $response);
-        } catch (\Exception $e) {
-            // If an exception occurs, that's also acceptable for this basic test
-            $this->assertInstanceOf(\Exception::class, $e);
-        }
+        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $response);
+        $data = $response->json();
+
+        $this->assertArrayHasKey('seal', $data);
+        $this->assertArrayHasKey('receiver', $data);
+        $this->assertArrayHasKey('sender', $data);
     }
 
     public function test_nip17_decrypt_direct_message()
