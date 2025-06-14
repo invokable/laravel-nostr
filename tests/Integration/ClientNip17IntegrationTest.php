@@ -100,6 +100,27 @@ class ClientNip17IntegrationTest extends TestCase
         $this->assertEquals(1059, $giftWrap['kind']); // Kind::GiftWrap
         $this->assertArrayHasKey('pubkey', $giftWrap);
         $this->assertArrayHasKey('sig', $giftWrap);
+
+        // New test: Retrieve the GiftWrap event from relay using its ID
+        $giftWrapId = $receiverGiftWrap['id'];
+        $this->assertNotEmpty($giftWrapId, 'GiftWrap ID should not be empty');
+
+        $filter = \Revolution\Nostr\Filter::make(
+            ids: [$giftWrapId],
+            kinds: [\Revolution\Nostr\Kind::GiftWrap]
+        );
+
+        $retrievedResponse = Nostr::driver('native')->event()->get(filter: $filter);
+        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $retrievedResponse);
+
+        $retrievedData = $retrievedResponse->json();
+        $this->assertArrayHasKey('event', $retrievedData, 'Retrieved response should contain event data');
+
+        $retrievedEvent = $retrievedData['event'];
+        $this->assertEquals($giftWrapId, $retrievedEvent['id'], 'Retrieved event ID should match original GiftWrap ID');
+        $this->assertEquals(\Revolution\Nostr\Kind::GiftWrap->value, $retrievedEvent['kind'], 'Retrieved event should be GiftWrap kind (1059)');
+        $this->assertEquals($receiverGiftWrap['content'], $retrievedEvent['content'], 'Retrieved event content should match original GiftWrap content');
+        $this->assertEquals($receiverGiftWrap['pubkey'], $retrievedEvent['pubkey'], 'Retrieved event pubkey should match original GiftWrap pubkey');
     }
 
     /**
