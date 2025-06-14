@@ -16,6 +16,8 @@ class NodeNip04
     use Macroable;
 
     /**
+     * @deprecated This method is deprecated and may be removed in the future.
+     *
      * @param  string  $sk  sender sk
      * @param  string  $pk  receiver pk
      */
@@ -26,6 +28,8 @@ class NodeNip04
     }
 
     /**
+     * @deprecated This method is deprecated and may be removed in the future.
+     *
      * @param  string  $sk  receiver sk
      * @param  string  $pk  sender pk
      */
