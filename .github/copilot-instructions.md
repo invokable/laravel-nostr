@@ -36,7 +36,7 @@ The package is organized into several key layers:
 **2. Laravel Integration** (`src/Providers/`, `src/Facades/`, `src/Notifications/`)
 - `NostrServiceProvider` - Package registration and configuration
 - `NostrChannel` - Laravel notification channel for Nostr messages
-- WebSocket HTTP client extensions
+- WebSocket HTTP client extensions via `WebSocketHttpMixin`
 
 **3. Core Protocol Layer** (`src/`)
 - `Event` - Fundamental Nostr event data structure
@@ -131,6 +131,100 @@ Nostr::nip05()->profile('user@domain.com');
 Nostr::nip19()->decode($nprofile);
 ```
 
+### WebSocket Integration
+
+The package provides seamless WebSocket connectivity for real-time communication with Nostr relays through Laravel's familiar HTTP client interface.
+
+**Architecture**:
+- **External Dependency**: Uses `valtzu/guzzle-websocket-middleware` for WebSocket protocol support
+- **Laravel Integration**: Extends Laravel's HTTP client with WebSocket capabilities via mixin
+- **Native Implementation**: Pure PHP WebSocket handling without external Node.js dependencies
+
+**Core Components**:
+
+**WebSocketHttpMixin** (`src/Client/Native/WebSocketHttpMixin.php`):
+- Extends `Illuminate\Http\Client\PendingRequest` with WebSocket functionality
+- Registered globally in `NostrServiceProvider::websocket()` method
+- Provides `Http::ws(string $url, callable $callback): mixed` method
+- Handles WebSocket handshake (HTTP 101 status code) and connection management
+- Supports both synchronous and asynchronous (Promise-based) operations
+- Gracefully handles HTTP fakes during testing
+
+**NativeWebSocket** (`src/Client/Native/NativeWebSocket.php`):
+- Wraps `Valtzu\WebSocketMiddleware\WebSocketStream` for Nostr-specific operations
+- Implements Nostr protocol message handling (EVENT, REQ, EOSE, OK, NOTICE)
+- Provides high-level methods: `publish()`, `request()`, `list()`, `get()`
+- Manages connection timeouts (default: 60 seconds)
+- Automatically closes connections after operations
+- Uses Laravel's `rescue()` helper for graceful error handling
+
+**Message Structures**:
+- **PublishEventMessage** (`src/Message/PublishEventMessage.php`): Formats EVENT messages for publishing
+- **RequestEventMessage** (`src/Message/RequestEventMessage.php`): Formats REQ messages for event retrieval
+
+**Usage Patterns**:
+
+```php
+use Illuminate\Support\Facades\Http;
+use Revolution\Nostr\Client\Native\NativeWebSocket;
+
+// Basic WebSocket connection
+$result = Http::ws('wss://relay.nostr.band', function (NativeWebSocket $ws) {
+    // Perform operations with the WebSocket connection
+    return $ws->list($filter);
+});
+
+// Publishing events via WebSocket
+Http::ws($relay, function (NativeWebSocket $ws) use ($event, $secretKey) {
+    return $ws->publish($event, $secretKey);
+});
+
+// Retrieving events with filters
+Http::ws($relay, function (NativeWebSocket $ws) use ($filter) {
+    return $ws->request($filter);
+});
+```
+
+**Integration with Native Client**:
+The `NativeEvent` class (`src/Client/Native/NativeEvent.php`) uses WebSocket connections for all relay operations:
+
+```php
+// Event publishing
+public function publish(Event $event, string $sk, ?string $relay = null): Response
+{
+    $relay = $relay ?? $this->relay;
+    
+    $response = Http::ws($relay, fn (NativeWebSocket $ws) => 
+        $this->response($ws->publish($event, $sk))
+    );
+    
+    return $this->publishResponse($response);
+}
+
+// Event retrieval
+public function list(Filter $filter, ?string $relay = null): Response
+{
+    $relay = $relay ?? $this->relay;
+    
+    return Http::ws($relay, fn (NativeWebSocket $ws) => 
+        $this->response(['events' => $ws->list($filter)])
+    );
+}
+```
+
+**Testing Support**:
+- WebSocket operations are mockable through Laravel's HTTP fake system
+- Integration tests demonstrate real WebSocket connections (`tests/Integration/`)
+- Test failures in restricted environments (like GitHub Copilot) are expected and should be ignored
+- Feature tests use HTTP mocking to test WebSocket logic without network dependencies
+
+**Benefits**:
+- **Familiar API**: Uses Laravel's `Http::` facade syntax that developers already know
+- **Real-time Communication**: Direct WebSocket connections to Nostr relays
+- **Pure PHP**: No external Node.js service required for WebSocket operations
+- **Testable**: Full support for HTTP fakes and mocking during testing
+- **Reliable**: Automatic connection management, timeouts, and error handling
+
 ### Configuration
 
 **Driver Selection** (`config/nostr.php`):
@@ -163,12 +257,26 @@ Nostr::nip19()->decode($nprofile);
 
 ## Integration Tests
 
-**Integration Tests with Real WebSocket Connections**: The package includes integration tests in `tests/Integration/` that connect to actual Nostr relays and WebSocket servers. These tests are designed to work with real network connections and will fail in restricted environments like GitHub Copilot.
+**Integration Tests with Real WebSocket Connections**: The package includes integration tests in `tests/Integration/` that connect to actual Nostr relays using real WebSocket connections. These tests validate the complete WebSocket integration stack including the `Http::ws()` method, `NativeWebSocket` operations, and relay communication protocols.
+
+**WebSocket Testing Strategy**:
+- **Unit/Feature Tests**: Use Laravel's HTTP fake system to mock WebSocket operations
+- **Integration Tests**: Make real WebSocket connections to test network communication
+- **HTTP Fake Support**: `WebSocketHttpMixin` gracefully handles `Http::fake()` during testing by falling back to GET requests
 
 **Running Integration Tests**:
 - Execute via: `vendor/bin/phpunit --testsuite=Integration`
 - These tests are separate from the main test suite and excluded from regular test runs
 - **In Copilot Environment**: Integration test failures should be ignored as they require real network access to WebSocket servers
+- Tests include WebSocket connection validation and real Nostr protocol operations
+
+**Example Integration Test Usage**:
+```php
+// Real WebSocket connection test
+Http::timeout(5)->ws('wss://relay.nostr.band', function ($ws) {
+    return ['status' => 'connected'];
+});
+```
 
 **CI/CD Integration**: On GitHub Actions, integration tests are executed in `.github/workflows/test-integration.yml`. While working in Copilot, you may be able to check results from this workflow to verify integration test status.
 
@@ -204,7 +312,15 @@ Nostr::nip19()->decode($nprofile);
 
 **NativeWebSocket** - `src/Client/Native/NativeWebSocket.php` - WebSocket client for direct relay communication
 
-**WebSocketHttpMixin** - `src/Client/Native/WebSocketHttpMixin.php` - Laravel HTTP client extension for WebSocket support
+**WebSocketHttpMixin** - `src/Client/Native/WebSocketHttpMixin.php` - Laravel HTTP client extension providing `Http::ws()` method, registered as mixin in NostrServiceProvider, handles WebSocket handshake and connection lifecycle
+
+**NativeWebSocket** - `src/Client/Native/NativeWebSocket.php` - WebSocket client wrapper for `WebSocketStream`, provides Nostr protocol operations (publish, request, list, get), manages timeouts and connection cleanup
+
+**WebSocketStream** - From `valtzu/guzzle-websocket-middleware` package, low-level WebSocket connection stream used by NativeWebSocket for read/write operations
+
+**PublishEventMessage** - `src/Message/PublishEventMessage.php` - WebSocket message structure for EVENT commands, formats Nostr events for publishing to relays
+
+**RequestEventMessage** - `src/Message/RequestEventMessage.php` - WebSocket message structure for REQ commands, formats event filters for retrieval from relays with subscription ID
 
 **ClientEvent** - `src/Contracts/Client/ClientEvent.php` - Contract for event operations (list, publish, get)
 
@@ -212,7 +328,19 @@ Nostr::nip19()->decode($nprofile);
 
 **ClientPool** - `src/Contracts/Client/ClientPool.php` - Contract for connection pooling operations
 
-**Relay** - Nostr server (wss://relay.url) that stores and distributes events across the network
+**Relay** - Nostr server (wss://relay.url) that stores and distributes events across the network, accessed via WebSocket connections
+
+**WebSocket Handshake** - HTTP upgrade process (status code 101) that establishes WebSocket connection from initial HTTP request, handled automatically by WebSocketHttpMixin
+
+**EOSE (End of Stored Events)** - Nostr relay response indicating all stored events matching a subscription have been sent, processed by NativeWebSocket to terminate event retrieval
+
+**REQ Message** - WebSocket message type for requesting events from relays, formatted as `["REQ", subscription_id, filter...]`
+
+**EVENT Message** - WebSocket message type for publishing events to relays, formatted as `["EVENT", event_object]`
+
+**OK Message** - Relay response to EVENT messages indicating acceptance/rejection, processed by NativeWebSocket for publish confirmation
+
+**NOTICE Message** - Relay informational/error messages, handled by NativeWebSocket for error reporting
 
 **NIP-04** - `src/Client/Node/NodeNip04.php` - Encrypted direct message specification implementation
 
