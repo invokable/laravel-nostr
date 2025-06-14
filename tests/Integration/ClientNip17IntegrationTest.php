@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Facades\Nostr;
+use Revolution\Nostr\Filter;
+use Revolution\Nostr\Kind;
 use Tests\TestCase;
 
 /**
@@ -43,7 +46,7 @@ class ClientNip17IntegrationTest extends TestCase
         );
 
         // Verify the message was processed successfully
-        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $sendResponse);
+        $this->assertInstanceOf(Response::class, $sendResponse);
         $sendData = $sendResponse->json();
 
         $this->assertTrue($sendData['success'] ?? false, 'Failed to send direct message: '.($sendData['error'] ?? 'Unknown error'));
@@ -65,7 +68,7 @@ class ClientNip17IntegrationTest extends TestCase
                 sk: $receiverSk
             );
 
-        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $decryptResponse);
+        $this->assertInstanceOf(Response::class, $decryptResponse);
         $decryptData = $decryptResponse->json();
 
         // Verify successful decryption
@@ -105,20 +108,20 @@ class ClientNip17IntegrationTest extends TestCase
         $giftWrapId = $receiverGiftWrap['id'];
         $this->assertNotEmpty($giftWrapId, 'GiftWrap ID should not be empty');
 
-        $filter = \Revolution\Nostr\Filter::make(
+        $filter = Filter::make(
             ids: [$giftWrapId],
-            kinds: [\Revolution\Nostr\Kind::GiftWrap]
+            kinds: [Kind::GiftWrap]
         );
 
         $retrievedResponse = Nostr::driver('native')->event()->get(filter: $filter);
-        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $retrievedResponse);
+        $this->assertInstanceOf(Response::class, $retrievedResponse);
 
         $retrievedData = $retrievedResponse->json();
         $this->assertArrayHasKey('event', $retrievedData, 'Retrieved response should contain event data');
 
         $retrievedEvent = $retrievedData['event'];
         $this->assertEquals($giftWrapId, $retrievedEvent['id'], 'Retrieved event ID should match original GiftWrap ID');
-        $this->assertEquals(\Revolution\Nostr\Kind::GiftWrap->value, $retrievedEvent['kind'], 'Retrieved event should be GiftWrap kind (1059)');
+        $this->assertEquals(Kind::GiftWrap->value, $retrievedEvent['kind'], 'Retrieved event should be GiftWrap kind (1059)');
         $this->assertEquals($receiverGiftWrap['content'], $retrievedEvent['content'], 'Retrieved event content should match original GiftWrap content');
         $this->assertEquals($receiverGiftWrap['pubkey'], $retrievedEvent['pubkey'], 'Retrieved event pubkey should match original GiftWrap pubkey');
     }
@@ -131,7 +134,7 @@ class ClientNip17IntegrationTest extends TestCase
     {
         // Try to establish a simple WebSocket connection
         try {
-            $response = \Illuminate\Support\Facades\Http::timeout(5)->ws('wss://relay.nostr.band', function ($ws) {
+            $response = Http::timeout(5)->ws('wss://relay.nostr.band', function ($ws) {
                 return ['status' => 'connected'];
             });
 
