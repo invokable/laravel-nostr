@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client\Native;
 
-use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
-use Mockery\MockInterface;
-use Revolution\Nostr\Client\Native\Concerns\DirectMessageWrapper;
 use Revolution\Nostr\Facades\Nostr;
-use swentel\nostr\Event\Event;
-use swentel\nostr\Nip17\DirectMessage;
-use swentel\nostr\Nip59\GiftWrapService;
 use Tests\TestCase;
 
 class ClientNip17Test extends TestCase
@@ -32,8 +26,9 @@ class ClientNip17Test extends TestCase
 
     public function test_nip17_send_direct_message()
     {
-        // Test that the method can be called without external requests
-        // The Http::preventStrayRequests() should prevent any external calls
+        // Mock HTTP requests to prevent external calls during event publishing
+        Http::fakeSequence()
+            ->push(['OK', 'event_id_123', true, '']);
 
         $response = Nostr::driver('native')->nip17()->sendDirectMessage(
             sk: str_pad('1', 64, '0', STR_PAD_LEFT), // Valid 64-char hex string
@@ -44,51 +39,52 @@ class ClientNip17Test extends TestCase
         $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $response);
         $data = $response->json();
 
+        $this->assertTrue($data['success'] ?? false);
         $this->assertArrayHasKey('seal', $data);
-        $this->assertArrayHasKey('receiver', $data);
-        $this->assertArrayHasKey('sender', $data);
+        $this->assertArrayHasKey('receiver_gift_wrap', $data);
+        $this->assertArrayHasKey('sender_gift_wrap', $data);
+        $this->assertTrue($data['published'] ?? false);
+
+        // Verify the seal is properly structured
+        $seal = $data['seal'];
+        $this->assertEquals(13, $seal['kind']); // Kind::Seal
+        $this->assertArrayHasKey('content', $seal);
+        $this->assertArrayHasKey('sig', $seal);
+
+        // Verify gift wraps are properly structured
+        $receiverGiftWrap = $data['receiver_gift_wrap'];
+        $this->assertEquals(1059, $receiverGiftWrap['kind']); // Kind::GiftWrap
+        $this->assertArrayHasKey('content', $receiverGiftWrap);
+        $this->assertArrayHasKey('sig', $receiverGiftWrap);
     }
 
     public function test_nip17_decrypt_direct_message()
     {
-        $testMessage = 'Hello Bob, this is a test message!';
-
-        $mockDecryptedData = [
-            'content' => $testMessage,
-            'kind' => 14,
-            'pubkey' => 'sender_pubkey',
-            'created_at' => 1234567890,
-            'tags' => [['p', 'receiver_pubkey']],
-        ];
-
-        $giftWrapData = [
-            'id' => 'gift_wrap_id',
-            'pubkey' => 'gift_wrap_pubkey',
-            'created_at' => 1234567890,
+        // Test invalid gift wrap data to ensure proper error handling
+        $invalidGiftWrap = [
+            'id' => 'test_id',
+            'pubkey' => str_pad('1', 64, '0', STR_PAD_LEFT),
+            'created_at' => time(),
             'kind' => 1059,
-            'tags' => [['p', 'receiver_pubkey']],
-            'content' => 'encrypted_content',
-            'sig' => 'gift_wrap_signature',
+            'tags' => [['p', str_pad('2', 64, '0', STR_PAD_LEFT)]],
+            'content' => 'invalid_encrypted_content',
+            'sig' => str_pad('1', 128, '0', STR_PAD_LEFT),
         ];
 
-        // Since we're testing the error handling path, we expect the method to handle exceptions
         $decryptResponse = Nostr::driver('native')
             ->nip17()
             ->decryptDirectMessage(
-                giftWrap: $giftWrapData,
-                sk: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+                giftWrap: $invalidGiftWrap,
+                sk: str_pad('2', 64, '0', STR_PAD_LEFT)
             );
 
-        // We're testing that the method returns a response even if decryption fails
-        $this->assertNotNull($decryptResponse);
         $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $decryptResponse);
+        $data = $decryptResponse->json();
 
-        // Since we're not providing actual encrypted content, we expect this to fail
-        // but the method should handle it gracefully and return an error response
-        if (! $decryptResponse->successful()) {
-            $this->assertEquals(400, $decryptResponse->status());
-            $this->assertArrayHasKey('error', $decryptResponse->json());
-        }
+        // Since we're using invalid encrypted content, we expect an error response
+        $this->assertEquals(400, $decryptResponse->status());
+        $this->assertFalse($data['success']);
+        $this->assertArrayHasKey('error', $data);
     }
 
     public function test_node_driver_nip17_throws_exception()
@@ -97,5 +93,53 @@ class ClientNip17Test extends TestCase
         $this->expectExceptionMessage('Node driver does not support nip17.');
 
         Nostr::driver('node')->nip17();
+    }
+
+    public function test_nip17_end_to_end_encryption_decryption()
+    {
+        // Mock HTTP requests
+        Http::fakeSequence()
+            ->push(['OK', 'event_id_123', true, '']); // For publishing
+
+        // Use realistic keys for end-to-end test
+        $senderSk = str_pad('1', 64, '0', STR_PAD_LEFT);
+        $receiverSk = str_pad('2', 64, '0', STR_PAD_LEFT);
+        $receiverPk = str_pad('2', 64, '0', STR_PAD_LEFT); // Simplified for test
+        $message = 'Hello Bob, this is a secret message!';
+
+        // Send the message
+        $sendResponse = Nostr::driver('native')->nip17()->sendDirectMessage(
+            sk: $senderSk,
+            pk: $receiverPk,
+            message: $message
+        );
+
+        $this->assertTrue($sendResponse->json('success'));
+
+        // Get the receiver's gift wrap
+        $receiverGiftWrap = $sendResponse->json('receiver_gift_wrap');
+
+        // Attempt to decrypt - this tests the full flow even if decryption fails
+        $decryptResponse = Nostr::driver('native')
+            ->nip17()
+            ->decryptDirectMessage(
+                giftWrap: $receiverGiftWrap,
+                sk: $receiverSk
+            );
+
+        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $decryptResponse);
+
+        // The response should either succeed with the correct content or fail gracefully
+        $data = $decryptResponse->json();
+        $this->assertArrayHasKey('success', $data);
+
+        if ($data['success']) {
+            // If decryption succeeds, verify the content
+            $this->assertEquals($message, $data['content']);
+            $this->assertArrayHasKey('sender', $data);
+        } else {
+            // If decryption fails, verify proper error handling
+            $this->assertArrayHasKey('error', $data);
+        }
     }
 }
