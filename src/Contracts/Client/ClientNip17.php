@@ -26,12 +26,12 @@ interface ClientNip17
     /**
      * Decrypt a private direct message from a gift wrap.
      *
-     * @param  array|object  $giftWrap  the gift wrapped event to decrypt
+     * @param  array  $giftWrap  the gift wrapped event to decrypt
      * @param  string  $sk  receiver's secret key
      * @param  bool  $verifyRecipient  whether to verify that the gift wrap is addressed to the receiver
      */
     public function decryptDirectMessage(
-        array|object $giftWrap,
+        array $giftWrap,
         #[\SensitiveParameter] string $sk,
         bool $verifyRecipient = true,
     ): Response;
