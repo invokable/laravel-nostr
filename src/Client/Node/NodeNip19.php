@@ -8,11 +8,12 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Revolution\Nostr\Client\Node\Concerns\HasHttp;
+use Revolution\Nostr\Contracts\Client\ClientNip19;
 use Revolution\Nostr\Nip19\AddressPointer;
 use Revolution\Nostr\Nip19\EventPointer;
 use Revolution\Nostr\Nip19\ProfilePointer;
 
-class NodeNip19
+class NodeNip19 implements ClientNip19
 {
     use Conditionable;
     use HasHttp;

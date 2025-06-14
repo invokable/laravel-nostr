@@ -18,6 +18,7 @@ class NativeNip05
 
     /**
      * @return array{user: string, pubkey: string, relays: array}
+     *
      * @throws ConnectionException
      */
     public function profile(string $user): array
