@@ -11,6 +11,13 @@ use Tests\TestCase;
 
 class ClientNip17Test extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+    }
+
     public function test_nip17_is_available_in_native_client()
     {
         $nip17 = Nostr::driver('native')->nip17();
