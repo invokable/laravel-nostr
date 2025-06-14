@@ -161,6 +161,21 @@ Nostr::nip19()->decode($nprofile);
 - Laravel service provider auto-discovery
 - MIT license
 
+## Integration Tests
+
+**Integration Tests with Real WebSocket Connections**: The package includes integration tests in `tests/Integration/` that connect to actual Nostr relays and WebSocket servers. These tests are designed to work with real network connections and will fail in restricted environments like GitHub Copilot.
+
+**Running Integration Tests**:
+- Execute via: `vendor/bin/phpunit --testsuite=Integration`
+- These tests are separate from the main test suite and excluded from regular test runs
+- **In Copilot Environment**: Integration test failures should be ignored as they require real network access to WebSocket servers
+
+**CI/CD Integration**: On GitHub Actions, integration tests are executed in `.github/workflows/test-integration.yml`. While working in Copilot, you may be able to check results from this workflow to verify integration test status.
+
+**Test Separation**: The phpunit.xml configuration separates integration tests from regular tests:
+- Main test suite: `tests/Feature/` and `tests/Unit/` (149+ tests)
+- Integration test suite: `tests/Integration/` (real WebSocket connections)
+
 ## Glossary of Codebase-Specific Terms
 
 **NostrManager** - `src/NostrManager.php` - Laravel Manager class extending Illuminate\Support\Manager, handles driver selection and instantiation
