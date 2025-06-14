@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Feature\Client\Native;
+namespace Tests\Integration;
 
 use Illuminate\Support\Facades\Http;
 use Revolution\Nostr\Facades\Nostr;
@@ -17,13 +17,13 @@ use Tests\TestCase;
 class ClientNip17IntegrationTest extends TestCase
 {
     /**
-     * Test NIP-17 functionality with real keys but mocked WebSocket connections.
-     * This test creates real keys, tests encryption/decryption, and simulates
-     * the WebSocket send/receive flow without requiring actual relay connections.
+     * Test NIP-17 functionality with real keys and real WebSocket connections.
+     * This test creates real keys, tests encryption/decryption, and uses
+     * actual WebSocket connections to Nostr relays.
      *
      * @group integration
      */
-    public function test_nip17_real_keys_with_simulated_websocket()
+    public function test_nip17_real_keys_with_real_websocket()
     {
         // Generate real keys for sender and receiver
         $senderKeys = Nostr::driver('native')->key()->generate()->json();
@@ -33,14 +33,9 @@ class ClientNip17IntegrationTest extends TestCase
         $receiverSk = $receiverKeys['sk'];
         $receiverPk = $receiverKeys['pk'];
 
-        $message = 'Hello from real keys test! ' . time();
+        $message = 'Hello from real keys test! '.time();
 
-        // Mock the WebSocket publishing to simulate successful send
-        Http::fake([
-            '*' => Http::response(['OK', 'event_id_' . time(), true, ''], 200),
-        ]);
-
-        // Send the direct message (uses real keys, simulated WebSocket)
+        // Send the direct message (uses real keys, real WebSocket)
         $sendResponse = Nostr::driver('native')->nip17()->sendDirectMessage(
             sk: $senderSk,
             pk: $receiverPk,
@@ -50,8 +45,8 @@ class ClientNip17IntegrationTest extends TestCase
         // Verify the message was processed successfully
         $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $sendResponse);
         $sendData = $sendResponse->json();
-        
-        $this->assertTrue($sendData['success'] ?? false, 'Failed to send direct message: ' . ($sendData['error'] ?? 'Unknown error'));
+
+        $this->assertTrue($sendData['success'] ?? false, 'Failed to send direct message: '.($sendData['error'] ?? 'Unknown error'));
         $this->assertTrue($sendData['published'] ?? false, 'Message was not published to relays');
 
         // Verify response structure
@@ -74,7 +69,7 @@ class ClientNip17IntegrationTest extends TestCase
         $decryptData = $decryptResponse->json();
 
         // Verify successful decryption
-        $this->assertTrue($decryptData['success'] ?? false, 'Failed to decrypt message: ' . ($decryptData['error'] ?? 'Unknown error'));
+        $this->assertTrue($decryptData['success'] ?? false, 'Failed to decrypt message: '.($decryptData['error'] ?? 'Unknown error'));
         $this->assertEquals($message, $decryptData['content'], 'Decrypted message content does not match original');
         $this->assertEquals($senderKeys['pk'], $decryptData['sender'], 'Sender public key does not match');
 
@@ -89,17 +84,17 @@ class ClientNip17IntegrationTest extends TestCase
         $rumor = $decryptData['rumor'];
         $this->assertEquals(14, $rumor['kind']); // Kind::PrivateDirectMessage
         $this->assertEquals($message, $rumor['content']);
-        
+
         // Verify the rumor has proper p-tag for receiver
-        $pTags = collect($rumor['tags'] ?? [])->filter(fn($tag) => ($tag[0] ?? '') === 'p');
+        $pTags = collect($rumor['tags'] ?? [])->filter(fn ($tag) => ($tag[0] ?? '') === 'p');
         $this->assertCount(1, $pTags, 'Rumor should have exactly one p-tag');
         $this->assertEquals($receiverPk, $pTags->first()[1] ?? '', 'p-tag should contain receiver public key');
-        
+
         // Additional verification: Check that the seal was properly created
         $seal = $decryptData['seal'];
         $this->assertEquals(13, $seal['kind']); // Kind::Seal
         $this->assertEquals($senderKeys['pk'], $seal['pubkey'], 'Seal should be signed by sender');
-        
+
         // Additional verification: Check that the gift wrap was properly created
         $giftWrap = $decryptData['gift_wrap'];
         $this->assertEquals(1059, $giftWrap['kind']); // Kind::GiftWrap
@@ -118,13 +113,13 @@ class ClientNip17IntegrationTest extends TestCase
             $response = \Illuminate\Support\Facades\Http::timeout(5)->ws('wss://relay.nostr.band', function ($ws) {
                 return ['status' => 'connected'];
             });
-            
+
             $this->assertTrue(true, 'WebSocket connection succeeded');
         } catch (\Exception $e) {
-            if (str_contains($e->getMessage(), 'Connection refused') || 
+            if (str_contains($e->getMessage(), 'Connection refused') ||
                 str_contains($e->getMessage(), 'timeout') ||
                 str_contains($e->getMessage(), 'network')) {
-                $this->markTestSkipped('WebSocket connection blocked by network/firewall: ' . $e->getMessage());
+                $this->markTestSkipped('WebSocket connection blocked by network/firewall: '.$e->getMessage());
             } else {
                 throw $e;
             }
@@ -133,7 +128,7 @@ class ClientNip17IntegrationTest extends TestCase
 
     /**
      * Test that messages with real keys work correctly between different users.
-     * Uses real key generation but simulated WebSocket to avoid network dependencies.
+     * Uses real key generation and real WebSocket connections.
      */
     public function test_nip17_multiple_users_real_keys()
     {
@@ -142,13 +137,8 @@ class ClientNip17IntegrationTest extends TestCase
         $bob = Nostr::driver('native')->key()->generate()->json();
         $charlie = Nostr::driver('native')->key()->generate()->json();
 
-        // Mock WebSocket connections
-        Http::fake([
-            '*' => Http::response(['OK', 'event_id_' . time(), true, ''], 200),
-        ]);
-
         // Alice sends message to Bob
-        $aliceToBobMessage = 'Hi Bob, this is Alice! ' . time();
+        $aliceToBobMessage = 'Hi Bob, this is Alice! '.time();
         $aliceToBobResponse = Nostr::driver('native')->nip17()->sendDirectMessage(
             sk: $alice['sk'],
             pk: $bob['pk'],
@@ -158,7 +148,7 @@ class ClientNip17IntegrationTest extends TestCase
         $this->assertTrue($aliceToBobResponse->json('success'));
 
         // Bob sends message to Charlie
-        $bobToCharlieMessage = 'Hey Charlie, Bob here! ' . time();
+        $bobToCharlieMessage = 'Hey Charlie, Bob here! '.time();
         $bobToCharlieResponse = Nostr::driver('native')->nip17()->sendDirectMessage(
             sk: $bob['sk'],
             pk: $charlie['pk'],
