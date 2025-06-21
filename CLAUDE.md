@@ -13,7 +13,7 @@ Laravel Nostr (`revolution/laravel-nostr`) is a PHP Laravel package that integra
 # Run main test suite (feature tests with HTTP mocking)
 vendor/bin/phpunit
 
-# Run integration tests (real WebSocket connections - may fail in restricted environments)
+# Run integration tests (real WebSocket connections - reliable in GitHub Actions, may fail in other restricted environments)
 vendor/bin/phpunit --testsuite=Integration
 
 # Run a specific test
@@ -120,7 +120,7 @@ The package extends Laravel's HTTP client with WebSocket capabilities:
 **Integration Tests**: Make real WebSocket connections (separate test suite)
 **HTTP Fake Support**: WebSocket operations fallback to GET requests during testing
 
-Integration tests may fail in restricted environments (like GitHub Copilot) - this is expected.
+Integration tests work reliably in GitHub Actions environments. They may fail in other restricted environments (like GitHub Copilot) due to WebSocket connectivity limitations - this is expected in those environments.
 
 ## Important File Locations
 
