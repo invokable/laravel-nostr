@@ -13,7 +13,7 @@
     "illuminate/support": "^11.28||^12.0",
     "guzzlehttp/guzzle": "^7.8",
     "swentel/nostr-php": "^1.9.2",
-    "valtzu/guzzle-websocket-middleware": "^0.2.0"
+    "valtzu/guzzle-websocket-middleware": "^0.3"
   },
   "require-dev": {
     "orchestra/testbench": "^9.0||^10.0",
