@@ -216,4 +216,27 @@ class SchnorrSignatureTest extends TestCase
         $this->assertEquals('BIP0340/aux', SchnorrSignature::AUX);
         $this->assertEquals('BIP0340/nonce', SchnorrSignature::NONCE);
     }
+
+    /**
+     * Test signature length consistency with original SchnorrSignature implementation.
+     * This test reproduces the gmp_hexval bug where signatures may not be exactly 128 characters.
+     *
+     * To run this test 100 times and check failure rate:
+     * for i in {1..100}; do vendor/bin/phpunit --filter test_original_schnorr_signature_length_consistency --no-coverage 2>/dev/null | grep -E "(FAILED|OK)" | tail -1; done | grep -c FAILED
+     */
+    public function test_original_schnorr_signature_length_consistency(): void
+    {
+        // Use the original SchnorrSignature from vendor
+        $originalSignature = new \Mdanter\Ecc\Crypto\Signature\SchnorrSignature;
+
+        $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
+        $message = 'hello world';
+
+        $result = $originalSignature->sign($privateKey, $message);
+
+        // This test will occasionally fail due to the gmp_hexval bug in the original implementation
+        // where signatures may be shorter than 128 characters when leading zeros are missing
+        $this->assertEquals(128, strlen($result['signature']),
+            'Original SchnorrSignature should produce 128 character signatures, but got: '.strlen($result['signature']));
+    }
 }
