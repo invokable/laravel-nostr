@@ -39,8 +39,8 @@ class ClientKeyTest extends TestCase
         $this->assertArrayHasKey('pk', $response->json());
         $this->assertArrayHasKey('npub', $response->json());
         $this->assertSame([
-            'sk' => str_pad('sk', 64, '0', STR_PAD_LEFT),
-            'pk' => str_pad('pk', 64, '0', STR_PAD_LEFT),
+            'sk' => 'sk',
+            'pk' => 'pk',
             'nsec' => 'nsec',
             'npub' => 'npub',
         ], $response->json());
