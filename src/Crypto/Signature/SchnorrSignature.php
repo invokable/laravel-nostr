@@ -21,22 +21,23 @@ use Mdanter\Ecc\Primitives\PointInterface;
 class SchnorrSignature
 {
     public const CHALLENGE = 'BIP0340/challenge';
-    public const AUX       = 'BIP0340/aux';
-    public const NONCE     = 'BIP0340/nonce';
+
+    public const AUX = 'BIP0340/aux';
+
+    public const NONCE = 'BIP0340/nonce';
 
     /**
      * Create a Schnorr Signature.
      *
-     * @param string $privateKey - Must be a hexadecimal string
-     * @param string $message - The message being signed
-     * @param string|null $randomK - Random k-value; must be a hex-encoded string if present
-     * @return array
+     * @param  string  $privateKey  - Must be a hexadecimal string
+     * @param  string  $message  - The message being signed
+     * @param  string|null  $randomK  - Random k-value; must be a hex-encoded string if present
      *
      * @throws Exception
      */
     public function sign(string $privateKey, string $message, ?string $randomK = null): array
     {
-        $constantTime = new ConstantTimeMath();
+        $constantTime = new ConstantTimeMath;
         // private key must be a hex string
         if (ctype_xdigit($privateKey) === false) {
             throw new InvalidArgumentException('Private key must be a hex string');
@@ -80,26 +81,26 @@ class SchnorrSignature
         );
 
         $auxSingle = hash('sha256', self::AUX);
-        $tagAux    = $auxSingle . $auxSingle;
+        $tagAux = $auxSingle.$auxSingle;
 
         // concatenate the tag and the random k and hash it
-        $auxHash       = hash('sha256', hex2bin($tagAux . $randomK));
+        $auxHash = hash('sha256', hex2bin($tagAux.$randomK));
         $auxRandNumber = gmp_init($auxHash, 16);
 
         // calculate the nonce
         $nonce = gmp_xor($scalar, $auxRandNumber);
 
         $tagNonceSingle = hash('sha256', self::NONCE);
-        $tagNonce       = $tagNonceSingle . $tagNonceSingle;
+        $tagNonce = $tagNonceSingle.$tagNonceSingle;
 
         // concatenate the tag and the nonce and hash it
-        $nonceHash   = hash(
+        $nonceHash = hash(
             'sha256',
-            sodium_hex2bin($tagNonce . $this->gmp_hexval($nonce) . $this->gmp_hexval($point->getX()) . $hash)
+            sodium_hex2bin($tagNonce.$this->gmp_hexval($nonce).$this->gmp_hexval($point->getX()).$hash)
         );
         $nonceNumber = gmp_init($nonceHash, 16);
 
-        $k0      = gmp_mod($nonceNumber, $n);
+        $k0 = gmp_mod($nonceNumber, $n);
         $k0Point = $generator->mul($k0);
 
         // k0Scalar is k0 if Y is even, otherwise it's order - k0Scalar
@@ -122,13 +123,13 @@ class SchnorrSignature
 
         // Schnorr Challenge
         $tagChallengeSingle = hash('sha256', self::CHALLENGE);
-        $tagChallenge       = $tagChallengeSingle . $tagChallengeSingle;
+        $tagChallenge = $tagChallengeSingle.$tagChallengeSingle;
 
         // convert the hex to binary, so it is NOT hashed as a simple string
-        $finalChallenge     = hash(
+        $finalChallenge = hash(
             'sha256',
             sodium_hex2bin(
-                $tagChallenge . $this->gmp_hexval($k0Point->getX()) . $this->gmp_hexval($point->getX()) . $hash
+                $tagChallenge.$this->gmp_hexval($k0Point->getX()).$this->gmp_hexval($point->getX()).$hash
             )
         );
         $finalChallengeNumber = gmp_init($finalChallenge, 16);
@@ -142,20 +143,17 @@ class SchnorrSignature
             $n
         );
 
-        $signature = $k0PointX . $this->gmp_hexval($finalVal);
+        $signature = $k0PointX.$this->gmp_hexval($finalVal);
 
         return [
             'signature' => $signature,
-            'message'   => $message,
+            'message' => $message,
             'publicKey' => $this->gmp_hexval($point->getX()),
         ];
     }
 
     /**
-     * @param string $publicKey Must be a hexadecimal string
-     * @param string $signature
-     * @param string $message
-     * @return bool
+     * @param  string  $publicKey  Must be a hexadecimal string
      */
     public function verify(string $publicKey, string $signature, string $message): bool
     {
@@ -167,23 +165,19 @@ class SchnorrSignature
         ['r' => $r, 's' => $s, 'm' => $m, 'P' => $P] = $this->initSchnorrVerify($signature, $message, $publicKey);
 
         $tagChallengeSingle = hash('sha256', self::CHALLENGE);
-        $tagChallenge       = $tagChallengeSingle . $tagChallengeSingle;
-        $paddedR            = str_pad(gmp_strval($r, 16), 64, '0', STR_PAD_LEFT);
+        $tagChallenge = $tagChallengeSingle.$tagChallengeSingle;
+        $paddedR = str_pad(gmp_strval($r, 16), 64, '0', STR_PAD_LEFT);
         $paddedX = str_pad(gmp_strval($P->getX(), 16), 64, '0', STR_PAD_LEFT);
 
         // convert the hex to binary so it is NOT hashed as a simple string
-        $concatToHash = hex2bin($tagChallenge . $paddedR . $paddedX . $m);
-        $schnorrVal   = hash('sha256', $concatToHash);
+        $concatToHash = hex2bin($tagChallenge.$paddedR.$paddedX.$m);
+        $schnorrVal = hash('sha256', $concatToHash);
 
         $e = gmp_mod(gmp_init($schnorrVal, 16), gmp_init(JacobianPoint::CurveN, 16));
 
         return $this->finalizeSchnorrVerify($r, $P, $s, $e);
     }
 
-    /**
-     * @param \GMP $gmp
-     * @return string
-     */
     private function gmp_hexval(\GMP $gmp): string
     {
         // gmp_strval does not properly pad hexadecimal values
@@ -195,7 +189,7 @@ class SchnorrSignature
 
     private function finalizeSchnorrVerify(\GMP $r, PointInterface $P, \GMP $s, \GMP $e): bool
     {
-        $pointBase = (new JacobianPoint())->getBase();
+        $pointBase = (new JacobianPoint)->getBase();
 
         $R = $pointBase->multiplyAndAddUnsafe(
             $P,
@@ -203,7 +197,7 @@ class SchnorrSignature
             $pointBase->mod(gmp_neg($e), gmp_init(JacobianPoint::CurveN, 16))
         );
 
-        if (!$R || !$R->hasEvenY() || gmp_cmp($R->getX(), $r) !== 0) {
+        if (! $R || ! $R->hasEvenY() || gmp_cmp($R->getX(), $r) !== 0) {
             return false;
         }
 
