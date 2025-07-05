@@ -222,7 +222,9 @@ class SchnorrSignatureTest extends TestCase
      * This test reproduces the gmp_hexval bug where signatures may not be exactly 128 characters.
      *
      * To run this test 100 times and check failure rate:
+     * ```
      * for i in {1..100}; do vendor/bin/phpunit --filter test_original_schnorr_signature_length_consistency --no-coverage 2>/dev/null | grep -E "(FAILED|OK)" | tail -1; done | grep -c FAILED
+     * ```
      */
     public function test_original_schnorr_signature_length_consistency(): void
     {
