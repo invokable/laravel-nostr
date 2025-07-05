@@ -77,7 +77,7 @@ class SchnorrSignature
         $scalar = $constantTime->select(
             $isEvenY,
             gmp_sub($n, $scalar),
-            $scalar
+            $scalar,
         );
 
         $auxSingle = hash('sha256', self::AUX);
@@ -96,7 +96,7 @@ class SchnorrSignature
         // concatenate the tag and the nonce and hash it
         $nonceHash = hash(
             'sha256',
-            sodium_hex2bin($tagNonce.$this->gmp_hexval($nonce).$this->gmp_hexval($point->getX()).$hash)
+            sodium_hex2bin($tagNonce.$this->gmp_hexval($nonce).$this->gmp_hexval($point->getX()).$hash),
         );
         $nonceNumber = gmp_init($nonceHash, 16);
 
@@ -118,7 +118,7 @@ class SchnorrSignature
         $k0Scalar = $constantTime->select(
             $isEvenYKPoint,
             gmp_sub($n, $k0Scalar),
-            $k0Scalar
+            $k0Scalar,
         );
 
         // Schnorr Challenge
@@ -129,8 +129,8 @@ class SchnorrSignature
         $finalChallenge = hash(
             'sha256',
             sodium_hex2bin(
-                $tagChallenge.$this->gmp_hexval($k0Point->getX()).$this->gmp_hexval($point->getX()).$hash
-            )
+                $tagChallenge.$this->gmp_hexval($k0Point->getX()).$this->gmp_hexval($point->getX()).$hash,
+            ),
         );
         $finalChallengeNumber = gmp_init($finalChallenge, 16);
 
@@ -138,9 +138,9 @@ class SchnorrSignature
         $finalVal = $constantTime->mod(
             $constantTime->add(
                 $k0Scalar,
-                $constantTime->mul($finalChallengeNumber, $scalar)
+                $constantTime->mul($finalChallengeNumber, $scalar),
             ),
-            $n
+            $n,
         );
 
         $signature = $k0PointX.$this->gmp_hexval($finalVal);
@@ -194,7 +194,7 @@ class SchnorrSignature
         $R = $pointBase->multiplyAndAddUnsafe(
             $P,
             $s,
-            $pointBase->mod(gmp_neg($e), gmp_init(JacobianPoint::CurveN, 16))
+            $pointBase->mod(gmp_neg($e), gmp_init(JacobianPoint::CurveN, 16)),
         );
 
         if (! $R || ! $R->hasEvenY() || gmp_cmp($R->getX(), $r) !== 0) {
@@ -214,7 +214,7 @@ class SchnorrSignature
 
         $P = $secp256k1Curve->getPoint(
             gmp_init($publicKey, 16),
-            $secp256k1Curve->recoverYfromX(false, gmp_init($publicKey, 16))
+            $secp256k1Curve->recoverYfromX(false, gmp_init($publicKey, 16)),
         );
 
         return [
