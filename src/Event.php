@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Traits\Tappable;
-use Mdanter\Ecc\Crypto\Signature\SchnorrSignature;
+use Revolution\Nostr\Crypto\Signature\SchnorrSignature;
 use Stringable;
 use swentel\nostr\Key\Key;
 use Throwable;
