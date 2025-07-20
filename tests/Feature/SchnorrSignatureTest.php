@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use InvalidArgumentException;
-use Revolution\Nostr\Crypto\Signature\SchnorrSignature;
+use Mdanter\Ecc\Crypto\Signature\SchnorrSigner;
 use Tests\TestCase;
 
 class SchnorrSignatureTest extends TestCase
 {
-    private SchnorrSignature $signature;
+    private SchnorrSigner $signature;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->signature = new SchnorrSignature;
+        $this->signature = new SchnorrSigner;
     }
 
     public function test_sign_message_with_hex_private_key(): void
@@ -212,9 +212,9 @@ class SchnorrSignatureTest extends TestCase
 
     public function test_validates_bip340_constants(): void
     {
-        $this->assertEquals('BIP0340/challenge', SchnorrSignature::CHALLENGE);
-        $this->assertEquals('BIP0340/aux', SchnorrSignature::AUX);
-        $this->assertEquals('BIP0340/nonce', SchnorrSignature::NONCE);
+        $this->assertEquals('BIP0340/challenge', SchnorrSigner::CHALLENGE);
+        $this->assertEquals('BIP0340/aux', SchnorrSigner::AUX);
+        $this->assertEquals('BIP0340/nonce', SchnorrSigner::NONCE);
     }
 
     /**
@@ -229,7 +229,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_original_schnorr_signature_length_consistency(): void
     {
         // Use the original SchnorrSignature from vendor
-        $originalSignature = new \Mdanter\Ecc\Crypto\Signature\SchnorrSignature;
+        $originalSignature = new \Mdanter\Ecc\Crypto\Signature\SchnorrSigner();
 
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
         $message = 'hello world';

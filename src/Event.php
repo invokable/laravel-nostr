@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Support\Traits\Tappable;
-use Revolution\Nostr\Crypto\Signature\SchnorrSignature;
+use Mdanter\Ecc\Crypto\Signature\SchnorrSigner;
 use Stringable;
 use swentel\nostr\Key\Key;
 use Throwable;
@@ -144,7 +144,7 @@ final class Event implements Arrayable, Jsonable, Stringable
         )->unless(
             isset($this->sig),
             function () use ($sk) {
-                $sign = (new SchnorrSignature)->sign($sk, $this->id);
+                $sign = (new SchnorrSigner)->sign($sk, $this->id);
 
                 return $this->withSign(data_get($sign, 'signature', ''));
             },
