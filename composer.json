@@ -1,46 +1,71 @@
 {
-  "name": "revolution/laravel-nostr",
-  "description": "Laravel Nostr",
-  "keywords": [
-    "laravel",
-    "nostr"
-  ],
-  "type": "library",
-  "license": "MIT",
-  "require": {
-    "php": "^8.2",
-    "ext-gmp": "*",
-    "illuminate/support": "^11.28||^12.0",
-    "guzzlehttp/guzzle": "^7.8",
-    "swentel/nostr-php": "^1.9.2",
-    "valtzu/guzzle-websocket-middleware": "^0.3"
-  },
-  "require-dev": {
-    "orchestra/testbench": "^9.0||^10.0",
-    "laravel/pint": "^1.22"
-  },
-  "autoload": {
-    "psr-4": {
-      "Revolution\\Nostr\\": "src/"
+    "name": "revolution/laravel-nostr",
+    "description": "Laravel Nostr",
+    "keywords": [
+        "laravel",
+        "nostr"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "ext-gmp": "*",
+        "illuminate/support": "^11.28||^12.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "swentel/nostr-php": "^1.9.2",
+        "valtzu/guzzle-websocket-middleware": "^0.3"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0||^10.0",
+        "laravel/pint": "^1.22",
+        "revolution/laravel-boost-copilot-cli": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Revolution\\Nostr\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "authors": [
+        {
+            "name": "kawax",
+            "email": "kawaxbiz@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Revolution\\Nostr\\Providers\\NostrServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": [
+            "@php vendor/bin/pint --ansi"
+        ],
+        "test": [
+            "@clear",
+            "@php vendor/bin/phpunit"
+        ]
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
-  "authors": [
-    {
-      "name": "kawax",
-      "email": "kawaxbiz@gmail.com"
-    }
-  ],
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Revolution\\Nostr\\Providers\\NostrServiceProvider"
-      ]
-    }
-  },
-  "minimum-stability": "stable"
 }
