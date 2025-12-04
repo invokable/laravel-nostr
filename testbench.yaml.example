@@ -6,7 +6,6 @@ providers:
 
 env:
   CACHE_STORE: array
-  APP_ENV: local
   NOSTR_SK:
   NOSTR_NSEC:
   NOSTR_PK:
