@@ -19,5 +19,5 @@ Artisan::command('nostr:keys', function () {
 // vendor/bin/testbench nostr:list
 Artisan::command('nostr:list', function () {
     $response = Nostr::event()->list(Filter::make(kinds: [Kind::Text], limit: 5));
-    $this->info($response->collect()->toPrettyJson());
+    $this->info($response->collect()->toPrettyJson(JSON_UNESCAPED_UNICODE));
 });
