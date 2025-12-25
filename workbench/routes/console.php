@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Foundation\Inspiring;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Revolution\Nostr\Facades\Nostr;
 use Revolution\Nostr\Filter;
 use Revolution\Nostr\Kind;
-use Illuminate\Support\Arr;
 
 // Artisan::command('inspire', function () {
 //     $this->comment(Inspiring::quote());
@@ -30,7 +30,8 @@ Artisan::command('nostr:info', function () {
         if (Arr::exists($response, 'error')) {
             $this->error("Relay: $relay Error: {$response['error']}");
         } else {
-            // dump($relay, $response);
+            $this->info("$relay is reachable.");
+            // dump($response);
         }
     }
 })->purpose('Ensure Nostr relays are reachable and display their information.');
