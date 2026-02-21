@@ -10,8 +10,8 @@ Laravel Nostr
 Because the Nostr specifications are still evolving, this package is under constant development. However, the notification features should be useful as-is.
 
 ## Requirements
-- PHP(+GMP) >= 8.2
-- Laravel >= 11.0
+- PHP(+GMP) >= 8.3
+- Laravel >= 12.0
 
 ## Installation
 

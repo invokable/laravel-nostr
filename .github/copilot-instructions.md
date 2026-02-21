@@ -19,8 +19,8 @@ This is a PHP Laravel package (`revolution/laravel-nostr`) from the `invokable/l
 - **Cryptographic Operations**: Key generation, event signing, verification
 
 **Requirements**:
-- PHP 8.2+ with GMP extension
-- Laravel 11.28+ or 12.0+
+- PHP 8.3+ with GMP extension
+- Laravel 12.0+
 - Dependencies: `swentel/nostr-php`, `valtzu/guzzle-websocket-middleware`
 
 ## Project Organization
