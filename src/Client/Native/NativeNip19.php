@@ -43,7 +43,7 @@ class NativeNip19 implements ClientNip19
      * ```
      *
      * @param  string  $n  nsec, npub, note, nprofile, nevent, naddr
-     * @return \Illuminate\Http\Client\Response JSON: {type: string, data: mixed}
+     * @return Response JSON: {type: string, data: mixed}
      *
      * @throws Exception
      * @throws BindingResolutionException
@@ -144,7 +144,7 @@ class NativeNip19 implements ClientNip19
      * ```
      *
      * @param  string  $id  Event ID in hex format
-     * @return \Illuminate\Http\Client\Response JSON: {note: string}
+     * @return Response JSON: {note: string}
      *
      * @throws Bech32Exception|BindingResolutionException
      */
@@ -173,7 +173,7 @@ class NativeNip19 implements ClientNip19
      * ```
      *
      * @param  ProfilePointer  $profile  Profile pointer containing pubkey and optional relays
-     * @return \Illuminate\Http\Client\Response JSON: {nprofile: string}
+     * @return Response JSON: {nprofile: string}
      *
      * @throws BindingResolutionException
      * @throws Exception
@@ -206,7 +206,7 @@ class NativeNip19 implements ClientNip19
      * ```
      *
      * @param  EventPointer  $event  Event pointer containing event ID, optional relays and author
-     * @return \Illuminate\Http\Client\Response JSON: {nevent: string}
+     * @return Response JSON: {nevent: string}
      *
      * @throws BindingResolutionException
      * @throws Exception
@@ -243,7 +243,7 @@ class NativeNip19 implements ClientNip19
      * ```
      *
      * @param  AddressPointer  $addr  Address pointer containing identifier, pubkey, kind and optional relays
-     * @return \Illuminate\Http\Client\Response JSON: {naddr: string}
+     * @return Response JSON: {naddr: string}
      *
      * @throws BindingResolutionException
      * @throws Exception

@@ -61,7 +61,7 @@ class NativeEvent implements ClientEvent
      * @param  Event  $event  The event to publish
      * @param  string  $sk  Secret key for signing the event
      * @param  string|null  $relay  Relay URL (optional, uses default if null)
-     * @return \Illuminate\Http\Client\Response JSON: {message: string, id: string}
+     * @return Response JSON: {message: string, id: string}
      */
     public function publish(Event $event, #[\SensitiveParameter] string $sk, ?string $relay = null): Response
     {
@@ -102,7 +102,7 @@ class NativeEvent implements ClientEvent
      *
      * @param  Filter  $filter  Filter criteria for event selection
      * @param  string|null  $relay  Relay URL (optional, uses default if null)
-     * @return \Illuminate\Http\Client\Response JSON: {events: array}
+     * @return Response JSON: {events: array}
      */
     public function list(Filter $filter, ?string $relay = null): Response
     {
@@ -138,7 +138,7 @@ class NativeEvent implements ClientEvent
      *
      * @param  Filter  $filter  Filter criteria for event selection
      * @param  string|null  $relay  Relay URL (optional, uses default if null)
-     * @return \Illuminate\Http\Client\Response JSON: {event: array}
+     * @return Response JSON: {event: array}
      */
     public function get(Filter $filter, ?string $relay = null): Response
     {
@@ -166,7 +166,7 @@ class NativeEvent implements ClientEvent
      * ```
      *
      * @param  Event  $event  The event to hash
-     * @return \Illuminate\Http\Client\Response JSON: {hash: string}
+     * @return Response JSON: {hash: string}
      */
     public function hash(Event $event): Response
     {
@@ -195,7 +195,7 @@ class NativeEvent implements ClientEvent
      *
      * @param  Event  $event  The event to sign
      * @param  string  $sk  Secret key for signing
-     * @return \Illuminate\Http\Client\Response JSON: {sign: string}
+     * @return Response JSON: {sign: string}
      */
     public function sign(Event $event, #[\SensitiveParameter] string $sk): Response
     {
@@ -225,7 +225,7 @@ class NativeEvent implements ClientEvent
      * ```
      *
      * @param  Event  $event  The event to verify
-     * @return \Illuminate\Http\Client\Response JSON: {verify: bool}
+     * @return Response JSON: {verify: bool}
      */
     public function verify(Event $event): Response
     {

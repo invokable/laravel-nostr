@@ -43,7 +43,7 @@ class NativeKey implements ClientKey
      * // ]
      * ```
      *
-     * @return \Illuminate\Http\Client\Response JSON: {sk: string, pk: string, nsec: string, npub: string}
+     * @return Response JSON: {sk: string, pk: string, nsec: string, npub: string}
      */
     public function generate(): Response
     {
@@ -74,7 +74,7 @@ class NativeKey implements ClientKey
      * ```
      *
      * @param  string  $sk  Secret key in hex format
-     * @return \Illuminate\Http\Client\Response JSON: {sk: string, pk: string, nsec: string, npub: string}
+     * @return Response JSON: {sk: string, pk: string, nsec: string, npub: string}
      */
     public function fromSecretKey(#[\SensitiveParameter] string $sk): Response
     {
@@ -104,7 +104,7 @@ class NativeKey implements ClientKey
      * ```
      *
      * @param  string  $nsec  Secret key in bech32 format (nsec1...)
-     * @return \Illuminate\Http\Client\Response JSON: {sk: string, pk: string, nsec: string, npub: string}
+     * @return Response JSON: {sk: string, pk: string, nsec: string, npub: string}
      */
     public function fromNsec(#[\SensitiveParameter] string $nsec): Response
     {
@@ -132,7 +132,7 @@ class NativeKey implements ClientKey
      * ```
      *
      * @param  string  $pk  Public key in hex format
-     * @return \Illuminate\Http\Client\Response JSON: {pk: string, npub: string}
+     * @return Response JSON: {pk: string, npub: string}
      */
     public function fromPublicKey(string $pk): Response
     {
@@ -158,7 +158,7 @@ class NativeKey implements ClientKey
      * ```
      *
      * @param  string  $npub  Public key in bech32 format (npub1...)
-     * @return \Illuminate\Http\Client\Response JSON: {pk: string, npub: string}
+     * @return Response JSON: {pk: string, npub: string}
      */
     public function fromNpub(string $npub): Response
     {

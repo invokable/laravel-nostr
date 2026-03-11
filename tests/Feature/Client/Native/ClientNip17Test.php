@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Client\Native;
 
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Revolution\Nostr\Client\Native\NativeNip17;
 use Revolution\Nostr\Facades\Nostr;
 use Tests\TestCase;
 
@@ -21,7 +23,7 @@ class ClientNip17Test extends TestCase
     {
         $nip17 = Nostr::driver('native')->nip17();
 
-        $this->assertInstanceOf(\Revolution\Nostr\Client\Native\NativeNip17::class, $nip17);
+        $this->assertInstanceOf(NativeNip17::class, $nip17);
     }
 
     public function test_nip17_send_direct_message()
@@ -36,7 +38,7 @@ class ClientNip17Test extends TestCase
             message: 'Hello Bob, this is a test message!'
         );
 
-        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
         $data = $response->json();
 
         $this->assertTrue($data['success'] ?? false);
@@ -78,7 +80,7 @@ class ClientNip17Test extends TestCase
                 sk: str_pad('2', 64, '0', STR_PAD_LEFT)
             );
 
-        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $decryptResponse);
+        $this->assertInstanceOf(Response::class, $decryptResponse);
         $data = $decryptResponse->json();
 
         // Since we're using invalid encrypted content, we expect an error response
@@ -127,7 +129,7 @@ class ClientNip17Test extends TestCase
                 sk: $receiverSk
             );
 
-        $this->assertInstanceOf(\Illuminate\Http\Client\Response::class, $decryptResponse);
+        $this->assertInstanceOf(Response::class, $decryptResponse);
 
         // The response should either succeed with the correct content or fail gracefully
         $data = $decryptResponse->json();
