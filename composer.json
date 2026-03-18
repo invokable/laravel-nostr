@@ -16,7 +16,7 @@
         "valtzu/guzzle-websocket-middleware": "^0.3"
     },
     "require-dev": {
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": "^10.0||^11.0",
         "laravel/pint": "^1.22",
         "revolution/laravel-boost-copilot-cli": "^2.0"
     },
