@@ -12,4 +12,5 @@ phpunit.xml export-ignore
 testbench.yaml.example export-ignore
 pint.json export-ignore
 boost.json export-ignore
+.mcp.json export-ignore
 /workbench export-ignore
