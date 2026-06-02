@@ -83,6 +83,7 @@ class NativePool implements ClientPool
         );
 
         return collect($responses)
+            ->filter(fn ($response) => $response instanceof Response)
             ->map(fn ($response) => $this->publishResponse($response))
             ->toArray();
     }
