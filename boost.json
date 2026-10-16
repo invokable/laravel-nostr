@@ -2,12 +2,18 @@
     "agents": [
         "copilot-cli"
     ],
-    "cloud": false,
+    "cloud": true,
     "guidelines": true,
     "mcp": true,
     "nightwatch": false,
     "packages": [
         "revolution/laravel-boost-copilot-cli"
     ],
-    "sail": false
+    "sail": false,
+    "skills": [
+        "infer-conventions",
+        "deploying-to-cloud",
+        "laravel-best-practices",
+        "testing-best-practices"
+    ]
 }
