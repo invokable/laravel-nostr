@@ -137,18 +137,20 @@ class SchnorrSignatureTest extends TestCase
     public function test_throws_exception_for_invalid_private_key(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains('Private key must be a 32-byte hex string');
 
-        $this->signature->sign('invalid_hex', 'hello world');
+        // TODO:PHPUnit12/PHP8.3にはexpectExceptionMessageIsOrContainsがないので8.3対応を終了したら変更
+        $this->expectExceptionMessage('Private key must be a 32-byte hex string');
+
+        $this->signature->sign('invalid_hex', bin2hex('hello world'));
     }
 
     public function test_throws_exception_for_invalid_public_key_in_verify(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains('Public key must be a 32-byte hex string');
+        $this->expectExceptionMessage('Public key must be a 32-byte hex string');
 
         $signature = '0'.str_repeat('0', 127);
-        $this->signature->verify('invalid_hex', $signature, 'hello world');
+        $this->signature->verify('invalid_hex', $signature, bin2hex('hello world'));
     }
 
     public function test_throws_exception_for_invalid_random_k(): void
@@ -156,9 +158,9 @@ class SchnorrSignatureTest extends TestCase
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageIsOrContains('Message must be an even-length hexadecimal string');
+        $this->expectExceptionMessage('Randomness must be a 32-byte hex string');
 
-        $this->signature->sign($privateKey, 'hello world', 'invalid_hex');
+        $this->signature->sign($privateKey, bin2hex('hello world'), 'invalid_hex');
     }
 
     public function test_handles_empty_message(): void
