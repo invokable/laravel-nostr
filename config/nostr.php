@@ -32,7 +32,7 @@ return [
         'wss://nostr.einundzwanzig.space',
 
         'wss://yabu.me',
-        'wss://relay.barine.co',
+        // 'wss://relay.barine.co',
         'wss://nostr-relay.h3z.jp',
         'wss://nostr.fediverse.jp',
         // 'wss://relay-jp.shino3.net',
