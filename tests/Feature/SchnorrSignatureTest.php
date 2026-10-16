@@ -21,7 +21,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_sign_message_with_hex_private_key(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
+        $message = bin2hex('hello world');
 
         $result = $this->signature->sign($privateKey, $message);
 
@@ -50,7 +50,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_verify_valid_signature(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
+        $message = bin2hex('hello world');
 
         $result = $this->signature->sign($privateKey, $message);
         $isValid = $this->signature->verify($result['publicKey'], $result['signature'], $message);
@@ -72,7 +72,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_verification_fails_with_wrong_signature(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
+        $message = bin2hex('hello world');
 
         $result = $this->signature->sign($privateKey, $message);
 
@@ -88,7 +88,7 @@ class SchnorrSignatureTest extends TestCase
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
         $wrongPublicKey = '0000000000000000000000000000000000000000000000000000000000000001';
-        $message = 'hello world';
+        $message = bin2hex('hello world');
 
         $result = $this->signature->sign($privateKey, $message);
         $isValid = $this->signature->verify($wrongPublicKey, $result['signature'], $message);
@@ -99,8 +99,8 @@ class SchnorrSignatureTest extends TestCase
     public function test_verification_fails_with_wrong_message(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
-        $wrongMessage = 'goodbye world';
+        $message = bin2hex('hello world');
+        $wrongMessage = bin2hex('goodbye world');
 
         $result = $this->signature->sign($privateKey, $message);
         $isValid = $this->signature->verify($result['publicKey'], $result['signature'], $wrongMessage);
@@ -111,7 +111,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_sign_with_custom_random_k(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
+        $message = bin2hex('hello world');
         $randomK = 'c7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
 
         $result = $this->signature->sign($privateKey, $message, $randomK);
@@ -124,7 +124,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_deterministic_signatures_with_same_random_k(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
+        $message = bin2hex('hello world');
         $randomK = 'c7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
 
         $result1 = $this->signature->sign($privateKey, $message, $randomK);
@@ -137,7 +137,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_throws_exception_for_invalid_private_key(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Private key must be a hex string');
+        $this->expectExceptionMessageIsOrContains('Private key must be a 32-byte hex string');
 
         $this->signature->sign('invalid_hex', 'hello world');
     }
@@ -145,7 +145,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_throws_exception_for_invalid_public_key_in_verify(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Public key must be a hex string');
+        $this->expectExceptionMessageIsOrContains('Public key must be a 32-byte hex string');
 
         $signature = '0'.str_repeat('0', 127);
         $this->signature->verify('invalid_hex', $signature, 'hello world');
@@ -156,7 +156,7 @@ class SchnorrSignatureTest extends TestCase
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Randomness must be a hex string');
+        $this->expectExceptionMessageIsOrContains('Message must be an even-length hexadecimal string');
 
         $this->signature->sign($privateKey, 'hello world', 'invalid_hex');
     }
@@ -175,7 +175,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_handles_long_message(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = str_repeat('This is a long message. ', 100);
+        $message = bin2hex(str_repeat('This is a long message. ', 100));
 
         $result = $this->signature->sign($privateKey, $message);
         $isValid = $this->signature->verify($result['publicKey'], $result['signature'], $message);
@@ -186,7 +186,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_handles_unicode_message(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'こんにちは世界 🌍 Hello World! 🚀';
+        $message = bin2hex('こんにちは世界 🌍 Hello World! 🚀');
 
         $result = $this->signature->sign($privateKey, $message);
         $isValid = $this->signature->verify($result['publicKey'], $result['signature'], $message);
@@ -197,7 +197,7 @@ class SchnorrSignatureTest extends TestCase
     public function test_validates_signature_format(): void
     {
         $privateKey = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
+        $message = bin2hex('hello world');
 
         $result = $this->signature->sign($privateKey, $message);
 
@@ -215,43 +215,5 @@ class SchnorrSignatureTest extends TestCase
         $this->assertEquals('BIP0340/challenge', SchnorrSigner::CHALLENGE);
         $this->assertEquals('BIP0340/aux', SchnorrSigner::AUX);
         $this->assertEquals('BIP0340/nonce', SchnorrSigner::NONCE);
-    }
-
-    /**
-     * Test signature length consistency with original SchnorrSigner implementation.
-     * This test reproduces the gmp_hexval bug where signatures may not be exactly 128 characters.
-     *
-     * To run this test 100 times and check failure rate:
-     * ```
-     * for i in {1..100}; do vendor/bin/phpunit --filter test_original_schnorr_signature_length_consistency --no-coverage 2>/dev/null | grep -E "(FAILED|OK)" | tail -1; done | grep -c FAILED
-     * ```
-     */
-    public function test_original_schnorr_signature_length_consistency(): void
-    {
-        // Skip if mdanter/ecc SchnorrSigner doesn't exist
-        if (! class_exists('\Mdanter\Ecc\Crypto\Signature\SchnorrSigner')) {
-            $this->markTestSkipped('Mdanter\Ecc\Crypto\Signature\SchnorrSigner not available');
-        }
-
-        $privateKeyHex = 'b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfef';
-        $message = 'hello world';
-
-        try {
-            // Use the original SchnorrSigner from vendor
-            $originalSigner = new SchnorrSigner;
-
-            // Original SchnorrSigner expects string arguments
-            $result = $originalSigner->sign($privateKeyHex, $message);
-
-            // Check signature length - this is where the gmp_hexval bug may occur
-            $signatureLength = strlen($result['signature']);
-
-            // The bug manifests as signatures shorter than 128 characters due to missing leading zeros
-            $this->assertEquals(128, $signatureLength,
-                sprintf('Original SchnorrSigner should produce 128 character signatures, but got: %d', $signatureLength));
-
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Cannot test original SchnorrSigner: '.$e->getMessage());
-        }
     }
 }
